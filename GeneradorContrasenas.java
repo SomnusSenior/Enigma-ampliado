@@ -141,39 +141,52 @@ public class GeneradorContrasenas {
 
         for (int i = 0; i < rotor; i++) {
             do {
-                int iA = (int) random() * alfabetoArray.size();
-                int iB = (int) random() * alfabetoArray.size();
-
+                System.out.println(".......... INICIO DO WHILE() .........");
+                int iA = alea(alfabetoArray.size()); //(int) random() * alfabetoArray.size();
+                int iB = alea(alfabetoArray.size()); //(int) random() * alfabetoArray.size();
+                System.out.println("size?: " + alfabetoArray.size());
+                System.out.println("alfabeto?: " + alfabetoArray.toString());
+                System.out.println("iA: " + iA + " iB: " + iB);
+                System.out.println("r?: " + r.size());
                 // añadir if iA < iB, el menor indice se extrae primero y se resta 1 al segundo; Y REVISAR CODIGO COMPLETO PARA LA NUEVA CARACTERISTICA
+                if (iB < iA) {
+                    System.out.println("<<<<<<<<<<< Entro comparación");
+                    int aux = iA;
+                    iA = iB;
+                    iB = aux;
+                }
+
                 if (iA != iB) {
+                    System.out.println("----------------- Entro if");
                     repetido = false;
-                    //if (iA < iB) {
                     c1 = alfabetoArray.get(iA);
                     c2 = alfabetoArray.get(iB);
-                    /*}else if(iB < iA){
-                        c1 = alfabetoArray.get(iB);
-                        c2 = alfabetoArray.get(iA);
-                    }*/
-                    alfabetoArray.remove(c1);
-                    alfabetoArray.remove(c2);
+
+                    System.out.println("c1: " + c1 + " c2: " + c2);
+                    alfabetoArray.remove(iA);
+                    alfabetoArray.remove(iB-1);
+                    
+                    r.set(alfabeto.indexOf(c2), c1);
+                    r.set(alfabeto.indexOf(c1), c2);
+                    //r.set(iB, c1);
+                    //r.set(iA, c2);
+                    System.out.println("r?: " + r);
                 } else {
+                    System.out.println(">>>>>>>>>>>>> Entro else");
                     repetido = true;
                 }
-                r.set(iB, c1);
-                r.set(iA, c2);
-                System.out.println("r?: " + r);
-            } while (repetido);
+            } while (repetido && !alfabetoArray.isEmpty());
         }
-        System.out.print("reflector: ");
         for (char c : r) {
             resultado = resultado + c;
         }
-        System.out.println("resultado: " + resultado);
-        System.out.println("");
+        System.out.println("reflector: ");
+        System.out.println(resultado);
         System.out.print("teclado: ");
         for (int i = 0; i < alfabeto.length(); i++) {
             System.out.print("|" + alfabeto.charAt(i));
         }
+        System.out.println("");
         System.out.println("en length " + alfabeto.length());
     }
 
