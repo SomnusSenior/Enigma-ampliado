@@ -9,10 +9,12 @@ public class EjecutarEnigma {
     static Scanner scan = new Scanner(System.in);
 
     public static void RunnerEnigma() {
-        if (cifrado == 0) {
+        if (cifrado == 0 || cifrado == 1) {
             RotoresPregunta();
-        } else if (cifrado == 1) {
+        } else if (cifrado == 2) {
             ModoPregunta();
+        } else {
+            System.out.println("Error RunnerEnigma()");
         }
     }
 
@@ -28,9 +30,7 @@ public class EjecutarEnigma {
     }
 
     public static void RotoresPregunta() {
-        Rotor r1;
-        Rotor r2;
-        Rotor r3;
+        Rotor r1, r2, r3;
         System.out.print("Definir rotores?: ");
         switch (scan.nextInt()) {
             case 0:
@@ -38,7 +38,11 @@ public class EjecutarEnigma {
                     r1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
                     r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E 
                     r3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
-                } else {
+                } else if (cifrado == 1) {
+                    r1;
+                    r2;
+                    r3;
+                } else if (cifrado == 2) {
                     r1 = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo I h
                     r2 = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo II I 
                     r3 = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo III i

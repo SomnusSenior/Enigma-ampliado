@@ -7,7 +7,8 @@ public class Rotor {
 
     private String contenido; // alfabeto del rotor
     private String contEscritura = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // alfabeto de escritura
-    private String contEscrituraAmpliado = "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // alfabeto de escritura AMPLIADO
+    private String contEscrituraAmpliadoPlus = "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // alfabeto de escritura AMPLIADO Plus
+    private String contEscrituraAmpliado = " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // alfabeto de escritura AMPLIADO
     private int posicion; // posición del rotor
     private int tam; // tamaño del rotor
     private char puntoGiro; // punto de giro del rotor
@@ -40,7 +41,7 @@ public class Rotor {
         if (cifrado == 0) {
             this.contEscritura = mensaje;
         } else {
-            this.contEscrituraAmpliado = mensaje;
+            this.contEscrituraAmpliadoPlus = mensaje;
         }
         this.puntoGiro = puntoGiro;
     }
@@ -61,14 +62,14 @@ public class Rotor {
                 if (cifrado == 0) {
                     mensaje += this.contEscritura.charAt(i + offset);
                 } else {
-                    mensaje += this.contEscrituraAmpliado.charAt(i + offset);
+                    mensaje += this.contEscrituraAmpliadoPlus.charAt(i + offset);
                 }
             } else { // giro del rotor al dar una vuelta completa
                 aux += this.contenido.charAt(i + offset - this.tam);
                 if (cifrado == 0) {
                     mensaje += this.contEscritura.charAt(i + offset - this.tam);
                 } else {
-                    mensaje += this.contEscrituraAmpliado.charAt(i + offset - this.tam);
+                    mensaje += this.contEscrituraAmpliadoPlus.charAt(i + offset - this.tam);
                 }
             }
         }
@@ -108,7 +109,7 @@ public class Rotor {
      * @return alfabeto de escritura
      */
     public String obtenerContEscrituraAmpliado() {
-        return this.contEscrituraAmpliado;
+        return this.contEscrituraAmpliadoPlus;
     }
 
     /**
@@ -124,7 +125,7 @@ public class Rotor {
         if (cifrado == 0) {
             iCifrada = this.contEscritura.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
         } else {
-            iCifrada = this.contEscrituraAmpliado.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
+            iCifrada = this.contEscrituraAmpliadoPlus.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
         }
         return iCifrada;
     }
@@ -140,7 +141,7 @@ public class Rotor {
         if (cifrado == 0) {
             c = this.contEscritura.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura}else{
         } else {
-            c = this.contEscrituraAmpliado.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura
+            c = this.contEscrituraAmpliadoPlus.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura
         }
         int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
         return iCifrada;

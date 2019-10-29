@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class GeneradorContrasenas {
 
     public static int N = 20;   // Longitud de contraseña
-    public static int rotor = 73; // Longitud NUEVOS rotores
+    public static int rotor = 73; // Longitud NUEVOS rotores Plus
     static Scanner scan = new Scanner(System.in);
     public static int symbolic = 0;
 
@@ -139,7 +139,7 @@ public class GeneradorContrasenas {
         String s = ".";
         boolean repetido = false;
 
-        for (int i = 0; i < rotor; i++) {
+        for (int i = 0; i < alfabetoArray.size() / 2; i++) {
             do {
                 System.out.println(".......... INICIO DO WHILE() .........");
                 int iA = alea(alfabetoArray.size()); //(int) random() * alfabetoArray.size();
