@@ -130,49 +130,67 @@ public class GeneradorContrasenas {
         //String r = "..........................................................................";
         String alfabeto = " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", resultado = "";
         ArrayList<Character> alfabetoArray = new ArrayList<>();
+        //System.out.println("l: " + alfabeto.length());
         for (int i = 0; i < alfabeto.length(); i++) {
             alfabetoArray.add(alfabeto.charAt(i));
             r.add('.');
         }
         char chaM, cham, num, sym, c1 = '.', c2 = '.';
-        int alea;
+        int alea = 0, count = 0;
         String s = ".";
         boolean repetido = false;
 
         for (int i = 0; i < alfabetoArray.size() / 2; i++) {
             do {
-                System.out.println(".......... INICIO DO WHILE() .........");
+                //System.out.println(".......... INICIO DO WHILE() .........");
                 int iA = alea(alfabetoArray.size()); //(int) random() * alfabetoArray.size();
                 int iB = alea(alfabetoArray.size()); //(int) random() * alfabetoArray.size();
-                System.out.println("size?: " + alfabetoArray.size());
-                System.out.println("alfabeto?: " + alfabetoArray.toString());
-                System.out.println("iA: " + iA + " iB: " + iB);
-                System.out.println("r?: " + r.size());
+                //System.out.println("size?: " + alfabetoArray.size());
+                //System.out.println("alfabeto?: " + alfabetoArray.toString());
+                //System.out.println("iA: " + iA + " iB: " + iB);
+                /*count = 0;
+                for (int j = 0; j < alfabeto.length(); j++) {
+                    if(r.get(j) == '.'){
+                        count++;
+                    }
+                }*/
+                //System.out.println("r '.'?: " + count);
                 // añadir if iA < iB, el menor indice se extrae primero y se resta 1 al segundo; Y REVISAR CODIGO COMPLETO PARA LA NUEVA CARACTERISTICA
-                if (iB < iA) {
-                    System.out.println("<<<<<<<<<<< Entro comparación");
+                /*if (iB < iA) {
+                    //System.out.println("<<<<<<<<<<< Entro comparación");
                     int aux = iA;
                     iA = iB;
                     iB = aux;
-                }
+                }*/
 
                 if (iA != iB) {
-                    System.out.println("----------------- Entro if");
+                    //System.out.println("----------------- Entro if");
                     repetido = false;
                     c1 = alfabetoArray.get(iA);
                     c2 = alfabetoArray.get(iB);
 
-                    System.out.println("c1: " + c1 + " c2: " + c2);
-                    alfabetoArray.remove(iA);
-                    alfabetoArray.remove(iB-1);
-                    
-                    r.set(alfabeto.indexOf(c2), c1);
-                    r.set(alfabeto.indexOf(c1), c2);
-                    //r.set(iB, c1);
-                    //r.set(iA, c2);
-                    System.out.println("r?: " + r);
+                    //r.set(alfabeto.indexOf(c2), c1);
+                    //r.set(alfabeto.indexOf(c1), c2);
+                    if (!r.contains(c1) && !r.contains(c2) && r.get(iA) == '.' && r.get(iB) == '.') {
+                        //System.out.println("C1 y C2 NO están en r.");
+                        r.set(iB, c1);
+                        r.set(iA, c2);
+
+                        //System.out.println("c1: " + c1 + " c2: " + c2);
+                        //System.out.println("alfabeto antes?: " + alfabetoArray.toString());
+                        //alfabetoArray.remove(iA);
+                        alfabetoArray.set(iA,'.');
+                        //System.out.println("alfabeto antes remove iB?: " + alfabetoArray.toString());
+                        //alfabetoArray.remove(iB - 1);
+                        alfabetoArray.set(iB,'.');
+                        //System.out.println("alfabeto después?: " + alfabetoArray.toString());
+                        //System.out.println("r?: " + r);
+                    } else {
+                        //System.out.println("C1 y C2 ESTÁN en r.");
+                        repetido = true;
+                    }
                 } else {
-                    System.out.println(">>>>>>>>>>>>> Entro else");
+                    //System.out.println(">>>>>>>>>>>>> Entro else");
                     repetido = true;
                 }
             } while (repetido && !alfabetoArray.isEmpty());
@@ -182,12 +200,12 @@ public class GeneradorContrasenas {
         }
         System.out.println("reflector: ");
         System.out.println(resultado);
-        System.out.print("teclado: ");
-        for (int i = 0; i < alfabeto.length(); i++) {
+        //System.out.print("teclado: ");
+        /*for (int i = 0; i < alfabeto.length(); i++) {
             System.out.print("|" + alfabeto.charAt(i));
-        }
-        System.out.println("");
-        System.out.println("en length " + alfabeto.length());
+        }*/
+        //System.out.println("");
+        //System.out.println("en length " + alfabeto.length());
     }
 
     public static boolean checkArray(String[] r, String s) {

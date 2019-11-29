@@ -36,11 +36,7 @@ public class AdministrarPass {
         cifrado = scan.nextInt();
         switch (cifrado) {
             case 0:
-                RunnerEnigma();
-                break;
             case 1:
-                RunnerEnigma();
-                break;
             case 2:
                 RunnerEnigma();
                 break;

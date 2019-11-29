@@ -5,10 +5,14 @@
         <group>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/AdministrarPass.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/Clavijas.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/test/administrarpass/AdministrarPassTest.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/EjecutarEnigma.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/test/administrarpass/GeneradorAleatorios.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/test/administrarpass/ClavijasTest.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/Enigma.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/Rotor.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/GeneradorContrasenas.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/test/administrarpass/GeneradorContrasenasTest.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/ConexionClavijas.java</file>
         </group>
     </open-files>
