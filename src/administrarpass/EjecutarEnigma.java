@@ -7,6 +7,7 @@ public class EjecutarEnigma {
     public static int modo;
     public static int cifrado;
     static Scanner scan = new Scanner(System.in);
+    public static char cI, cC, cD;
 
     public static void RunnerEnigma() {
         if (cifrado == 0 || cifrado == 1) {
@@ -36,7 +37,7 @@ public class EjecutarEnigma {
             case 0:
                 if (cifrado == 0) {
                     r1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
-                    r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E 
+                    r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
                     r3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
                 } /*else if (cifrado == 1) {
                     r1;
@@ -99,43 +100,32 @@ public class EjecutarEnigma {
 
     public static void ClavesPregunta(Enigma enigma) {
         System.out.print("Claves por default?: ");
-        char cI, cC, cD;
+        //char cI = 0, cC = 0, cD = 0;
         switch (scan.nextInt()) {
             case 0:
-                boolean repetir = false;
-                do {
-                    System.out.print("Clave I: ");
-                    cI = scan.next().charAt(0);
-                    System.out.print("Clave C: ");
-                    cC = scan.next().charAt(0);
-                    System.out.print("Clave D: ");
-                    cD = scan.next().charAt(0);         // String index out of range: 73 ??????
-                    enigma.setRotorsIni(cI, cC, cD); // Inicializa las claves
-
-                    System.out.print("Poner más clavijas?: ");
-                    if (scan.nextInt() == 0) {
-                        repetir = false;
-                    } else {
-                        repetir = true;
-                    }
-                } while (repetir);
-                if (cifrado == 0) {
-                    base(enigma);
-                } else {
-                    ampliado(enigma);
-                }
+                System.out.print("Clave I: ");
+                cI = scan.next().charAt(0);
+                System.out.print("Clave C: ");
+                cC = scan.next().charAt(0);
+                System.out.print("Clave D: ");
+                cD = scan.next().charAt(0);         // String index out of range: 73 ??????
+                enigma.setRotorsIni(cI, cC, cD); // Inicializa las claves                
                 break;
             case 1:
-                enigma.setRotorsIni('A', 'B', 'C');
-                if (cifrado == 0) {
-                    base(enigma);
-                } else {
-                    ampliado(enigma);
-                }
+                cI = 'A';
+                cC = 'B';
+                cD = 'C';
+                enigma.setRotorsIni(cI, cC, cD);
                 break;
             default:
                 System.out.println("Opción incorrecta.");
                 break;
+        }
+        //prueba.clavesRotores(cI, cC, cD);
+        if (cifrado == 0) {
+            base(enigma);
+        } else {
+            ampliado(enigma);
         }
     }
 
@@ -147,6 +137,8 @@ public class EjecutarEnigma {
 
         resultado = procesar(enigma, s); // Obtiene el resultado de cifrar, la traducción
         System.out.println("Cifrado: " + resultado);
+
+        prueba.resta();
     }
 
     public static void ampliado(Enigma enigma) {
@@ -179,7 +171,7 @@ public class EjecutarEnigma {
                 System.exit(0);
             }
             c = pasarMayus(c); // transforma en mayúscula los caracteres
-            resultado += enigma.cifrado(c);
+            resultado += enigma.cifradoBase(c); //.cifrado(c);
         }
         return resultado;
     }

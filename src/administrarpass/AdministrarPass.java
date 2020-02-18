@@ -22,6 +22,7 @@ public class AdministrarPass {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Selecciona una opción:");
@@ -29,7 +30,7 @@ public class AdministrarPass {
         System.out.println("1. Enigma ampliado");
         System.out.println("2. Enigma 'ampliado' Plus");
         System.out.println("3. Aleatorio");
-        System.out.println("4. Aleatorio rotores ampliados");
+        System.out.println("4. Aleatorio rotores ampliados (sin funcionamiento)");
         System.out.println("5. Aleatorio rotores 'ampliados' Plus");
         System.out.println("6. Aleatorio rotor reflector");
 
@@ -44,7 +45,7 @@ public class AdministrarPass {
                 RunnerAleatorios();
                 break;
             case 4:
-                
+
                 break;
             case 5:
                 rotoresAleatorios();

@@ -7,15 +7,19 @@ public class Enigma {
 
     private Rotor entrada = new Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", '-'); // rotor entrada
     private Rotor entradaAmpliado = new Rotor("!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", '-'); // rotor entrada AMPLIADO
-    private Rotor rotorDerecha; // rotor derecho
-    private Rotor rotorCentral; // rotor medio
-    private Rotor rotorIzquierda; // rotor izquierdo
-    private Rotor rotorDerIni; // inicial derecho
-    private Rotor rotorCenIni; // inicial medio
-    private Rotor rotorIzqIni; // inicial izquierdo
-    private Rotor reflector = new Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT", '-'); // reflector B
-    private Rotor reflectorAmpliado = new Rotor("bnD(gcF3SzpT6Q%#lRv70\"+V8J5eOoLxGN2)r$PiwAy1hfm'jX*t!4sCkYMHBq&KudWUE9ZaI", '-'); // reflector B AMPLIADO
-    private ConexionClavijas plugboard; // tablero de clavijas
+
+    private static Rotor rotorDerecha; // rotor derecho
+    private static Rotor rotorCentral; // rotor medio
+    private static Rotor rotorIzquierda; // rotor izquierdo
+    private static Rotor rotorDerIni; // inicial derecho
+    private static Rotor rotorCenIni; // inicial medio
+    private static Rotor rotorIzqIni; // inicial izquierdo
+    private static Rotor reflector = new Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT", '-'); // reflector B
+    private static Rotor reflectorAmpliado = new Rotor("bnD(gcF3SzpT6Q%#lRv70\"+V8J5eOoLxGN2)r$PiwAy1hfm'jX*t!4sCkYMHBq&KudWUE9ZaI", '-'); // reflector B AMPLIADO
+    private static ConexionClavijas plugboard; // tablero de clavijas
+
+    public static int indiceP = 0;
+    public static char[] pintar = new char[16];
 
     /**
      * Creación la maquina enigma
@@ -50,17 +54,15 @@ public class Enigma {
             posIzq = posCheck(claveIzq);
         }
         this.rotorDerecha = this.rotorDerecha.giro(posDer);
-        this.rotorCentral = this.rotorCentral.giro(posCen);
-        this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);
-
         this.rotorDerIni = this.rotorDerecha;
+        this.rotorCentral = this.rotorCentral.giro(posCen);
         this.rotorCenIni = this.rotorCentral;
+        this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);
         this.rotorIzqIni = this.rotorIzquierda;
     }
 
     public int posCheck(int clave) {
         int pos, check = clave - '!';
-
         if (check < 11) {
             pos = clave - '!';
         } else if (check < 25) {
@@ -86,7 +88,6 @@ public class Enigma {
             claveActualDer = this.rotorDerecha.obtenerContEscrituraAmpliado().charAt(0); // obtiene la clave actual del rotor derecho
             claveActualCen = this.rotorCentral.obtenerContEscrituraAmpliado().charAt(0); // obtiene la clave actual del rotor central
         }
-
         if (claveActualDer == this.rotorDerecha.obtenerPuntoGiro()) { // si la clave actual del rotor derecho es el punto de giro del rotor derecho
             if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central
                 this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo
@@ -101,6 +102,34 @@ public class Enigma {
         this.rotorDerecha = this.rotorDerecha.giro(1); // gira rotor derecho
     }
 
+    public char cifradoBase(char c) {
+        indiceP = 0;
+        pintar[indiceP] = c;
+        indiceP++;
+
+        char aux;
+        actualizarRotores();
+        int i;
+        i = this.entrada.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado
+
+        i = this.rotorDerecha.cifrarIda(i);
+        i = this.rotorCentral.cifrarIda(i);
+        i = this.rotorIzquierda.cifrarIda(i);
+
+        i = this.reflector.cifrarIda(i);
+
+        i = this.rotorIzquierda.cifrarVuelta(i);
+        i = this.rotorCentral.cifrarVuelta(i);
+        i = this.rotorDerecha.cifrarVuelta(i);
+
+        aux = this.entrada.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido
+
+        pintar[indiceP] = aux;
+        indiceP++;
+
+        return aux;
+    }
+
     /**
      * Cifra el caracter pasado
      *
@@ -108,6 +137,11 @@ public class Enigma {
      * @return Caracter cifrado del mensaje
      */
     public char cifrado(char c) {
+        indiceP = 0;
+        pintar[indiceP] = c;
+        System.out.println(" carácter que llega al primer rotor (llegada): " + c);
+        indiceP++;
+
         char aux;
         actualizarRotores();
         int i;
@@ -117,10 +151,14 @@ public class Enigma {
             i = this.entradaAmpliado.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado
         }
 
+        System.out.println("---ROTOR DERECHO---");
         i = this.rotorDerecha.cifrarIda(i);
+        System.out.println("---ROTOR CENTRAL---");
         i = this.rotorCentral.cifrarIda(i);
+        System.out.println("---ROTOR IZQUIERDO---");
         i = this.rotorIzquierda.cifrarIda(i);
 
+        System.out.println("---REFLECTOR---");
         if (modo == 0) {
             if (cifrado == 0) {
                 i = this.reflector.cifrarIda(i);
@@ -131,8 +169,11 @@ public class Enigma {
             i = this.reflectorAmpliado.cifrarVuelta(i);
         }
 
+        System.out.println("---ROTOR IZQUIERDO---");
         i = this.rotorIzquierda.cifrarVuelta(i);
+        System.out.println("---ROTOR CENTRAL---");
         i = this.rotorCentral.cifrarVuelta(i);
+        System.out.println("---ROTOR DERECHO---");
         i = this.rotorDerecha.cifrarVuelta(i);
 
         if (cifrado == 0) {
@@ -140,6 +181,10 @@ public class Enigma {
         } else {
             aux = this.entradaAmpliado.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido
         }
+
+        System.out.println(" *** carácter cifrado (salida): " + aux);
+        pintar[indiceP] = aux;
+        indiceP++;
 
         return aux;
     }
@@ -193,9 +238,8 @@ public class Enigma {
             contenido = this.entradaAmpliado.obtenerContenido();
         }
         char susIzq, susDer;
-
-        /*a = Main.pasarMayus(a); // pasa a mayúsculas las clavijas
-        b = Main.pasarMayus(b);*/
+        a = EjecutarEnigma.pasarMayus(a); // pasa a mayúsculas las clavijas
+        b = EjecutarEnigma.pasarMayus(b);
         if (a < b) { // ordena las clavijas
             susIzq = a;
             susDer = b;
@@ -203,7 +247,6 @@ public class Enigma {
             susIzq = b;
             susDer = a;
         }
-
         for (int i = 0; i < contenido.length(); i++) {
             if (contenido.charAt(i) == susIzq) { // reordena el alfabeto de escritura
                 aux += susDer;
@@ -222,7 +265,18 @@ public class Enigma {
         }
     }
 
-    //pruebas
+    public static Rotor getRotorDerecha() {
+        return rotorDerecha;
+    }
+
+    public static Rotor getRotorCentral() {
+        return rotorCentral;
+    }
+
+    public static Rotor getRotorIzquierda() {
+        return rotorIzquierda;
+    }
+
     public Rotor getEntradaAmpliado() {
         return this.entradaAmpliado;
     }
