@@ -138,7 +138,7 @@ public class EjecutarEnigma {
         resultado = procesar(enigma, s); // Obtiene el resultado de cifrar, la traducción
         System.out.println("Cifrado: " + resultado);
 
-        prueba.resta();
+        //prueba.resta();
     }
 
     public static void ampliado(Enigma enigma) {

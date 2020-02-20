@@ -1,31 +1,63 @@
 package administrarpass;
 
 import static administrarpass.EjecutarEnigma.procesar;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//import static administrarpass.prueba.resta;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
 
 /**
- *
  * @author 49904022
  */
 public class menu extends javax.swing.JFrame {
 
+    JTextField jt = new JTextField();
+    Rotor rIzq = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
+            rCen = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
+            rDer = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
+    JFrame f;
+    public boolean eni = false;
+
+    //----------
+    private boolean ida = true;
+    private double[] origen = new double[2];
+    private static double[][] puntos = new double[26][2];
+
+    private static int posIY, posCY, posDY, posTX, posTY, posRX, posRY, posClaX, posClaY;
+    private static Map<String, Integer> posIX = new HashMap<>();
+    private static Map<String, Integer> posPerIX = new HashMap<>();
+    private static Map<String, Integer> posCX = new HashMap<>();
+    private static Map<String, Integer> posPerCX = new HashMap<>();
+    private static Map<String, Integer> posDX = new HashMap<>();
+    private static Map<String, Integer> posPerDX = new HashMap<>();
+    private static int contEleccion;
+    private static char cI, cC, cD;
+
+    private static Map<String, String> rotores = new HashMap<>();
+
+    //-----------
     /**
      * Creates new form menu
      */
     public menu() {
+        super();
         initComponents();
         prueba1();
+        initialize();
     }
-
-    JTextField jt = new JTextField();
 
     private void prueba1() {
         /**
@@ -36,88 +68,237 @@ public class menu extends javax.swing.JFrame {
          */
 
         System.out.println("Antes add listeners");
-        jTextFieldMensaje.addActionListener(new pruebaTextListener());
+        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new MyFilter());
         jTextFieldMensaje.getDocument().addDocumentListener(new pruebaListener());
         jTextFieldMensaje.getDocument().putProperty("name", "prueba");
         System.out.println("Listeners listos");
-
-        /*Rotor r1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
-                r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
-                r3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
-        Enigma enigma = new Enigma(r1, r2, r3); // Crea la máquina enigma
-
-        char c1 = jTextFieldClavija1.getText().charAt(0),
-                c2 = jTextFieldClavija2.getText().charAt(0);
-        enigma.ponerClavija(c1, c2);
-
-        char cI = jTextFieldClaveIzq.getText().charAt(0),
-                cC = jTextFieldClaveCen.getText().charAt(0),
-                cD = jTextFieldClaveDer.getText().charAt(0);
-        enigma.setRotorsIni(cI, cC, cD);
-
-        String mensaje = jTextFieldMensaje.getText();
-        //modo = 0;
-        jTextFieldCifrado.setText(procesar(enigma, mensaje));*/
-        //-----
-        //DocumentListener dl = new DocumentListener() 
-        //----
     }
 
     class pruebaListener implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            /**
-             * Comprobar: - Si no es un caracter no dejar que escriba - Pasar a
-             * mayúsculas -
-             */
-            System.out.println("Insert Update");
             updateFieldState(e, "insert");
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-
-            System.out.println("Remove Update");
             updateFieldState(e, "remove");
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-
-            System.out.println("Change Update");
             updateFieldState(e, "change");
         }
 
         public void updateFieldState(DocumentEvent e, String action) {
-            Document doc = (Document) e.getDocument();
-            //String text = field1.getText() + " " + field2.getText();
-            //field3.setText(text);
-            int l = doc.getLength();
-            String s = "";
-            char c = 0;
+            //System.out.println("updateField: " + action);
+            Enigma enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
+            EjecutarEnigma.cifrado = 0;
+
+            char c1 = jTextFieldClavija1.getText().charAt(0),
+                    c2 = jTextFieldClavija2.getText().charAt(0);
+            System.out.println("c1: " + c1 + " c2: " + c2);
+            enigma.ponerClavija(c1, c2);
+
+            char cI = jTextFieldClaveIzq.getText().charAt(0),
+                    cC = jTextFieldClaveCen.getText().charAt(0),
+                    cD = jTextFieldClaveDer.getText().charAt(0);
+            System.out.println("cI: " + cI + " cC: " + cC + " cD: " + cD);
+            enigma.setRotorsIni(cI, cC, cD);
+
+            String mensaje = jTextFieldMensaje.getText();
+            //modo = 0;
+            jTextFieldCifrado.setText(procesar(enigma, mensaje));
+
+            int len = e.getDocument().getLength();
+            String doc = "";
             try {
-                s = doc.getText(0, l);
-                c = s.isEmpty() ? 0 : s.charAt(l - 1);
+                doc = e.getDocument().getText(0, len);
             } catch (BadLocationException ex) {
-                System.out.println("Error BadLocation");
                 Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("****    Listener    **** " + "length: " + l + " s: " + s + " c: " + c);
+
+            if (!doc.isEmpty()) {
+                eni = true;
+                repaint();
+            } else {
+                eni = false;
+            }
         }
     }
 
-    class pruebaTextListener implements ActionListener {
+    class MyFilter extends DocumentFilter {
 
-        /**
-         * Handle the text field Return.
-         */
         @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("TextListener");
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length,
+                String text, AttributeSet attrs) throws BadLocationException {
+            boolean valido = false;
+            /*System.out.println("Replace");
+            if (offset >= fb.getDocument().getLength()) {
+                System.out.println("Added: " + text);
+            } else {
+                String old = fb.getDocument().getText(offset, length);
+                System.out.println("Replaced " + old + " with " + text);
+            }*/
+            char c = text.charAt(0);
+
+            if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
+                valido = true;
+            } else {
+                valido = false;
+            }
+
+            if (valido) {
+                super.replace(fb, offset, length, text, attrs);
+            } else {
+                super.replace(fb, offset, length, "", attrs);
+            }
+        }
+
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int offset,
+                String text, AttributeSet attr) throws BadLocationException {
+            super.insertString(fb, offset, text, attr);
+        }
+
+        @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length)
+                throws BadLocationException {
+            //System.out.println("Remove: " + fb.getDocument().getText(offset, length));
+            super.remove(fb, offset, length);
         }
     }
 
+    //--------
+    private void initialize() {
+        //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
+
+        posRX = 400;
+        posRY = 100;
+        posClaX = 400;
+        posClaY = 600;
+        posTX = 400;
+        posTY = 700;
+        System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
+
+        cI = EjecutarEnigma.cI;
+        cC = EjecutarEnigma.cC;
+        cD = EjecutarEnigma.cD;
+        System.out.println("Initialize * cI: " + cI + " cC: " + cC + " cD: " + cD);
+
+        contEleccion = 0;
+        System.out.println("Colocación rotores inicializada");
+
+        posIY = 200;
+        posCY = 300;
+        posDY = 400;
+        System.out.println("Posiciones rotores Y inicializadas");
+
+        rotores.put("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ");
+        rotores.put("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE");
+        rotores.put("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO");
+        rotores.put("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB");
+        rotores.put("V", "VZBRGITYUPSDNHLXAWMJQOFECK");
+        System.out.println("Rotores inicializados");
+    }
+    
+    public void repaint(){
+        super.repaint();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        Font f = new Font("Monospaced", Font.BOLD, 22);
+        //initialize();
+        super.paint(g);
+        int character = 65;
+        Graphics pintar = (Graphics) g;
+        pintar.setColor(Color.black);
+        pintar.setFont(f);
+
+        pintarBucle(character, pintar, "I", posIY);
+        pintarBucle(character, pintar, "II", posCY);
+        pintarBucle(character, pintar, "III", posDY);
+
+        pintarBucle(character, pintar, "R", posRY);
+        pintarBucle(character, pintar, "C", posClaY);
+        pintarBucle(character, pintar, "T", posTY);
+
+        if (eni) {
+            pintarLinea(g);
+        }
+    }
+
+    private void pintarLinea(Graphics g) {
+        g.setColor(Color.RED);
+        g.drawLine(posTX, posTY, posClaX, posClaY + 20);// Desde Teclado entrada hasta Clavijero paraPintar[0]
+        g.drawLine(posClaX, posClaY, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero paraPintar[0] hasta D ABC
+        g.drawLine(posPerDX.get(Character.toString(Enigma.pintar[2])), posDY - 15, posCX.get(Character.toString(Enigma.pintar[3])), posCY + 20);    // Desde D PER hasta C ABC
+        g.drawLine(posPerCX.get(Character.toString(Enigma.pintar[4])), posCY - 15, posIX.get(Character.toString(Enigma.pintar[5])), posIY + 20);   // Desde C PER hasta I ABC
+        g.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX, posRY + 20); // Desde I PER hasta R paraPintar[7]
+
+        g.setColor(Color.MAGENTA);
+        g.drawLine(posRX, posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15);// Desde R paraPintar[8] hasta I PER
+        g.drawLine(posIX.get(Character.toString(Enigma.pintar[10])), posIY + 20, posPerCX.get(Character.toString(Enigma.pintar[11])), posCY - 15);// Desde I ABC hasta C PER
+        g.drawLine(posCX.get(Character.toString(Enigma.pintar[12])), posCY + 20, posPerDX.get(Character.toString(Enigma.pintar[13])), posDY - 15);// Desde C ABC hasta D PER
+        g.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX, posClaY);// Desde D ABC hasta Clavijero paraPintar[15]
+        g.drawLine(posClaX, posClaY + 20, posTX, posTY);// Desde Clavijero paraPintar[15] hasta Teclado entrada
+    }
+
+    public void pintarBucle(int character, Graphics g, String eleccion, int offset) {
+        String s = rotores.get(eleccion);
+        int n = 0;
+        String abc = "", per = "";
+        for (int i = 0; i < 26; i++) {
+            char c = (char) character;
+            n = 100 + 20 * i;
+            abc = Character.toString(c);
+
+            if (!"T".equals(eleccion) && !"C".equals(eleccion) && !"R".equals(eleccion)) {
+                per = Character.toString(s.charAt(i));
+                switch (contEleccion) {
+                    case 0:
+                        posPerIX.put(per, n + 5);
+                        posIX.put(abc, n + 5);
+                        if (c == cI) {
+                            pintarClave(g, n, offset);
+                        }
+                        break;
+                    case 1:
+                        posPerCX.put(per, n + 5);
+                        posCX.put(abc, n + 5);
+                        if (c == cC) {
+                            pintarClave(g, n, offset);
+                        }
+                        break;
+                    case 2:
+                        posPerDX.put(per, n + 5);
+                        posDX.put(abc, n + 5);
+                        if (c == cD) {
+                            pintarClave(g, n, offset);
+                        }
+                        break;
+                    default:
+                        System.out.println("Error al colocar los rotores (prueba.pintarBucle)");
+                        break;
+                }
+                g.setColor(Color.black);
+                g.drawString(per, n, offset);
+            }
+            g.setColor(Color.black);
+            g.drawString(abc, n, offset + 20);
+            character++;
+        }
+        contEleccion++;
+    }
+
+    private void pintarClave(Graphics g, int n, int offset) {
+        g.setColor(Color.CYAN);
+        g.fillRect(n, offset + 5, 15, 18);
+    }
+
+    //---------
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,6 +336,7 @@ public class menu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1000, 1000));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);

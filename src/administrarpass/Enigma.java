@@ -59,6 +59,8 @@ public class Enigma {
         this.rotorCenIni = this.rotorCentral;
         this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);
         this.rotorIzqIni = this.rotorIzquierda;
+
+        //System.out.println("Izq: " + (char) this.rotorIzquierda.getPosicion() + " Cen: " + (char) this.rotorCentral.getPosicion() + " Der: " + (char) this.rotorDerecha.getPosicion());
     }
 
     public int posCheck(int clave) {
@@ -126,7 +128,7 @@ public class Enigma {
 
         pintar[indiceP] = aux;
         indiceP++;
-
+        System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
         return aux;
     }
 
