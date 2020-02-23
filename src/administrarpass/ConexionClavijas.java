@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class ConexionClavijas {
 
-    private ArrayList<Character> clavijas = new ArrayList<Character>(); // Todas las clavijas
-    private ArrayList<Character> clavijasLibres = new ArrayList<Character>(); // Clavijas libres
-    private ArrayList<Clavijas> conexiones = new ArrayList<Clavijas>(); // Conexiones realizadas
+    private ArrayList<Character> clavijas = new ArrayList<>(); // Todas las clavijas
+    private ArrayList<Character> clavijasLibres = new ArrayList<>(); // Clavijas libres
+    private ArrayList<Clavijas> conexiones = new ArrayList<>(); // Conexiones realizadas
 
     /**
      * Crea el panel de clavijas
@@ -98,5 +98,9 @@ public class ConexionClavijas {
             return false;
         }
         return true;
+    }
+
+    public ArrayList<Clavijas> getConexiones() {
+        return conexiones;
     }
 }

@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,7 +38,10 @@ public class menu extends javax.swing.JFrame {
     private double[] origen = new double[2];
     private static double[][] puntos = new double[26][2];
 
-    private static int posIY, posCY, posDY, posTX, posTY, posRX, posRY, posClaX, posClaY;
+    private static int posIY, posCY, posDY, posTY, posRY, posClaY;//, posClaX;
+    private static Map<String, Integer> posRX = new HashMap<>();
+    private static Map<String, Integer> posClaX = new HashMap<>();
+    private static Map<String, Integer> posTX = new HashMap<>();
     private static Map<String, Integer> posIX = new HashMap<>();
     private static Map<String, Integer> posPerIX = new HashMap<>();
     private static Map<String, Integer> posCX = new HashMap<>();
@@ -48,6 +52,7 @@ public class menu extends javax.swing.JFrame {
     private static char cI, cC, cD;
 
     private static Map<String, String> rotores = new HashMap<>();
+    private static Enigma enigma;
 
     //-----------
     /**
@@ -92,13 +97,29 @@ public class menu extends javax.swing.JFrame {
 
         public void updateFieldState(DocumentEvent e, String action) {
             //System.out.println("updateField: " + action);
-            Enigma enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
+            int xValue = 0, yValue = 0;
+            char x = 0, y = 0;
+
+            enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
 
             char c1 = jTextFieldClavija1.getText().charAt(0),
                     c2 = jTextFieldClavija2.getText().charAt(0);
             //System.out.println("c1: " + c1 + " c2: " + c2);
             enigma.ponerClavija(c1, c2);
+
+            for (Clavijas conex : enigma.getPlugboard().getConexiones()) {
+                x = conex.getX();
+                y = conex.getY();
+
+                xValue = posClaX.get(Character.toString(x));
+                yValue = posClaX.get(Character.toString(y));
+                
+                System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue);
+                
+                posClaX.put(Character.toString(x), yValue);
+                posClaX.put(Character.toString(y), xValue);
+            }
 
             char cI = jTextFieldClaveIzq.getText().charAt(0),
                     cC = jTextFieldClaveCen.getText().charAt(0),
@@ -174,11 +195,11 @@ public class menu extends javax.swing.JFrame {
     private void initialize() {
         //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
 
-        posRX = 400;
+        //posRX = 400;
         posRY = 80;
-        posClaX = 400;
+        //posClaX = 400;
         posClaY = 400;
-        posTX = 400;
+        //posTX = 400;
         posTY = 480;
         //System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
 
@@ -209,12 +230,12 @@ public class menu extends javax.swing.JFrame {
 
     @Override
     public void paint(Graphics g) {
-        Font f = new Font("Monospaced", Font.BOLD, 22);
+        Font font = new Font("Monospaced", Font.BOLD, 22);
         super.paint(g);
         int character = 65;
         Graphics pintar = (Graphics) g;
         pintar.setColor(Color.black);
-        pintar.setFont(f);
+        pintar.setFont(font);
 
         pintarBucle(character, pintar, "I", posIY);
         pintarBucle(character, pintar, "II", posCY);
@@ -235,18 +256,19 @@ public class menu extends javax.swing.JFrame {
         g2d.setStroke(new BasicStroke(width));
 
         g.setColor(Color.RED);
-        g2d.drawLine(posTX, posTY, posClaX, posClaY + 20);// Desde Teclado entrada hasta Clavijero paraPintar[0]
-        g2d.drawLine(posClaX, posClaY, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero paraPintar[0] hasta D ABC
+        g2d.drawLine(posTX.get(Character.toString(Enigma.pintar[0])), posTY, posClaX.get(Character.toString(Enigma.pintar[0])), posClaY + 20);// Desde Teclado paraPintar[0] hasta Clavijero
+
+        g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[0])), posClaY, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero  hasta D ABC
         g2d.drawLine(posPerDX.get(Character.toString(Enigma.pintar[2])), posDY - 15, posCX.get(Character.toString(Enigma.pintar[3])), posCY + 20);    // Desde D PER hasta C ABC
         g2d.drawLine(posPerCX.get(Character.toString(Enigma.pintar[4])), posCY - 15, posIX.get(Character.toString(Enigma.pintar[5])), posIY + 20);   // Desde C PER hasta I ABC
-        g2d.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX, posRY + 20); // Desde I PER hasta R paraPintar[7]
+        g2d.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX.get(Character.toString(Enigma.pintar[7])), posRY + 20); // Desde I PER hasta R paraPintar[7]
 
         g2d.setColor(Color.MAGENTA);
-        g2d.drawLine(posRX, posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15);// Desde R paraPintar[8] hasta I PER
+        g2d.drawLine(posRX.get(Character.toString(Enigma.pintar[8])), posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15);// Desde R paraPintar[8] hasta I PER
         g2d.drawLine(posIX.get(Character.toString(Enigma.pintar[10])), posIY + 20, posPerCX.get(Character.toString(Enigma.pintar[11])), posCY - 15);// Desde I ABC hasta C PER
         g2d.drawLine(posCX.get(Character.toString(Enigma.pintar[12])), posCY + 20, posPerDX.get(Character.toString(Enigma.pintar[13])), posDY - 15);// Desde C ABC hasta D PER
-        g2d.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX, posClaY);// Desde D ABC hasta Clavijero paraPintar[15]
-        g2d.drawLine(posClaX, posClaY + 20, posTX, posTY);// Desde Clavijero paraPintar[15] hasta Teclado entrada
+        g2d.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX.get(Character.toString(Enigma.pintar[15])), posClaY);// Desde D ABC hasta Clavijero 
+        g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[15])), posClaY + 20, posTX.get(Character.toString(Enigma.pintar[15])), posTY);// Desde Clavijero hasta Teclado paraPintar[15]
 
         /*
         g.drawLine(posTX, posTY, posClaX, posClaY + 20);// Desde Teclado entrada hasta Clavijero paraPintar[0]
@@ -267,41 +289,52 @@ public class menu extends javax.swing.JFrame {
     public void pintarBucle(int character, Graphics g, String eleccion, int offset) {
         String s = rotores.get(eleccion);
         int n = 0;
+        char c = 0;
         String abc = "", per = "";
         for (int i = 0; i < 26; i++) {
-            char c = (char) character;
+            c = (char) character;
             n = 30 + 20 * i;
             abc = Character.toString(c);
 
             if (!"T".equals(eleccion) && !"C".equals(eleccion) && !"R".equals(eleccion)) {
                 per = Character.toString(s.charAt(i));
-                switch (contEleccion) {
-                    case 0:
-                        posPerIX.put(per, n + 5);
-                        posIX.put(abc, n + 5);
-                        if (c == cI) {
-                            pintarClave(g, n, offset);
-                        }
-                        break;
-                    case 1:
-                        posPerCX.put(per, n + 5);
-                        posCX.put(abc, n + 5);
-                        if (c == cC) {
-                            pintarClave(g, n, offset);
-                        }
-                        break;
-                    case 2:
-                        posPerDX.put(per, n + 5);
-                        posDX.put(abc, n + 5);
-                        if (c == cD) {
-                            pintarClave(g, n, offset);
-                        }
-                        break;
-                    default:
-                        break;
-                }
                 g.setColor(Color.black);
                 g.drawString(per, n, offset);
+            }
+            switch (contEleccion) {
+                case 0:
+                    posPerIX.put(per, n + 5);
+                    posIX.put(abc, n + 5);
+                    if (c == cI) {
+                        pintarClave(g, n, offset);
+                    }
+                    break;
+                case 1:
+                    posPerCX.put(per, n + 5);
+                    posCX.put(abc, n + 5);
+                    if (c == cC) {
+                        pintarClave(g, n, offset);
+                    }
+                    break;
+                case 2:
+                    posPerDX.put(per, n + 5);
+                    posDX.put(abc, n + 5);
+                    if (c == cD) {
+                        pintarClave(g, n, offset);
+                    }
+                    break;
+                case 3: //Reflector
+                    posRX.put(abc, n + 5);
+                    break;
+                case 4: //Clavijero
+                    posClaX.put(abc, n + 5);
+                    //
+                    break;
+                case 5: //Teclado
+                    posTX.put(abc, n + 5);
+                    break;
+                default:
+                    break;
             }
             g.setColor(Color.black);
             g.drawString(abc, n, offset + 20);
@@ -395,7 +428,6 @@ public class menu extends javax.swing.JFrame {
         });
 
         jTextFieldMensaje.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldMensaje.setText("Mensaje");
         jTextFieldMensaje.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -578,7 +610,7 @@ public class menu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 

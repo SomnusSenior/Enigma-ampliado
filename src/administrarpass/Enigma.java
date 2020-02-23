@@ -128,7 +128,7 @@ public class Enigma {
 
         pintar[indiceP] = aux;
         indiceP++;
-        System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
+        //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
         return aux;
     }
 
@@ -299,4 +299,7 @@ public class Enigma {
         return this.rotorIzqIni;
     }
 
+    public ConexionClavijas getPlugboard() {
+        return plugboard;
+    }
 }
