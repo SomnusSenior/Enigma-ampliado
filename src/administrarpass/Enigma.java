@@ -60,6 +60,10 @@ public class Enigma {
         this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);
         this.rotorIzqIni = this.rotorIzquierda;
 
+                
+        //EjecutarEnigma.cI = claveIzq;
+        //EjecutarEnigma.cC = claveCen;
+        //EjecutarEnigma.cD = claveDer;
         //System.out.println("Izq: " + (char) this.rotorIzquierda.getPosicion() + " Cen: " + (char) this.rotorCentral.getPosicion() + " Der: " + (char) this.rotorDerecha.getPosicion());
     }
 
@@ -101,7 +105,9 @@ public class Enigma {
                 this.rotorCentral = this.rotorCentral.giro(1); // gira rotor central
             }
         }
+        //System.out.println("?: " + this.rotorDerecha.getPosicion());
         this.rotorDerecha = this.rotorDerecha.giro(1); // gira rotor derecho
+        //System.out.println("??: " + this.rotorDerecha.getPosicion());
     }
 
     public char cifradoBase(char c) {
@@ -129,6 +135,15 @@ public class Enigma {
         pintar[indiceP] = aux;
         indiceP++;
         //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
+        
+        //System.out.println("cI: " + (char) (this.rotorIzquierda.getPosicion() + 'A'));
+        menu.setcI((char) this.rotorIzquierda.getContEscritura().charAt(0));
+        //menu.setcI((char) (this.rotorIzquierda.getPosicion() + 'A'));
+        //System.out.println("cC: " + (char) (this.rotorCentral.getPosicion() + 'A'));
+        menu.setcC((char) this.rotorCentral.getContEscritura().charAt(0));
+        menu.setcD((char) this.rotorDerecha.getContEscritura().charAt(0));
+        //System.out.println("rotorDerecho cifradoBase: " + this.rotorIzquierda.getContEscritura().charAt(0));
+        
         return aux;
     }
 
@@ -267,15 +282,15 @@ public class Enigma {
         }
     }
 
-    public static Rotor getRotorDerecha() {
+    public Rotor getRotorDerecha() {
         return rotorDerecha;
     }
 
-    public static Rotor getRotorCentral() {
+    public Rotor getRotorCentral() {
         return rotorCentral;
     }
 
-    public static Rotor getRotorIzquierda() {
+    public Rotor getRotorIzquierda() {
         return rotorIzquierda;
     }
 

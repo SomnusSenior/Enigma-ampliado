@@ -72,6 +72,7 @@ public class Rotor {
                 }
             }
         }
+        //System.out.println("tam: " + this.tam + " | offset: " + offset + " | nuevaPos: " + nuevaPos);
         return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
     }
 
@@ -125,6 +126,9 @@ public class Rotor {
         
         char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
 
+        //System.out.println("contenido cifrarIda: " + this.contenido.charAt(0));
+        //System.out.println("contEscritura cifrarIda: " + this.contEscritura.charAt(0));
+        
         Enigma.pintar[Enigma.indiceP] = c;
         Enigma.indiceP++;
         //System.out.println(" * carácter del rotor con respecto al carácter anterior (ida segundo): " + c);
@@ -185,4 +189,10 @@ public class Rotor {
     public int getPosicion() {
         return posicion;
     }
+
+    public String getContEscritura() {
+        return contEscritura;
+    }
+    
+    
 }

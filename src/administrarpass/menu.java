@@ -114,9 +114,8 @@ public class menu extends javax.swing.JFrame {
 
                 xValue = posClaX.get(Character.toString(x));
                 yValue = posClaX.get(Character.toString(y));
-                
-                System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue);
-                
+
+                //System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue + " | " + enigma.getPlugboard().getConexiones().size());
                 posClaX.put(Character.toString(x), yValue);
                 posClaX.put(Character.toString(y), xValue);
             }
@@ -129,8 +128,13 @@ public class menu extends javax.swing.JFrame {
 
             String mensaje = jTextFieldMensaje.getText();
             //modo = 0;
-            jTextFieldCifrado.setText(procesar(enigma, mensaje));
 
+            //menu.cI = EjecutarEnigma.cI;
+            //menu.cC = EjecutarEnigma.cC;
+            //menu.cD = EjecutarEnigma.cD;
+
+            jTextFieldCifrado.setText(procesar(enigma, mensaje));
+            
             int len = e.getDocument().getLength();
             String doc = "";
             try {
@@ -138,7 +142,6 @@ public class menu extends javax.swing.JFrame {
             } catch (BadLocationException ex) {
                 Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             if (!doc.isEmpty()) {
                 eni = true;
                 repaint();
@@ -148,6 +151,20 @@ public class menu extends javax.swing.JFrame {
             }
         }
     }
+
+    public static void setcI(char cI) {
+        menu.cI = cI;
+    }
+
+    public static void setcC(char cC) {
+        menu.cC = cC;
+    }
+
+    public static void setcD(char cD) {
+        menu.cD = cD;
+    }
+    
+    
 
     class MyFilter extends DocumentFilter {
 
@@ -203,11 +220,8 @@ public class menu extends javax.swing.JFrame {
         posTY = 480;
         //System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
 
-        cI = EjecutarEnigma.cI;
-        cC = EjecutarEnigma.cC;
-        cD = EjecutarEnigma.cD;
+        //
         //System.out.println("Initialize * cI: " + cI + " cC: " + cC + " cD: " + cD);
-
         contEleccion = 0;
         //System.out.println("Colocación rotores inicializada");
 
@@ -237,6 +251,7 @@ public class menu extends javax.swing.JFrame {
         pintar.setColor(Color.black);
         pintar.setFont(font);
 
+        contEleccion = 0;
         pintarBucle(character, pintar, "I", posIY);
         pintarBucle(character, pintar, "II", posCY);
         pintarBucle(character, pintar, "III", posDY);
@@ -345,7 +360,7 @@ public class menu extends javax.swing.JFrame {
 
     private void pintarClave(Graphics g, int n, int offset) {
         g.setColor(Color.CYAN);
-        g.fillRect(n, offset + 5, 15, 18);
+        g.fillRect(n, offset + 5, 15, 18); //15, 18
     }
 
     //---------
@@ -500,7 +515,7 @@ public class menu extends javax.swing.JFrame {
                     .addComponent(jLabelMensaje)
                     .addComponent(jLabelCifrado)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(387, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
