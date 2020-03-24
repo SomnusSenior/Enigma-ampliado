@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -75,7 +74,14 @@ public class menu extends javax.swing.JFrame {
 
         ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new MyFilter());
         jTextFieldMensaje.getDocument().addDocumentListener(new pruebaListener());
-        jTextFieldMensaje.getDocument().putProperty("name", "prueba");
+        //jTextFieldMensaje.getDocument().putProperty("name", "prueba");
+
+        ((AbstractDocument) jTextFieldClaveIzq.getDocument()).setDocumentFilter(new filtro1char());
+        ((AbstractDocument) jTextFieldClaveCen.getDocument()).setDocumentFilter(new filtro1char());
+        ((AbstractDocument) jTextFieldClaveDer.getDocument()).setDocumentFilter(new filtro1char());
+
+        ((AbstractDocument) jTextFieldClavija1.getDocument()).setDocumentFilter(new filtro1char());
+        ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new filtro1char());
     }
 
     class pruebaListener implements DocumentListener {
@@ -97,8 +103,6 @@ public class menu extends javax.swing.JFrame {
 
         public void updateFieldState(DocumentEvent e, String action) {
             //System.out.println("updateField: " + action);
-            int xValue = 0, yValue = 0;
-            char x = 0, y = 0;
 
             enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
@@ -107,18 +111,6 @@ public class menu extends javax.swing.JFrame {
                     c2 = jTextFieldClavija2.getText().charAt(0);
             //System.out.println("c1: " + c1 + " c2: " + c2);
             enigma.ponerClavija(c1, c2);
-
-            for (Clavijas conex : enigma.getPlugboard().getConexiones()) {
-                x = conex.getX();
-                y = conex.getY();
-
-                xValue = posClaX.get(Character.toString(x));
-                yValue = posClaX.get(Character.toString(y));
-
-                //System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue + " | " + enigma.getPlugboard().getConexiones().size());
-                posClaX.put(Character.toString(x), yValue);
-                posClaX.put(Character.toString(y), xValue);
-            }
 
             char cI = jTextFieldClaveIzq.getText().charAt(0),
                     cC = jTextFieldClaveCen.getText().charAt(0),
@@ -132,9 +124,8 @@ public class menu extends javax.swing.JFrame {
             //menu.cI = EjecutarEnigma.cI;
             //menu.cC = EjecutarEnigma.cC;
             //menu.cD = EjecutarEnigma.cD;
-
             jTextFieldCifrado.setText(procesar(enigma, mensaje));
-            
+
             int len = e.getDocument().getLength();
             String doc = "";
             try {
@@ -152,6 +143,24 @@ public class menu extends javax.swing.JFrame {
         }
     }
 
+    public static void acomodarClavijas() {
+
+        int xValue = 0, yValue = 0;
+        char x = 0, y = 0;
+
+        for (Clavijas conex : enigma.getPlugboard().getConexiones()) {
+            x = conex.getX();
+            y = conex.getY();
+
+            xValue = posClaX.get(Character.toString(x));
+            yValue = posClaX.get(Character.toString(y));
+
+            //System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue + " | " + enigma.getPlugboard().getConexiones().size());
+            posClaX.put(Character.toString(x), yValue);
+            posClaX.put(Character.toString(y), xValue);
+        }
+    }
+
     public static void setcI(char cI) {
         menu.cI = cI;
     }
@@ -163,14 +172,11 @@ public class menu extends javax.swing.JFrame {
     public static void setcD(char cD) {
         menu.cD = cD;
     }
-    
-    
 
     class MyFilter extends DocumentFilter {
 
         @Override
-        public void replace(DocumentFilter.FilterBypass fb, int offset, int length,
-                String text, AttributeSet attrs) throws BadLocationException {
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             boolean valido = false;
             /*System.out.println("Replace");
             if (offset >= fb.getDocument().getLength()) {
@@ -195,15 +201,44 @@ public class menu extends javax.swing.JFrame {
         }
 
         @Override
-        public void insertString(DocumentFilter.FilterBypass fb, int offset,
-                String text, AttributeSet attr) throws BadLocationException {
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
             super.insertString(fb, offset, text, attr);
         }
 
         @Override
-        public void remove(DocumentFilter.FilterBypass fb, int offset, int length)
-                throws BadLocationException {
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
             //System.out.println("Remove: " + fb.getDocument().getText(offset, length));
+            super.remove(fb, offset, length);
+        }
+    }
+
+    class filtro1char extends DocumentFilter {
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            boolean valido = false;
+            char c = text.charAt(0);
+
+            if (((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) && offset == 0) {
+                valido = true;
+            } else {
+                valido = false;
+            }
+
+            if (valido) {
+                super.replace(fb, offset, length, text, attrs);
+            } else {
+                super.replace(fb, offset, length, "", attrs);
+            }
+        }
+
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+            super.insertString(fb, offset, text, attr);
+        }
+
+        @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
             super.remove(fb, offset, length);
         }
     }
@@ -220,7 +255,6 @@ public class menu extends javax.swing.JFrame {
         posTY = 480;
         //System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
 
-        //
         //System.out.println("Initialize * cI: " + cI + " cC: " + cC + " cD: " + cD);
         contEleccion = 0;
         //System.out.println("Colocación rotores inicializada");
@@ -261,6 +295,7 @@ public class menu extends javax.swing.JFrame {
         pintarBucle(character, pintar, "T", posTY);
 
         if (eni) {
+            acomodarClavijas();
             pintarLinea(g);
         }
     }

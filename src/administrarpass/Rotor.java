@@ -11,7 +11,7 @@ public class Rotor {
     private int posicion; // posición del rotor
     private int tam; // tamaño del rotor
     private char puntoGiro; // punto de giro del rotor
-    
+
     /**
      * Creacion del rotor
      *
@@ -111,7 +111,7 @@ public class Rotor {
     public String obtenerContEscrituraAmpliado() {
         return this.contEscrituraAmpliadoPlus;
     }
-    
+
     /**
      * Cifra la letra a la "ida", antes del reflector; también realiza el
      * cifrado del reflector
@@ -123,12 +123,11 @@ public class Rotor {
         //System.out.println(" **** carácter del rotor según el índice anterior (ida primero): " + this.contEscritura.charAt(i));
         Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(i);
         Enigma.indiceP++;
-        
+
         char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
 
         //System.out.println("contenido cifrarIda: " + this.contenido.charAt(0));
         //System.out.println("contEscritura cifrarIda: " + this.contEscritura.charAt(0));
-        
         Enigma.pintar[Enigma.indiceP] = c;
         Enigma.indiceP++;
         //System.out.println(" * carácter del rotor con respecto al carácter anterior (ida segundo): " + c);
@@ -159,13 +158,13 @@ public class Rotor {
         //System.out.println(" ** carácter del alfabeto deescritura con respecto al carácter anterior (vuelta primero): " + c);
         Enigma.pintar[Enigma.indiceP] = c;
         Enigma.indiceP++;
-        
+
         int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
 
         //System.out.println(" ***** carácter del rotor según el índice anterior (vuelta segundo): " + this.contEscritura.charAt(iCifrada));
         Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(iCifrada);
         Enigma.indiceP++;
-        
+
         return iCifrada;
     }
 
@@ -193,6 +192,4 @@ public class Rotor {
     public String getContEscritura() {
         return contEscritura;
     }
-    
-    
 }
