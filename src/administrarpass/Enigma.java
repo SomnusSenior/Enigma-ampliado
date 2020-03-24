@@ -45,10 +45,6 @@ public class Enigma {
     public void setRotorsIni(char claveIzq, char claveCen, char claveDer) {
         int posDer, posCen, posIzq;
         if (cifrado == 0) {
-            claveIzq = EjecutarEnigma.pasarMayus(claveIzq); // pasa a mayúscula las claves
-            claveCen = EjecutarEnigma.pasarMayus(claveCen);
-            claveDer = EjecutarEnigma.pasarMayus(claveDer);
-
             posDer = claveDer - 'A';
             posCen = claveCen - 'A';
             posIzq = claveIzq - 'A';
@@ -238,10 +234,6 @@ public class Enigma {
     public void moverClavijas(char a, char b) {
         String aux = "", contenido;
         char susIzq, susDer, c;
-
-        // pasa a mayúsculas las clavijas
-        a = EjecutarEnigma.pasarMayus(a);
-        b = EjecutarEnigma.pasarMayus(b);
 
         if (cifrado == 0) {
             contenido = this.entrada.obtenerContenido();

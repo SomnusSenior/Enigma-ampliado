@@ -107,14 +107,14 @@ public class menu extends javax.swing.JFrame {
             enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
 
-            char c1 = jTextFieldClavija1.getText().charAt(0),
-                    c2 = jTextFieldClavija2.getText().charAt(0);
+            char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
+                    c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
             //System.out.println("c1: " + c1 + " c2: " + c2);
             enigma.ponerClavija(c1, c2);
 
-            char cI = jTextFieldClaveIzq.getText().charAt(0),
-                    cC = jTextFieldClaveCen.getText().charAt(0),
-                    cD = jTextFieldClaveDer.getText().charAt(0);
+            char cI = EjecutarEnigma.pasarMayus(jTextFieldClaveIzq.getText().charAt(0)),
+                    cC = EjecutarEnigma.pasarMayus(jTextFieldClaveCen.getText().charAt(0)),
+                    cD = EjecutarEnigma.pasarMayus(jTextFieldClaveDer.getText().charAt(0));
             //System.out.println("cI: " + cI + " cC: " + cC + " cD: " + cD);
             enigma.setRotorsIni(cI, cC, cD);
 
@@ -138,6 +138,9 @@ public class menu extends javax.swing.JFrame {
                 repaint();
             } else {
                 eni = false;
+                setcI(cI);
+                setcC(cC);
+                setcD(cD);
                 repaint();
             }
         }
@@ -434,6 +437,7 @@ public class menu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Rotor Izquierdo:");
@@ -499,7 +503,6 @@ public class menu extends javax.swing.JFrame {
 
         jTextFieldCifrado.setEditable(false);
         jTextFieldCifrado.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldCifrado.setText("Prueba");
         jTextFieldCifrado.setDragEnabled(true);
         jTextFieldCifrado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -549,9 +552,8 @@ public class menu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelMensaje)
                     .addComponent(jLabelCifrado)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(387, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -571,9 +573,9 @@ public class menu extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addGap(38, 38, 38)
                             .addComponent(jComboBoxRotorIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(27, 27, 27)
                             .addComponent(jTextFieldClaveIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(jTextFieldClaveCen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
