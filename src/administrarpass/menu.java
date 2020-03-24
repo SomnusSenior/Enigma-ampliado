@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -26,9 +27,11 @@ import javax.swing.text.DocumentFilter;
 public class menu extends javax.swing.JFrame {
 
     JTextField jt = new JTextField();
-    Rotor rIzq = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
-            rCen = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
-            rDer = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
+    Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
+            rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
+            rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'), //tipo III V
+            rIV = new Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'J'),
+            rV = new Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z'); 
     JFrame f;
     public boolean eni = false;
 
@@ -50,8 +53,12 @@ public class menu extends javax.swing.JFrame {
     private static int contEleccion;
     private static char cI, cC, cD;
 
-    private static Map<String, String> rotores = new HashMap<>();
+    private static Map<String, String> rotoresString = new HashMap<>();
     private static Enigma enigma;
+    
+    private static Map<String, Rotor> rotores = new HashMap<>();
+    
+    //private Graphics gGlobal;
 
     //-----------
     /**
@@ -104,26 +111,23 @@ public class menu extends javax.swing.JFrame {
         public void updateFieldState(DocumentEvent e, String action) {
             //System.out.println("updateField: " + action);
 
-            enigma = new Enigma(rIzq, rCen, rDer); // Crea la máquina enigma
+            enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()), 
+                                rotores.get(jComboBoxRotorCen.getSelectedItem().toString()), 
+                                rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
 
             char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
                     c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
-            //System.out.println("c1: " + c1 + " c2: " + c2);
             enigma.ponerClavija(c1, c2);
 
             char cI = EjecutarEnigma.pasarMayus(jTextFieldClaveIzq.getText().charAt(0)),
                     cC = EjecutarEnigma.pasarMayus(jTextFieldClaveCen.getText().charAt(0)),
                     cD = EjecutarEnigma.pasarMayus(jTextFieldClaveDer.getText().charAt(0));
-            //System.out.println("cI: " + cI + " cC: " + cC + " cD: " + cD);
             enigma.setRotorsIni(cI, cC, cD);
 
             String mensaje = jTextFieldMensaje.getText();
             //modo = 0;
-
-            //menu.cI = EjecutarEnigma.cI;
-            //menu.cC = EjecutarEnigma.cC;
-            //menu.cD = EjecutarEnigma.cD;
+            
             jTextFieldCifrado.setText(procesar(enigma, mensaje));
 
             int len = e.getDocument().getLength();
@@ -135,15 +139,33 @@ public class menu extends javax.swing.JFrame {
             }
             if (!doc.isEmpty()) {
                 eni = true;
+                changeEnabled(false);
                 repaint();
             } else {
                 eni = false;
+                changeEnabled(true);
                 setcI(cI);
                 setcC(cC);
                 setcD(cD);
                 repaint();
             }
+
+            /*ArrayList<Clavijas> conex = enigma.getPlugboard().getConexiones();
+            for (Clavijas clavijas : conex) {
+                System.out.println("conexión: " + clavijas.getX() + " - " + clavijas.getY());
+            }*/
         }
+    }
+
+    private void changeEnabled(boolean b) {
+        jTextFieldClaveIzq.setEnabled(b);
+        jTextFieldClaveCen.setEnabled(b);
+        jTextFieldClaveDer.setEnabled(b);
+        jTextFieldClavija1.setEnabled(b);
+        jTextFieldClavija2.setEnabled(b);
+
+        jButtonClavijaAdd.setEnabled(b);
+        jButtonClavijaDelete.setEnabled(b);
     }
 
     public static void acomodarClavijas() {
@@ -251,28 +273,36 @@ public class menu extends javax.swing.JFrame {
         //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
 
         //posRX = 400;
-        posRY = 80;
+        posRY = 90;
         //posClaX = 400;
-        posClaY = 400;
+        posClaY = 410;
         //posTX = 400;
-        posTY = 480;
+        posTY = 490;
         //System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
 
         //System.out.println("Initialize * cI: " + cI + " cC: " + cC + " cD: " + cD);
         contEleccion = 0;
         //System.out.println("Colocación rotores inicializada");
 
-        posIY = 160;
-        posCY = 240;
-        posDY = 320;
+        posIY = 170;
+        posCY = 250;
+        posDY = 330;
         //System.out.println("Posiciones rotores Y inicializadas");
 
-        rotores.put("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ");
-        rotores.put("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE");
-        rotores.put("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO");
-        rotores.put("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB");
-        rotores.put("V", "VZBRGITYUPSDNHLXAWMJQOFECK");
+        rotoresString.put("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ");
+        rotoresString.put("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE");
+        rotoresString.put("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO");
+        rotoresString.put("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB");
+        rotoresString.put("V", "VZBRGITYUPSDNHLXAWMJQOFECK");
         //System.out.println("Rotores inicializados");
+        
+        rotores.put("I", rI);
+        rotores.put("II", rII);
+        rotores.put("III", rIII);
+        rotores.put("IV", rIV);
+        rotores.put("V", rV);
+        
+        jTabbedPane1.setFont(new Font(jTabbedPane1.getFont().getFontName(), Font.BOLD, jTabbedPane1.getFont().getSize() + 4)); //jTabbedPane1.getFont().getStyle()
     }
 
     public void repaint() {
@@ -284,24 +314,29 @@ public class menu extends javax.swing.JFrame {
         Font font = new Font("Monospaced", Font.BOLD, 22);
         super.paint(g);
         int character = 65;
-        Graphics pintar = (Graphics) g;
-        pintar.setColor(Color.black);
-        pintar.setFont(font);
+        g.setColor(Color.black);
+        g.setFont(font);
 
         contEleccion = 0;
-        pintarBucle(character, pintar, "I", posIY);
-        pintarBucle(character, pintar, "II", posCY);
-        pintarBucle(character, pintar, "III", posDY);
+        pintarBucle(character, g, jComboBoxRotorIzq.getSelectedItem().toString(), posIY); //"I"
+        pintarBucle(character, g, jComboBoxRotorCen.getSelectedItem().toString(), posCY); //"II"
+        pintarBucle(character, g, jComboBoxRotorDer.getSelectedItem().toString(), posDY); //"III"
 
-        pintarBucle(character, pintar, "R", posRY);
-        pintarBucle(character, pintar, "C", posClaY);
-        pintarBucle(character, pintar, "T", posTY);
+        pintarBucle(character, g, "R", posRY);
+        pintarBucle(character, g, "C", posClaY);
+        pintarBucle(character, g, "T", posTY);
 
         if (eni) {
             acomodarClavijas();
             pintarLinea(g);
         }
+        
+        //copiarGraphic(g);
     }
+    
+    /*private void copiarGraphic(Graphics g){
+        gGlobal = g.create();
+    }*/
 
     private void pintarLinea(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -340,7 +375,7 @@ public class menu extends javax.swing.JFrame {
     }
 
     public void pintarBucle(int character, Graphics g, String eleccion, int offset) {
-        String s = rotores.get(eleccion);
+        String s = rotoresString.get(eleccion);
         int n = 0;
         char c = 0;
         String abc = "", per = "";
@@ -434,14 +469,22 @@ public class menu extends javax.swing.JFrame {
         jButtonClavijaDelete = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(805, 710));
         setResizable(false);
+
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 700));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(805, 680));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Rotor Izquierdo:");
@@ -461,43 +504,16 @@ public class menu extends javax.swing.JFrame {
         jTextFieldClaveIzq.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClaveIzq.setText("A");
         jTextFieldClaveIzq.setPreferredSize(new java.awt.Dimension(20, 20));
-        jTextFieldClaveIzq.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldClaveIzqActionPerformed(evt);
-            }
-        });
 
         jTextFieldClaveCen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClaveCen.setText("A");
         jTextFieldClaveCen.setPreferredSize(new java.awt.Dimension(20, 20));
-        jTextFieldClaveCen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldClaveCenActionPerformed(evt);
-            }
-        });
 
         jTextFieldClaveDer.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClaveDer.setText("A");
         jTextFieldClaveDer.setPreferredSize(new java.awt.Dimension(20, 20));
-        jTextFieldClaveDer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldClaveDerActionPerformed(evt);
-            }
-        });
 
         jTextFieldMensaje.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldMensaje.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                mensajeOnChange(evt);
-            }
-        });
-        jTextFieldMensaje.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mensaje(evt);
-            }
-        });
 
         jLabelMensaje.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelMensaje.setText("Introduce tu mensaje:");
@@ -508,11 +524,6 @@ public class menu extends javax.swing.JFrame {
         jTextFieldCifrado.setEditable(false);
         jTextFieldCifrado.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldCifrado.setDragEnabled(true);
-        jTextFieldCifrado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCifradoActionPerformed(evt);
-            }
-        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel7.setText("Clavijas:");
@@ -524,14 +535,14 @@ public class menu extends javax.swing.JFrame {
         jTextFieldClavija2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClavija2.setText("A");
         jTextFieldClavija2.setPreferredSize(new java.awt.Dimension(20, 20));
-        jTextFieldClavija2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldClavija2ActionPerformed(evt);
-            }
-        });
 
         jButtonClavijaAdd.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonClavijaAdd.setText("Añadir");
+        jButtonClavijaAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonClavijaAddMouseClicked(evt);
+            }
+        });
 
         jComboBoxRotorCen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jComboBoxRotorCen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I", "II", "III", "IV", "V" }));
@@ -541,26 +552,29 @@ public class menu extends javax.swing.JFrame {
 
         jButtonClavijaDelete.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonClavijaDelete.setText("Eliminar");
-        jButtonClavijaDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonClavijaDeleteActionPerformed(evt);
+        jButtonClavijaDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonClavijaDeleteMouseClicked(evt);
             }
         });
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(13);
+        jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelMensaje)
                     .addComponent(jLabelCifrado)
                     .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(387, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -591,11 +605,13 @@ public class menu extends javax.swing.JFrame {
                             .addComponent(jTextFieldClavija1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(jTextFieldClavija2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButtonClavijaAdd)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButtonClavijaDelete))))
-                .addGap(25, 25, 25))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButtonClavijaAdd)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonClavijaDelete)))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -631,15 +647,20 @@ public class menu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonClavijaAdd)
                     .addComponent(jButtonClavijaDelete))
-                .addGap(195, 195, 195)
-                .addComponent(jLabelMensaje)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabelCifrado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(jLabelMensaje)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelCifrado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Enigma clásica", jPanel1);
@@ -654,7 +675,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Enigma ampliada", jPanel2);
@@ -667,10 +688,10 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Rotores ampliados", jPanel3);
+        jTabbedPane1.addTab("Rotor ampliado", jPanel3);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -680,7 +701,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Reflector ampliado", jPanel4);
@@ -693,7 +714,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Enigma ampliada ++", jPanel5);
@@ -706,61 +727,48 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Rotores ampliados ++", jPanel6);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 682, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Generardor de contraseñas", jPanel7);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.getAccessibleContext().setAccessibleName("Simulador Enigma");
+        jTabbedPane1.getAccessibleContext().setAccessibleName("Simulador Enigma ++");
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("Simulador de la Máquina Enigma original y de la ampliación");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldClaveIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldClaveIzqActionPerformed
+    private void jButtonClavijaDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDeleteMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldClaveIzqActionPerformed
+    }//GEN-LAST:event_jButtonClavijaDeleteMouseClicked
 
-    private void jTextFieldClaveCenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldClaveCenActionPerformed
+    private void jButtonClavijaAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaAddMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldClaveCenActionPerformed
-
-    private void jTextFieldClaveDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldClaveDerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldClaveDerActionPerformed
-
-    private void mensaje(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mensaje
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mensaje
-
-    private void mensajeOnChange(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_mensajeOnChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mensajeOnChange
-
-    private void jTextFieldCifradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCifradoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCifradoActionPerformed
-
-    private void jTextFieldClavija2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldClavija2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldClavija2ActionPerformed
-
-    private void jButtonClavijaDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClavijaDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonClavijaDeleteActionPerformed
+    }//GEN-LAST:event_jButtonClavijaAddMouseClicked
 
     /**
      * @param args the command line arguments
@@ -817,15 +825,18 @@ public class menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextFieldCifrado;
     private javax.swing.JTextField jTextFieldClaveCen;
     private javax.swing.JTextField jTextFieldClaveDer;
     private javax.swing.JTextField jTextFieldClaveIzq;
     private javax.swing.JTextField jTextFieldClavija1;
     private javax.swing.JTextField jTextFieldClavija2;
-    public javax.swing.JTextField jTextFieldMensaje;
+    private javax.swing.JTextField jTextFieldMensaje;
     // End of variables declaration//GEN-END:variables
 }
