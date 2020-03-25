@@ -7,17 +7,12 @@ public class Enigma {
 
     private Rotor entrada = new Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", '-'); // rotor entrada
     private Rotor entradaAmpliado = new Rotor("!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", '-'); // rotor entrada AMPLIADO
-
     private static Rotor rotorDerecha; // rotor derecho
     private static Rotor rotorCentral; // rotor medio
     private static Rotor rotorIzquierda; // rotor izquierdo
-    //private static Rotor rotorDerIni; // inicial derecho
-    //private static Rotor rotorCenIni; // inicial medio
-    //private static Rotor rotorIzqIni; // inicial izquierdo
     private static Rotor reflector = new Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT", '-'); // reflector B
     private static Rotor reflectorAmpliado = new Rotor("bnD(gcF3SzpT6Q%#lRv70\"+V8J5eOoLxGN2)r$PiwAy1hfm'jX*t!4sCkYMHBq&KudWUE9ZaI", '-'); // reflector B AMPLIADO
-    private static ConexionClavijas plugboard; // tablero de clavijas
-
+    private static Clavijero plugboard; // tablero de clavijas
     public static int indiceP = 0;
     public static char[] pintar = new char[16];
 
@@ -32,7 +27,7 @@ public class Enigma {
         this.rotorDerecha = rDe;
         this.rotorCentral = rCen;
         this.rotorIzquierda = rIz;
-        this.plugboard = new ConexionClavijas();
+        this.plugboard = new Clavijero();
     }
 
     /**
@@ -54,14 +49,18 @@ public class Enigma {
             posIzq = posCheck(claveIzq);
         }
         this.rotorDerecha = this.rotorDerecha.giro(posDer);
-        //this.rotorDerIni = this.rotorDerecha;
         this.rotorCentral = this.rotorCentral.giro(posCen);
-        //this.rotorCenIni = this.rotorCentral;
         this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);
-        //this.rotorIzqIni = this.rotorIzquierda;
     }
 
-    public int posCheck(int clave) {
+    /**
+     * Comprueba las posiciones de la clave pasada; funcionalidad de los rotores
+     * ampliados.
+     *
+     * @param clave
+     * @return posición de la clave
+     */
+    private int posCheck(int clave) {
         int pos, check = clave - '!';
         if (check < 11) {
             pos = clave - '!';
@@ -78,7 +77,7 @@ public class Enigma {
     /**
      * Actualiza la posicion de los rotores haciendo que giren 1 vez
      */
-    public void actualizarRotores() {
+    private void actualizarRotores() {
         char claveActualDer, claveActualCen;
         if (cifrado == 0) {
             claveActualDer = this.rotorDerecha.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor derecho
@@ -101,35 +100,34 @@ public class Enigma {
         this.rotorDerecha = this.rotorDerecha.giro(1); // gira rotor derecho
     }
 
+    /**
+     * Cifrado para la interfaz interactiva, revisar utilidad para usar esta
+     * función o la de cifrado.
+     *
+     * @param c
+     * @return Completar una vez terminada la depuración completa?
+     */
     public char cifradoBase(char c) {
+        char aux;
+        int i;
         indiceP = 0;
         pintar[indiceP] = c;
         indiceP++;
-
-        char aux;
         actualizarRotores();
-        int i;
         i = this.entrada.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado
-
         i = this.rotorDerecha.cifrarIda(i);
         i = this.rotorCentral.cifrarIda(i);
         i = this.rotorIzquierda.cifrarIda(i);
-
-        i = this.reflector.cifrarIda(i);
-
+        i = this.reflector.cifrarIda(i);            //Reflector
         i = this.rotorIzquierda.cifrarVuelta(i);
         i = this.rotorCentral.cifrarVuelta(i);
         i = this.rotorDerecha.cifrarVuelta(i);
-
         aux = this.entrada.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido
-
         pintar[indiceP] = aux;
         indiceP++;
-
         menu.setcI((char) this.rotorIzquierda.getContEscritura().charAt(0));
         menu.setcC((char) this.rotorCentral.getContEscritura().charAt(0));
         menu.setcD((char) this.rotorDerecha.getContEscritura().charAt(0));
-
         return aux;
     }
 
@@ -188,19 +186,9 @@ public class Enigma {
         System.out.println(" *** carácter cifrado (salida): " + aux);
         pintar[indiceP] = aux;
         indiceP++;
-
         return aux;
     }
 
-    /**
-     * Reinicia la configuracion de los rotores con sus claves
-     */
-    /*public void reinicializar() {
-        this.rotorDerecha = this.rotorDerIni;
-        this.rotorCentral = this.rotorCenIni;
-        this.rotorIzquierda = this.rotorIzqIni;
-        //System.out.println("Maquina reinicializada");
-    }*/
     /**
      * Pone la conexión de las clavijas en el alfabeto
      *
@@ -234,13 +222,11 @@ public class Enigma {
     public void moverClavijas(char a, char b) {
         String aux = "", contenido;
         char susIzq, susDer, c;
-
         if (cifrado == 0) {
             contenido = this.entrada.obtenerContenido();
         } else {
             contenido = this.entradaAmpliado.obtenerContenido();
         }
-
         // ordena las clavijas
         if (a < b) {
             susIzq = a;
@@ -249,21 +235,17 @@ public class Enigma {
             susIzq = b;
             susDer = a;
         }
-
         for (int i = 0; i < contenido.length(); i++) {
-            // reordena el alfabeto de escritura
             c = contenido.charAt(i);
+            // reordena el alfabeto de escritura
             if (c == susIzq) {
                 aux += susDer;
-                //susIzq = contenido.charAt(i);
             } else if (c == susDer) {
                 aux += susIzq;
-                //susDer = contenido.charAt(i);
             } else {
                 aux += c;
             }
         }
-
         if (cifrado == 0) {
             this.entrada = new Rotor(aux, this.entrada.obtenerPuntoGiro());
         } else {
@@ -271,38 +253,12 @@ public class Enigma {
         }
     }
 
-    public Rotor getRotorDerecha() {
-        return rotorDerecha;
-    }
-
-    public Rotor getRotorCentral() {
-        return rotorCentral;
-    }
-
-    public Rotor getRotorIzquierda() {
-        return rotorIzquierda;
-    }
-
-    public Rotor getEntradaAmpliado() {
-        return this.entradaAmpliado;
-    }
-
-    public Rotor getEntrada() {
-        return this.entrada;
-    }
-
-    /*public Rotor getRotorDerIni() {
-        return this.rotorDerIni;
-    }
-
-    public Rotor getRotorCenIni() {
-        return this.rotorCenIni;
-    }
-
-    public Rotor getRotorIzqIni() {
-        return this.rotorIzqIni;
-    }*/
-    public ConexionClavijas getPlugboard() {
+    /**
+     * Obtiene las conexiones de las clavijas.
+     *
+     * @return conexiones del clavijero
+     */
+    public Clavijero getPlugboard() {
         return plugboard;
     }
 }

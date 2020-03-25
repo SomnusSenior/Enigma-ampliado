@@ -7,13 +7,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -26,16 +27,13 @@ import javax.swing.text.DocumentFilter;
  */
 public class menu extends javax.swing.JFrame {
 
-    JTextField jt = new JTextField();
-    Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
+    private Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
             rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
             rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'), //tipo III V
             rIV = new Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'J'),
-            rV = new Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z'); 
-    JFrame f;
-    public boolean eni = false;
+            rV = new Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z');
+    private boolean eni = false;
 
-    //----------
     private boolean ida = true;
     private double[] origen = new double[2];
     private static double[][] puntos = new double[26][2];
@@ -55,23 +53,20 @@ public class menu extends javax.swing.JFrame {
 
     private static Map<String, String> rotoresString = new HashMap<>();
     private static Enigma enigma;
-    
-    private static Map<String, Rotor> rotores = new HashMap<>();
-    
-    //private Graphics gGlobal;
 
-    //-----------
+    private static Map<String, Rotor> rotores = new HashMap<>();
+
     /**
      * Creates new form menu
      */
     public menu() {
         super();
         initComponents();
-        prueba1();
+        iniciar();
         initialize();
     }
 
-    private void prueba1() {
+    private void iniciar() {
         /**
          * - Si se ha introducido un mensaje se inhabilitan los botones para el
          * cambio de la clave.... Cada cambio de clave refresca la pantalla para
@@ -79,8 +74,8 @@ public class menu extends javax.swing.JFrame {
          * :( (Con respecto a mostrarlas en la interfaz)
          */
 
-        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new MyFilter());
-        jTextFieldMensaje.getDocument().addDocumentListener(new pruebaListener());
+        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new filtroMensaje());
+        jTextFieldMensaje.getDocument().addDocumentListener(new listenerMensaje());
         //jTextFieldMensaje.getDocument().putProperty("name", "prueba");
 
         ((AbstractDocument) jTextFieldClaveIzq.getDocument()).setDocumentFilter(new filtro1char());
@@ -91,7 +86,7 @@ public class menu extends javax.swing.JFrame {
         ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new filtro1char());
     }
 
-    class pruebaListener implements DocumentListener {
+    class listenerMensaje implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
@@ -111,9 +106,9 @@ public class menu extends javax.swing.JFrame {
         public void updateFieldState(DocumentEvent e, String action) {
             //System.out.println("updateField: " + action);
 
-            enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()), 
-                                rotores.get(jComboBoxRotorCen.getSelectedItem().toString()), 
-                                rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
+            enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()),
+                    rotores.get(jComboBoxRotorCen.getSelectedItem().toString()),
+                    rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
 
             char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
@@ -127,7 +122,7 @@ public class menu extends javax.swing.JFrame {
 
             String mensaje = jTextFieldMensaje.getText();
             //modo = 0;
-            
+
             jTextFieldCifrado.setText(procesar(enigma, mensaje));
 
             int len = e.getDocument().getLength();
@@ -166,23 +161,22 @@ public class menu extends javax.swing.JFrame {
 
         jButtonClavijaAdd.setEnabled(b);
         jButtonClavijaDelete.setEnabled(b);
+
+        jComboBoxRotorIzq.setEnabled(b);
+        jComboBoxRotorCen.setEnabled(b);
+        jComboBoxRotorDer.setEnabled(b);
     }
 
-    public static void acomodarClavijas() {
-
-        int xValue = 0, yValue = 0;
-        char x = 0, y = 0;
-
+    private static void acomodarClavijas() {
+        int primeraValue = 0, segundaValue = 0;
+        char primera = 0, segunda = 0;
         for (Clavijas conex : enigma.getPlugboard().getConexiones()) {
-            x = conex.getX();
-            y = conex.getY();
-
-            xValue = posClaX.get(Character.toString(x));
-            yValue = posClaX.get(Character.toString(y));
-
-            //System.out.println("x: " + x + " xValue: " + xValue + " | y: " + y + " yValue: " + yValue + " | " + enigma.getPlugboard().getConexiones().size());
-            posClaX.put(Character.toString(x), yValue);
-            posClaX.put(Character.toString(y), xValue);
+            primera = conex.getPrimera();
+            segunda = conex.getSegunda();
+            primeraValue = posClaX.get(Character.toString(primera));
+            segundaValue = posClaX.get(Character.toString(segunda));
+            posClaX.put(Character.toString(primera), segundaValue);
+            posClaX.put(Character.toString(segunda), primeraValue);
         }
     }
 
@@ -198,7 +192,7 @@ public class menu extends javax.swing.JFrame {
         menu.cD = cD;
     }
 
-    class MyFilter extends DocumentFilter {
+    class filtroMensaje extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
@@ -270,120 +264,108 @@ public class menu extends javax.swing.JFrame {
 
     //--------
     private void initialize() {
-        //System.out.println("Izq: " + this.rotorIzquierda.obtenerContEscritura().charAt(0) + " Cen: " + this.rotorCentral.obtenerContEscritura().charAt(0) + " Der: " + this.rotorDerecha.obtenerContEscritura().charAt(0));
-
-        //posRX = 400;
-        posRY = 90;
-        //posClaX = 400;
-        posClaY = 410;
-        //posTX = 400;
-        posTY = 490;
-        //System.out.println("Posiciones Y teclado, clavijero y reflector inicializadas");
-
-        //System.out.println("Initialize * cI: " + cI + " cC: " + cC + " cD: " + cD);
+        posRY = 90;     //Reflector
+        posIY = 170;    //Izquierdo
+        posCY = 250;    //Central
+        posDY = 330;    //Derecho
+        posClaY = 410;  //Clavijero
+        posTY = 490;    //Teclado
+        //System.out.println("Posiciones Y teclado, clavijero, reflector y rotores inicializadas");
         contEleccion = 0;
         //System.out.println("Colocación rotores inicializada");
-
-        posIY = 170;
-        posCY = 250;
-        posDY = 330;
-        //System.out.println("Posiciones rotores Y inicializadas");
-
         rotoresString.put("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotoresString.put("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE");
         rotoresString.put("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO");
         rotoresString.put("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB");
         rotoresString.put("V", "VZBRGITYUPSDNHLXAWMJQOFECK");
-        //System.out.println("Rotores inicializados");
-        
+        //System.out.println("Rotores pintar inicializados");
         rotores.put("I", rI);
         rotores.put("II", rII);
         rotores.put("III", rIII);
         rotores.put("IV", rIV);
         rotores.put("V", rV);
-        
+        //System.out.println("Rotores inicializados");
+
         jTabbedPane1.setFont(new Font(jTabbedPane1.getFont().getFontName(), Font.BOLD, jTabbedPane1.getFont().getSize() + 4)); //jTabbedPane1.getFont().getStyle()
+        jTabbedPane1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (jTabbedPane1.getSelectedIndex() == 0) {
+                    repaint();
+                }
+            }
+        });
+        jComboBoxRotorIzq.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+            }
+        });
+        jComboBoxRotorCen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+            }
+        });
+        jComboBoxRotorDer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+            }
+        });
     }
 
+    //@Override
     public void repaint() {
         super.repaint();
     }
 
     @Override
     public void paint(Graphics g) {
-        Font font = new Font("Monospaced", Font.BOLD, 22);
         super.paint(g);
+        Font font = new Font("Monospaced", Font.BOLD, 22);
         int character = 65;
+        contEleccion = 0;
         g.setColor(Color.black);
         g.setFont(font);
-
-        contEleccion = 0;
         pintarBucle(character, g, jComboBoxRotorIzq.getSelectedItem().toString(), posIY); //"I"
         pintarBucle(character, g, jComboBoxRotorCen.getSelectedItem().toString(), posCY); //"II"
         pintarBucle(character, g, jComboBoxRotorDer.getSelectedItem().toString(), posDY); //"III"
-
         pintarBucle(character, g, "R", posRY);
         pintarBucle(character, g, "C", posClaY);
         pintarBucle(character, g, "T", posTY);
-
         if (eni) {
             acomodarClavijas();
             pintarLinea(g);
         }
-        
-        //copiarGraphic(g);
+        g.dispose();
     }
-    
-    /*private void copiarGraphic(Graphics g){
-        gGlobal = g.create();
-    }*/
 
     private void pintarLinea(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        int width = 3;
-        g2d.setStroke(new BasicStroke(width));
-
+        g2d.setStroke(new BasicStroke(3));
         g.setColor(Color.RED);
         g2d.drawLine(posTX.get(Character.toString(Enigma.pintar[0])), posTY, posClaX.get(Character.toString(Enigma.pintar[0])), posClaY + 20);// Desde Teclado paraPintar[0] hasta Clavijero
-
         g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[0])), posClaY, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero  hasta D ABC
         g2d.drawLine(posPerDX.get(Character.toString(Enigma.pintar[2])), posDY - 15, posCX.get(Character.toString(Enigma.pintar[3])), posCY + 20);    // Desde D PER hasta C ABC
         g2d.drawLine(posPerCX.get(Character.toString(Enigma.pintar[4])), posCY - 15, posIX.get(Character.toString(Enigma.pintar[5])), posIY + 20);   // Desde C PER hasta I ABC
         g2d.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX.get(Character.toString(Enigma.pintar[7])), posRY + 20); // Desde I PER hasta R paraPintar[7]
-
         g2d.setColor(Color.MAGENTA);
         g2d.drawLine(posRX.get(Character.toString(Enigma.pintar[8])), posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15);// Desde R paraPintar[8] hasta I PER
         g2d.drawLine(posIX.get(Character.toString(Enigma.pintar[10])), posIY + 20, posPerCX.get(Character.toString(Enigma.pintar[11])), posCY - 15);// Desde I ABC hasta C PER
         g2d.drawLine(posCX.get(Character.toString(Enigma.pintar[12])), posCY + 20, posPerDX.get(Character.toString(Enigma.pintar[13])), posDY - 15);// Desde C ABC hasta D PER
         g2d.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX.get(Character.toString(Enigma.pintar[15])), posClaY);// Desde D ABC hasta Clavijero 
         g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[15])), posClaY + 20, posTX.get(Character.toString(Enigma.pintar[15])), posTY);// Desde Clavijero hasta Teclado paraPintar[15]
-
-        /*
-        g.drawLine(posTX, posTY, posClaX, posClaY + 20);// Desde Teclado entrada hasta Clavijero paraPintar[0]
-        g.drawLine(posClaX, posClaY, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero paraPintar[0] hasta D ABC
-        g.drawLine(posPerDX.get(Character.toString(Enigma.pintar[2])), posDY - 15, posCX.get(Character.toString(Enigma.pintar[3])), posCY + 20);    // Desde D PER hasta C ABC
-        g.drawLine(posPerCX.get(Character.toString(Enigma.pintar[4])), posCY - 15, posIX.get(Character.toString(Enigma.pintar[5])), posIY + 20);   // Desde C PER hasta I ABC
-        g.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX, posRY + 20); // Desde I PER hasta R paraPintar[7]
-
-        g.setColor(Color.MAGENTA);
-        g.drawLine(posRX, posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15);// Desde R paraPintar[8] hasta I PER
-        g.drawLine(posIX.get(Character.toString(Enigma.pintar[10])), posIY + 20, posPerCX.get(Character.toString(Enigma.pintar[11])), posCY - 15);// Desde I ABC hasta C PER
-        g.drawLine(posCX.get(Character.toString(Enigma.pintar[12])), posCY + 20, posPerDX.get(Character.toString(Enigma.pintar[13])), posDY - 15);// Desde C ABC hasta D PER
-        g.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX, posClaY);// Desde D ABC hasta Clavijero paraPintar[15]
-        g.drawLine(posClaX, posClaY + 20, posTX, posTY);// Desde Clavijero paraPintar[15] hasta Teclado entrada
-         */
     }
 
-    public void pintarBucle(int character, Graphics g, String eleccion, int offset) {
-        String s = rotoresString.get(eleccion);
+    private void pintarBucle(int character, Graphics g, String eleccion, int offset) {
+        String s = rotoresString.get(eleccion), abc = "", per = "";
         int n = 0;
         char c = 0;
-        String abc = "", per = "";
         for (int i = 0; i < 26; i++) {
             c = (char) character;
             n = 30 + 20 * i;
             abc = Character.toString(c);
-
             if (!"T".equals(eleccion) && !"C".equals(eleccion) && !"R".equals(eleccion)) {
                 per = Character.toString(s.charAt(i));
                 g.setColor(Color.black);
@@ -391,32 +373,19 @@ public class menu extends javax.swing.JFrame {
             }
             switch (contEleccion) {
                 case 0:
-                    posPerIX.put(per, n + 5);
-                    posIX.put(abc, n + 5);
-                    if (c == cI) {
-                        pintarClave(g, n, offset);
-                    }
+                    pintarEleccion(posPerIX, per, posIX, abc, c, cI, g, n, offset);
                     break;
                 case 1:
-                    posPerCX.put(per, n + 5);
-                    posCX.put(abc, n + 5);
-                    if (c == cC) {
-                        pintarClave(g, n, offset);
-                    }
+                    pintarEleccion(posPerCX, per, posCX, abc, c, cC, g, n, offset);
                     break;
                 case 2:
-                    posPerDX.put(per, n + 5);
-                    posDX.put(abc, n + 5);
-                    if (c == cD) {
-                        pintarClave(g, n, offset);
-                    }
+                    pintarEleccion(posPerDX, per, posDX, abc, c, cD, g, n, offset);
                     break;
                 case 3: //Reflector
                     posRX.put(abc, n + 5);
                     break;
                 case 4: //Clavijero
                     posClaX.put(abc, n + 5);
-                    //
                     break;
                 case 5: //Teclado
                     posTX.put(abc, n + 5);
@@ -429,6 +398,14 @@ public class menu extends javax.swing.JFrame {
             character++;
         }
         contEleccion++;
+    }
+
+    private void pintarEleccion(Map<String, Integer> posPer, String per, Map<String, Integer> pos, String abc, char c, char clave, Graphics g, int n, int offset) {
+        posPer.put(per, n + 5);
+        pos.put(abc, n + 5);
+        if (c == clave) {
+            pintarClave(g, n, offset);
+        }
     }
 
     private void pintarClave(Graphics g, int n, int offset) {
@@ -479,7 +456,6 @@ public class menu extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(805, 710));
         setResizable(false);
 
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 700));
@@ -837,6 +813,6 @@ public class menu extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldClaveIzq;
     private javax.swing.JTextField jTextFieldClavija1;
     private javax.swing.JTextField jTextFieldClavija2;
-    private javax.swing.JTextField jTextFieldMensaje;
+    public javax.swing.JTextField jTextFieldMensaje;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,7 +3,7 @@ package administrarpass;
 import static administrarpass.EjecutarEnigma.cifrado;
 import java.util.ArrayList;
 
-public class ConexionClavijas {
+public class Clavijero {
 
     private ArrayList<Character> clavijas = new ArrayList<>(); // Todas las clavijas
     private ArrayList<Character> clavijasLibres = new ArrayList<>(); // Clavijas libres
@@ -12,7 +12,7 @@ public class ConexionClavijas {
     /**
      * Crea el panel de clavijas
      */
-    public ConexionClavijas() {
+    public Clavijero() {
         String panel;
         if (cifrado == 0) {
             panel = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // panel de clavijas
@@ -36,12 +36,9 @@ public class ConexionClavijas {
     public boolean establecerConexion(char a, char b) {
         if (this.clavijas.contains(a) && this.clavijas.contains(b)) { // comprueba si existen las clavijas
             if (this.clavijasLibres.contains(a) && this.clavijasLibres.contains(b)) { // comprueba si alguna de las clavijas está ocupada
-
                 this.conexiones.add(new Clavijas(a, b)); // crea la conexión de las clavijas
-
                 for (int i = 0; i < this.clavijasLibres.size(); i++) { // busca las clavijas y las elimina de las clavijas libres
                     char aux = this.clavijasLibres.get(i);
-
                     if (a == aux || b == aux) {
                         this.clavijasLibres.remove(i);
                     }
@@ -64,11 +61,10 @@ public class ConexionClavijas {
      * @param b clavija b
      * @return índice de la conexion si la encuentra, -1 si no la encuentra
      */
-    public int encontrarConexion(char a, char b) {
+    private int encontrarConexion(char a, char b) {
         for (int i = 0; i < this.conexiones.size(); i++) {
             Clavijas aux = this.conexiones.get(i); // busca si hay una conexión entre las clavijas
-
-            if ((aux.getX() == a && aux.getY() == b) || (aux.getX() == b && aux.getY() == a)) { // comprueba las entradas (indiferente del orden)
+            if ((aux.getPrimera() == a && aux.getSegunda() == b) || (aux.getPrimera() == b && aux.getSegunda() == a)) { // comprueba las entradas (indiferente del orden)
                 return i;
             }
         }
@@ -85,10 +81,6 @@ public class ConexionClavijas {
      */
     public boolean eliminarConexion(char a, char b) {
         int i = encontrarConexion(a, b); // comprueba si existe conexión
-        if (i == -1) {
-            return false;
-        }
-
         if (i != -1) { // elimina la conexión
             this.clavijasLibres.add(a);
             this.clavijasLibres.add(b);

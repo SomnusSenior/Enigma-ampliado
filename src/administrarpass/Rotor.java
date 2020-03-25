@@ -72,8 +72,50 @@ public class Rotor {
                 }
             }
         }
-        //System.out.println("tam: " + this.tam + " | offset: " + offset + " | nuevaPos: " + nuevaPos);
         return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
+    }
+
+    /**
+     * Cifra la letra a la "ida", antes del reflector; también realiza el
+     * cifrado del reflector
+     *
+     * @param i índice del caracter a cifrar
+     * @return índice de la letra cifrada
+     */
+    public int cifrarIda(int i) {
+        int iCifrada;
+        Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(i);
+        Enigma.indiceP++;
+        char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
+        Enigma.pintar[Enigma.indiceP] = c;
+        Enigma.indiceP++;
+        if (cifrado == 0) {
+            iCifrada = this.contEscritura.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
+        } else {
+            iCifrada = this.contEscrituraAmpliadoPlus.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
+        }
+        return iCifrada;
+    }
+
+    /**
+     * Cifra la letra a la "vuelta", después del reflector
+     *
+     * @param i índice de la letra a cifrar
+     * @return índice del caracter cifrada
+     */
+    public int cifrarVuelta(int i) {
+        char c;
+        if (cifrado == 0) {
+            c = this.contEscritura.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
+        } else {
+            c = this.contEscrituraAmpliadoPlus.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura
+        }
+        Enigma.pintar[Enigma.indiceP] = c;
+        Enigma.indiceP++;
+        int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
+        Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(iCifrada);
+        Enigma.indiceP++;
+        return iCifrada;
     }
 
     /**
@@ -113,62 +155,6 @@ public class Rotor {
     }
 
     /**
-     * Cifra la letra a la "ida", antes del reflector; también realiza el
-     * cifrado del reflector
-     *
-     * @param i índice del caracter a cifrar
-     * @return índice de la letra cifrada
-     */
-    public int cifrarIda(int i) {
-        //System.out.println(" **** carácter del rotor según el índice anterior (ida primero): " + this.contEscritura.charAt(i));
-        Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(i);
-        Enigma.indiceP++;
-
-        char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
-
-        //System.out.println("contenido cifrarIda: " + this.contenido.charAt(0));
-        //System.out.println("contEscritura cifrarIda: " + this.contEscritura.charAt(0));
-        Enigma.pintar[Enigma.indiceP] = c;
-        Enigma.indiceP++;
-        //System.out.println(" * carácter del rotor con respecto al carácter anterior (ida segundo): " + c);
-
-        int iCifrada;
-        if (cifrado == 0) {
-            iCifrada = this.contEscritura.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
-        } else {
-            iCifrada = this.contEscrituraAmpliadoPlus.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
-        }
-        return iCifrada;
-    }
-
-    /**
-     * Cifra la letra a la "vuelta", después del reflector
-     *
-     * @param i índice de la letra a cifrar
-     * @return índice del caracter cifrada
-     */
-    public int cifrarVuelta(int i) {
-        char c;
-        if (cifrado == 0) {
-            c = this.contEscritura.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
-        } else {
-            c = this.contEscrituraAmpliadoPlus.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura
-        }
-
-        //System.out.println(" ** carácter del alfabeto deescritura con respecto al carácter anterior (vuelta primero): " + c);
-        Enigma.pintar[Enigma.indiceP] = c;
-        Enigma.indiceP++;
-
-        int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
-
-        //System.out.println(" ***** carácter del rotor según el índice anterior (vuelta segundo): " + this.contEscritura.charAt(iCifrada));
-        Enigma.pintar[Enigma.indiceP] = this.contEscritura.charAt(iCifrada);
-        Enigma.indiceP++;
-
-        return iCifrada;
-    }
-
-    /**
      * Obtiene el punto de cambio / giro de los rotores
      *
      * @return punto de cambio giro
@@ -177,18 +163,11 @@ public class Rotor {
         return this.puntoGiro;
     }
 
-    public String getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
-
-    public int getPosicion() {
-        return posicion;
-    }
-
+    /**
+     * Obtiene el alfabeto de escritura del rotor.
+     *
+     * @return alfabeto de escritura
+     */
     public String getContEscritura() {
         return contEscritura;
     }

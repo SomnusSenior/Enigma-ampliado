@@ -10,12 +10,17 @@ public class EjecutarEnigma {
     public static char cI, cC, cD;
 
     public static void RunnerEnigma() {
-        if (cifrado == 0 || cifrado == 1) {
-            RotoresPregunta();
-        } else if (cifrado == 2) {
-            ModoPregunta();
-        } else {
-            System.out.println("Error RunnerEnigma()");
+        switch (cifrado) {
+            case 0:
+            case 1:
+                RotoresPregunta();
+                break;
+            case 2:
+                ModoPregunta();
+                break;
+            default:
+                System.out.println("Error RunnerEnigma()");
+                break;
         }
     }
 

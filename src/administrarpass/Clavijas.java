@@ -2,8 +2,8 @@ package administrarpass;
 
 public class Clavijas {
 
-    private char x;
-    private char y;
+    private char primera;
+    private char segunda;
 
     /**
      * Crea la pareja de clavijas
@@ -12,8 +12,8 @@ public class Clavijas {
      * @param b segunda clavija
      */
     public Clavijas(char a, char b) {
-        this.x = a;
-        this.y = b;
+        this.primera = a;
+        this.segunda = b;
     }
 
     /**
@@ -21,8 +21,8 @@ public class Clavijas {
      *
      * @return la primera clavija
      */
-    public char getX() {
-        return this.x;
+    public char getPrimera() {
+        return this.primera;
     }
 
     /**
@@ -30,7 +30,7 @@ public class Clavijas {
      *
      * @return la segunda clavija
      */
-    public char getY() {
-        return this.y;
+    public char getSegunda() {
+        return this.segunda;
     }
 }
