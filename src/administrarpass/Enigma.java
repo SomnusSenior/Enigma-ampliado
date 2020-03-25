@@ -37,7 +37,7 @@ public class Enigma {
      * @param claveCen Clave / posición inicial del rotor medio
      * @param claveIzq Clave / posición inicial del rotor izquierdo
      */
-    public void setRotorsIni(char claveIzq, char claveCen, char claveDer) {
+    public void setRotoresIni(char claveIzq, char claveCen, char claveDer) {
         int posDer, posCen, posIzq;
         if (cifrado == 0) {
             posDer = claveDer - 'A';
@@ -260,5 +260,13 @@ public class Enigma {
      */
     public Clavijero getPlugboard() {
         return plugboard;
+    }
+
+    /**
+     * Configura las conexiones de las clavijas
+     * @param plugboard 
+     */
+    public static void setPlugboard(Clavijero plugboard) {
+        Enigma.plugboard = plugboard;
     }
 }

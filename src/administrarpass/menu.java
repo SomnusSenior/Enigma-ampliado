@@ -2,13 +2,13 @@ package administrarpass;
 
 import static administrarpass.EjecutarEnigma.procesar;
 import java.awt.BasicStroke;
-//import static administrarpass.prueba.resta;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -55,6 +55,8 @@ public class menu extends javax.swing.JFrame {
     private static Enigma enigma;
 
     private static Map<String, Rotor> rotores = new HashMap<>();
+
+    ArrayList<Clavijas> conex = new ArrayList<>();
 
     /**
      * Creates new form menu
@@ -105,26 +107,20 @@ public class menu extends javax.swing.JFrame {
 
         public void updateFieldState(DocumentEvent e, String action) {
             //System.out.println("updateField: " + action);
-
             enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorCen.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
             EjecutarEnigma.cifrado = 0;
-
-            char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
-                    c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
-            enigma.ponerClavija(c1, c2);
-
+            for (Clavijas cla : conex) {
+                enigma.ponerClavija(cla.getPrimera(), cla.getSegunda());
+            }
             char cI = EjecutarEnigma.pasarMayus(jTextFieldClaveIzq.getText().charAt(0)),
                     cC = EjecutarEnigma.pasarMayus(jTextFieldClaveCen.getText().charAt(0)),
                     cD = EjecutarEnigma.pasarMayus(jTextFieldClaveDer.getText().charAt(0));
-            enigma.setRotorsIni(cI, cC, cD);
-
+            enigma.setRotoresIni(cI, cC, cD);
             String mensaje = jTextFieldMensaje.getText();
             //modo = 0;
-
             jTextFieldCifrado.setText(procesar(enigma, mensaje));
-
             int len = e.getDocument().getLength();
             String doc = "";
             try {
@@ -144,11 +140,6 @@ public class menu extends javax.swing.JFrame {
                 setcD(cD);
                 repaint();
             }
-
-            /*ArrayList<Clavijas> conex = enigma.getPlugboard().getConexiones();
-            for (Clavijas clavijas : conex) {
-                System.out.println("conexión: " + clavijas.getX() + " - " + clavijas.getY());
-            }*/
         }
     }
 
@@ -165,6 +156,8 @@ public class menu extends javax.swing.JFrame {
         jComboBoxRotorIzq.setEnabled(b);
         jComboBoxRotorCen.setEnabled(b);
         jComboBoxRotorDer.setEnabled(b);
+
+        jList1.setEnabled(b);
     }
 
     private static void acomodarClavijas() {
@@ -237,13 +230,12 @@ public class menu extends javax.swing.JFrame {
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             boolean valido = false;
             char c = text.charAt(0);
-
             if (((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) && offset == 0) {
                 valido = true;
             } else {
                 valido = false;
             }
-
+            text = Character.toString(EjecutarEnigma.pasarMayus(c));
             if (valido) {
                 super.replace(fb, offset, length, text, attrs);
             } else {
@@ -262,7 +254,6 @@ public class menu extends javax.swing.JFrame {
         }
     }
 
-    //--------
     private void initialize() {
         posRY = 90;     //Reflector
         posIY = 170;    //Izquierdo
@@ -315,7 +306,6 @@ public class menu extends javax.swing.JFrame {
         });
     }
 
-    //@Override
     public void repaint() {
         super.repaint();
     }
@@ -423,6 +413,7 @@ public class menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextFieldMensaje2 = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -446,14 +437,39 @@ public class menu extends javax.swing.JFrame {
         jButtonClavijaDelete = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jPanel2 = new javax.swing.JPanel();
+        jLabelMensaje1 = new javax.swing.JLabel();
+        jTextFieldMensaje1 = new javax.swing.JTextField();
+        jLabelCifrado1 = new javax.swing.JLabel();
+        jTextFieldCifrado1 = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldClaveIzq1 = new javax.swing.JTextField();
+        jTextFieldClaveCen1 = new javax.swing.JTextField();
+        jTextFieldClaveDer1 = new javax.swing.JTextField();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel8 = new javax.swing.JLabel();
+        jTextFieldClavija3 = new javax.swing.JTextField();
+        jTextFieldClavija4 = new javax.swing.JTextField();
+        jButtonClavijaAdd1 = new javax.swing.JButton();
+        jButtonClavijaDelete1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
+        jTextFieldRotorIzq1 = new javax.swing.JTextField();
+        jLabelRotorIzq1 = new javax.swing.JLabel();
+        jLabelRotorCen1 = new javax.swing.JLabel();
+        jTextFieldRotorCen1 = new javax.swing.JTextField();
+        jLabelRotorDer1 = new javax.swing.JLabel();
+        jTextFieldRotorDer1 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
+
+        jTextFieldMensaje2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -534,10 +550,8 @@ public class menu extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(13);
-        jScrollPane1.setViewportView(jTextArea1);
+        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane2.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -551,43 +565,46 @@ public class menu extends javax.swing.JFrame {
                     .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxRotorDer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxRotorCen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(38, 38, 38)
-                            .addComponent(jComboBoxRotorIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addGap(27, 27, 27)
-                            .addComponent(jTextFieldClaveIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextFieldClaveCen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextFieldClaveDer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextFieldClavija1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextFieldClavija2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonClavijaAdd)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonClavijaDelete)))))
-                .addContainerGap())
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxRotorDer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxRotorCen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(38, 38, 38)
+                                    .addComponent(jComboBoxRotorIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(jTextFieldClaveIzq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldClaveCen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldClaveDer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldClavija1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldClavija2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jButtonClavijaAdd)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jButtonClavijaDelete))))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(98, 98, 98))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -623,35 +640,196 @@ public class menu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonClavijaAdd)
                     .addComponent(jButtonClavijaDelete))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(178, 178, 178)
                         .addComponent(jLabelMensaje)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextFieldMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabelCifrado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldCifrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Enigma clásica", jPanel1);
 
         jPanel2.setName(""); // NOI18N
 
+        jLabelMensaje1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje1.setText("Introduce tu mensaje:");
+
+        jTextFieldMensaje1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabelCifrado1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelCifrado1.setText("Mensaje cifrado:");
+
+        jTextFieldCifrado1.setEditable(false);
+        jTextFieldCifrado1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldCifrado1.setDragEnabled(true);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("Claves:");
+
+        jTextFieldClaveIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveIzq1.setText("A");
+        jTextFieldClaveIzq1.setPreferredSize(new java.awt.Dimension(20, 20));
+
+        jTextFieldClaveCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveCen1.setText("A");
+        jTextFieldClaveCen1.setPreferredSize(new java.awt.Dimension(20, 20));
+
+        jTextFieldClaveDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveDer1.setText("A");
+        jTextFieldClaveDer1.setPreferredSize(new java.awt.Dimension(20, 20));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel8.setText("Clavijas:");
+
+        jTextFieldClavija3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClavija3.setText("A");
+        jTextFieldClavija3.setPreferredSize(new java.awt.Dimension(20, 20));
+
+        jTextFieldClavija4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClavija4.setText("A");
+        jTextFieldClavija4.setPreferredSize(new java.awt.Dimension(20, 20));
+
+        jButtonClavijaAdd1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonClavijaAdd1.setText("Añadir");
+        jButtonClavijaAdd1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonClavijaAdd1MouseClicked(evt);
+            }
+        });
+
+        jButtonClavijaDelete1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonClavijaDelete1.setText("Eliminar");
+        jButtonClavijaDelete1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonClavijaDelete1MouseClicked(evt);
+            }
+        });
+
+        jList2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane3.setViewportView(jList2);
+
+        jTextFieldRotorIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabelRotorIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorIzq1.setText("Rotor Izquierdo:");
+
+        jLabelRotorCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorCen1.setText("Rotor Central:");
+
+        jTextFieldRotorCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabelRotorDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorDer1.setText("Rotor Derecho:");
+
+        jTextFieldRotorDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabelRotorIzq1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTextFieldRotorIzq1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelMensaje1)
+                            .addComponent(jTextFieldMensaje1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCifrado1)
+                            .addComponent(jTextFieldCifrado1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelRotorCen1)
+                            .addComponent(jTextFieldRotorCen1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelRotorDer1)
+                            .addComponent(jTextFieldRotorDer1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(jTextFieldClaveIzq1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldClaveCen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldClaveDer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldClavija3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldClavija4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jButtonClavijaAdd1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButtonClavijaDelete1)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(88, 88, 88))))
+                        .addGap(70, 70, 70))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(jLabelRotorIzq1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldRotorIzq1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabelRotorCen1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldRotorCen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelRotorDer1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldRotorDer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
+                        .addComponent(jLabelMensaje1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldMensaje1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelCifrado1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldCifrado1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(119, 119, 119))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextFieldClaveDer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldClaveCen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldClaveIzq1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTextFieldClavija3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldClavija4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonClavijaAdd1)
+                            .addComponent(jButtonClavijaDelete1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69))))
         );
 
         jTabbedPane1.addTab("Enigma ampliada", jPanel2);
@@ -664,7 +842,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGap(0, 672, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Rotor ampliado", jPanel3);
@@ -677,7 +855,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGap(0, 672, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Reflector ampliado", jPanel4);
@@ -690,7 +868,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGap(0, 672, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Enigma ampliada ++", jPanel5);
@@ -703,7 +881,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGap(0, 672, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Rotores ampliados ++", jPanel6);
@@ -716,7 +894,7 @@ public class menu extends javax.swing.JFrame {
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGap(0, 672, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Generardor de contraseñas", jPanel7);
@@ -729,7 +907,7 @@ public class menu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("Simulador Enigma ++");
@@ -739,12 +917,50 @@ public class menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonClavijaDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDeleteMouseClicked
-        // TODO add your handling code here:
+        String s[];
+        if (!jList1.isSelectionEmpty()) {
+            conex.remove(jList1.getSelectedIndex());
+            s = new String[conex.size()];
+            for (int i = 0; i < conex.size(); i++) {
+                s[i] = conex.get(i).getPrimera() + " - " + conex.get(i).getSegunda();
+            }
+            jList1.setListData(s);
+        }
     }//GEN-LAST:event_jButtonClavijaDeleteMouseClicked
 
     private void jButtonClavijaAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaAddMouseClicked
-        // TODO add your handling code here:
+        String s[];
+        boolean nuevo = false;
+        char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
+                c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
+        if (c1 != c2) {
+            if (conex.isEmpty()) {
+                conex.add(new Clavijas(c1, c2));
+            } else {
+                for (Clavijas cla : conex) {
+                    if (!(cla.getPrimera() == c1 || cla.getSegunda() == c1) && !(cla.getPrimera() == c2 || cla.getSegunda() == c2)) {
+                        nuevo = true;
+                    }
+                }
+                if (nuevo) {
+                    conex.add(new Clavijas(c1, c2));
+                }
+            }
+            s = new String[conex.size()];
+            for (int i = 0; i < conex.size(); i++) {
+                s[i] = conex.get(i).getPrimera() + " - " + conex.get(i).getSegunda();
+            }
+            jList1.setListData(s);
+        }
     }//GEN-LAST:event_jButtonClavijaAddMouseClicked
+
+    private void jButtonClavijaAdd1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaAdd1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonClavijaAdd1MouseClicked
+
+    private void jButtonClavijaDelete1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDelete1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonClavijaDelete1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -784,7 +1000,9 @@ public class menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClavijaAdd;
+    private javax.swing.JButton jButtonClavijaAdd1;
     private javax.swing.JButton jButtonClavijaDelete;
+    private javax.swing.JButton jButtonClavijaDelete1;
     private javax.swing.JComboBox<String> jComboBoxRotorCen;
     private javax.swing.JComboBox<String> jComboBoxRotorDer;
     private javax.swing.JComboBox<String> jComboBoxRotorIzq;
@@ -792,9 +1010,18 @@ public class menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelCifrado;
+    private javax.swing.JLabel jLabelCifrado1;
     private javax.swing.JLabel jLabelMensaje;
+    private javax.swing.JLabel jLabelMensaje1;
+    private javax.swing.JLabel jLabelRotorCen1;
+    private javax.swing.JLabel jLabelRotorDer1;
+    private javax.swing.JLabel jLabelRotorIzq1;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -802,17 +1029,30 @@ public class menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextFieldCifrado;
+    private javax.swing.JTextField jTextFieldCifrado1;
     private javax.swing.JTextField jTextFieldClaveCen;
+    private javax.swing.JTextField jTextFieldClaveCen1;
     private javax.swing.JTextField jTextFieldClaveDer;
+    private javax.swing.JTextField jTextFieldClaveDer1;
     private javax.swing.JTextField jTextFieldClaveIzq;
+    private javax.swing.JTextField jTextFieldClaveIzq1;
     private javax.swing.JTextField jTextFieldClavija1;
     private javax.swing.JTextField jTextFieldClavija2;
+    private javax.swing.JTextField jTextFieldClavija3;
+    private javax.swing.JTextField jTextFieldClavija4;
     public javax.swing.JTextField jTextFieldMensaje;
+    public javax.swing.JTextField jTextFieldMensaje1;
+    public javax.swing.JTextField jTextFieldMensaje2;
+    public javax.swing.JTextField jTextFieldRotorCen1;
+    public javax.swing.JTextField jTextFieldRotorDer1;
+    public javax.swing.JTextField jTextFieldRotorIzq1;
     // End of variables declaration//GEN-END:variables
 }

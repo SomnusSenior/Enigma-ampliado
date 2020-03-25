@@ -114,13 +114,13 @@ public class EjecutarEnigma {
                 cC = scan.next().charAt(0);
                 System.out.print("Clave D: ");
                 cD = scan.next().charAt(0);         // String index out of range: 73 ??????
-                enigma.setRotorsIni(cI, cC, cD); // Inicializa las claves                
+                enigma.setRotoresIni(cI, cC, cD); // Inicializa las claves                
                 break;
             case 1:
                 cI = 'A';
                 cC = 'B';
                 cD = 'C';
-                enigma.setRotorsIni(cI, cC, cD);
+                enigma.setRotoresIni(cI, cC, cD);
                 break;
             default:
                 System.out.println("Opción incorrecta.");
