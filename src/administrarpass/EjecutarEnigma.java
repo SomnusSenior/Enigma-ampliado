@@ -9,7 +9,7 @@ public class EjecutarEnigma {
     static Scanner scan = new Scanner(System.in);
     public static char cI, cC, cD;
 
-    public static void RunnerEnigma() {
+    /*public static void RunnerEnigma() {
         switch (cifrado) {
             case 0:
             case 1:
@@ -22,56 +22,56 @@ public class EjecutarEnigma {
                 System.out.println("Error RunnerEnigma()");
                 break;
         }
-    }
+    }*/
 
-    public static void ModoPregunta() {
+    public static void ModoPregunta() { // Para Ampliado Plus
         System.out.print("Modo: ");
         int n = scan.nextInt();
         if (n == 0 || n == 1) {
             modo = n;
-            RotoresPregunta();
+            //RotoresPregunta();
         } else {
             System.out.println("Opción incorrecta.");
         }
     }
 
-    public static void RotoresPregunta() {
-        Rotor r1 = null, r2 = null, r3 = null;
-        System.out.print("Definir rotores?: ");
-        switch (scan.nextInt()) {
-            case 0:
-                if (cifrado == 0) {
-                    r1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
-                    r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
-                    r3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
-                } /*else if (cifrado == 1) {
-                    r1;
-                    r2;
-                    r3;
-                }*/ else if (cifrado == 2) {
-                    r1 = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo I h
-                    r2 = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo II I 
-                    r3 = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo III i
-                }
-                Runner(r1, r2, r3);
-                break;
-            case 1:
-                System.out.print("Rotor 1 y giro: ");
-                r1 = new Rotor(scan.next(), scan.next().charAt(0));
-                System.out.print("Rotor 2 y giro: ");
-                r2 = new Rotor(scan.next(), scan.next().charAt(0));
-                System.out.print("Rotor 3 y giro: ");
-                r3 = new Rotor(scan.next(), scan.next().charAt(0));
+//    public static void RotoresPregunta() {
+//        Rotor r1 = null, r2 = null, r3 = null;
+//        System.out.print("Definir rotores?: ");
+//        switch (scan.nextInt()) {
+//            case 0:
+//                if (cifrado == 0) {
+//                    r1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
+//                    r2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
+//                    r3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
+//                } /*else if (cifrado == 1) {
+//                    r1;
+//                    r2;
+//                    r3;
+//                }*/ else if (cifrado == 2) {
+//                    r1 = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo I h
+//                    r2 = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo II I 
+//                    r3 = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo III i
+//                }
+//                Runner(r1, r2, r3);
+//                break;
+//            case 1:
+//                System.out.print("Rotor 1 y giro: ");
+//                r1 = new Rotor(scan.next(), scan.next().charAt(0));
+//                System.out.print("Rotor 2 y giro: ");
+//                r2 = new Rotor(scan.next(), scan.next().charAt(0));
+//                System.out.print("Rotor 3 y giro: ");
+//                r3 = new Rotor(scan.next(), scan.next().charAt(0));
+//
+//                Runner(r1, r2, r3);
+//                break;
+//            default:
+//                System.out.println("Opción incorrecta.");
+//                break;
+//        }
+//    }
 
-                Runner(r1, r2, r3);
-                break;
-            default:
-                System.out.println("Opción incorrecta.");
-                break;
-        }
-    }
-
-    public static void ClavijasPregunta(Enigma enigma) {
+    /*public static void ClavijasPregunta(Enigma enigma) {
         System.out.print("Clavijas por default?: ");
         char c1, c2;
         switch (scan.nextInt()) {
@@ -101,9 +101,9 @@ public class EjecutarEnigma {
                 System.out.println("Opción incorrecta.");
                 break;
         }
-    }
+    }*/
 
-    public static void ClavesPregunta(Enigma enigma) {
+    /*public static void ClavesPregunta(Enigma enigma) {
         System.out.print("Claves por default?: ");
         //char cI = 0, cC = 0, cD = 0;
         switch (scan.nextInt()) {
@@ -132,9 +132,9 @@ public class EjecutarEnigma {
         } else {
             ampliado(enigma);
         }
-    }
+    }*/
 
-    public static void base(Enigma enigma) {
+    /*public static void base(Enigma enigma) {
         modo = 0;
 
         System.out.print("A cifrar: ");
@@ -144,21 +144,22 @@ public class EjecutarEnigma {
         System.out.println("Cifrado: " + resultado);
 
         //prueba.resta();
-    }
+    }*/
 
-    public static void ampliado(Enigma enigma) {
+    /*public static void ampliado(Enigma enigma) {
         System.out.println("A cifrar: ");
         String resultado = "", s = scan.next();
 
-        resultado = procesarAmpliado(enigma, s); // Obtiene el resultado de cifrar, la traducción AMPLIADA
+        resultado = procesarAmpliadoPlus(enigma, s); // Obtiene el resultado de cifrar, la traducción AMPLIADA Plus
         System.out.println("Cifrado: " + resultado);
-    }
+    }*/
 
-    public static void Runner(Rotor r1, Rotor r2, Rotor r3) {
+    /*public static void Runner(Rotor r1, Rotor r2, Rotor r3) {
         Enigma enigma = new Enigma(r1, r2, r3); // Crea la máquina enigma
         ClavijasPregunta(enigma);
-    }
+    }*/
 
+    //  --------------- IMPORTANTE
     /**
      * Ejecución de la máquina Enigma
      *
@@ -181,7 +182,8 @@ public class EjecutarEnigma {
         return resultado;
     }
 
-    public static String procesarAmpliado(Enigma enigma, String s) {
+    //  --------------- IMPORTANTE
+    public static String procesarAmpliadoPlus(Enigma enigma, String s, boolean plus) {
         String resultado = "";
         char c = '0';
         for (int i = 0; i < s.length(); i++) { // analiza la cadena de caracteres introducida
@@ -189,11 +191,12 @@ public class EjecutarEnigma {
             if (s.isEmpty()) { // comprueba si no ha sido introducido un caracter
                 System.exit(0);
             }
-            resultado += enigma.cifrado(c);
+            resultado += enigma.cifradoAmpliadoPlus(c, plus);
         }
         return resultado;
     }
 
+    //  --------------- IMPORTANTE
     /**
      * Transforma en mayúscula el caracter pasado
      *
@@ -201,10 +204,11 @@ public class EjecutarEnigma {
      * @return caracter en mayúscula
      */
     public static char pasarMayus(char c) {
-        if ('Z' - c < 0) {
+        return ('Z' - c < 0) ? (char) (c + 'A' - 'a') : c;
+        /*if ('Z' - c < 0) {
             return c = (char) (c + 'A' - 'a');
         } else {
             return c;
-        }
+        }*/
     }
 }

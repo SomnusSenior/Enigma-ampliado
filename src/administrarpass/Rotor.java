@@ -37,11 +37,7 @@ public class Rotor {
         this.contenido = contenido;
         this.tam = contenido.length();
         this.posicion = pos % this.tam;
-        if (cifrado == 0) {
-            this.contEscritura = mensaje;
-        } else {
-            this.contEscrituraAmpliadoPlus = mensaje;
-        }
+        this.contEscritura = mensaje;
         this.puntoGiro = puntoGiro;
     }
 
@@ -52,25 +48,11 @@ public class Rotor {
      * @return un nuevo rotor con el contenido "girado"
      */
     public Rotor giro(int offset) {
-        String aux = "";
-        String mensaje = "";
+        String aux = "", mensaje = "";
         int nuevaPos = this.tam + offset; // calcula la nueva posición del rotor
         for (int i = 0; i < this.tam; i++) {
-            if (i + offset < this.tam) { // giro del rotor
-                aux += this.contenido.charAt(i + offset);
-                if (cifrado == 0) {
-                    mensaje += this.contEscritura.charAt(i + offset);
-                } else {
-                    mensaje += this.contEscrituraAmpliadoPlus.charAt(i + offset);
-                }
-            } else { // giro del rotor al dar una vuelta completa
-                aux += this.contenido.charAt(i + offset - this.tam);
-                if (cifrado == 0) {
-                    mensaje += this.contEscritura.charAt(i + offset - this.tam);
-                } else {
-                    mensaje += this.contEscrituraAmpliadoPlus.charAt(i + offset - this.tam);
-                }
-            }
+            aux += (i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam); // giro del rotor : giro del rotor al dar una vuelta completa
+            mensaje += (i + offset < this.tam) ? this.contEscritura.charAt(i + offset) : this.contEscritura.charAt(i + offset - this.tam);
         }
         return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
     }
@@ -89,11 +71,7 @@ public class Rotor {
         char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
         Enigma.pintar[Enigma.indiceP] = c;
         Enigma.indiceP++;
-        if (cifrado == 0) {
-            iCifrada = this.contEscritura.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
-        } else {
-            iCifrada = this.contEscrituraAmpliadoPlus.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
-        }
+        iCifrada = this.contEscritura.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
         return iCifrada;
     }
 
@@ -105,11 +83,7 @@ public class Rotor {
      */
     public int cifrarVuelta(int i) {
         char c;
-        if (cifrado == 0) {
-            c = this.contEscritura.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
-        } else {
-            c = this.contEscrituraAmpliadoPlus.charAt(i); // obtiene el caracter con ese índice con respecto al alfabeto de escritura
-        }
+        c = this.contEscritura.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
         Enigma.pintar[Enigma.indiceP] = c;
         Enigma.indiceP++;
         int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
@@ -117,6 +91,46 @@ public class Rotor {
         Enigma.indiceP++;
         return iCifrada;
     }
+
+    //----------------
+    public Rotor(String contenido, int pos, String mensaje, char puntoGiro, boolean plus) {
+        this.contenido = contenido;
+        this.tam = contenido.length();
+        this.posicion = pos % this.tam;
+        if (plus) {
+            this.contEscrituraAmpliadoPlus = mensaje;
+        } else {
+            this.contEscrituraAmpliado = mensaje;
+        }
+        this.puntoGiro = puntoGiro;
+    }
+
+    public Rotor giroAmpliado(int offset, boolean plus) {
+        String aux = "", mensaje = "";
+        int nuevaPos = this.tam + offset; // calcula la nueva posición del rotor
+        for (int i = 0; i < this.tam; i++) {
+            // giro del rotor : giro del rotor al dar una vuelta completa
+            aux += (i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam);
+            mensaje += (i + offset < this.tam) ? (plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset) : this.contEscrituraAmpliado.charAt(i + offset))
+                    : (plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset - this.tam) : this.contEscrituraAmpliado.charAt(i + offset - this.tam));
+        }
+        return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
+    }
+
+    public int cifrarIdaAmpliado(int i, boolean plus) {
+        int iCifrada;
+        char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
+        iCifrada = plus ? this.contEscrituraAmpliadoPlus.indexOf(c) : this.contEscrituraAmpliado.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
+        return iCifrada;
+    }
+
+    public int cifrarVueltaAmpliado(int i, boolean plus) {
+        char c;
+        c = plus ? this.contEscrituraAmpliadoPlus.charAt(i) : this.contEscrituraAmpliado.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
+        int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
+        return iCifrada;
+    }
+    //-------------
 
     /**
      * Obtiene la posicion actual del rotor
@@ -151,6 +165,15 @@ public class Rotor {
      * @return alfabeto de escritura
      */
     public String obtenerContEscrituraAmpliado() {
+        return this.contEscrituraAmpliado;
+    }
+
+    /**
+     * Obtiene el alfabeto ordenado AMPLIADO, antes de empezar a cifrar
+     *
+     * @return alfabeto de escritura
+     */
+    public String obtenerContEscrituraAmpliadoPlus() {
         return this.contEscrituraAmpliadoPlus;
     }
 
@@ -161,14 +184,5 @@ public class Rotor {
      */
     public char obtenerPuntoGiro() {
         return this.puntoGiro;
-    }
-
-    /**
-     * Obtiene el alfabeto de escritura del rotor.
-     *
-     * @return alfabeto de escritura
-     */
-    public String getContEscritura() {
-        return contEscritura;
     }
 }

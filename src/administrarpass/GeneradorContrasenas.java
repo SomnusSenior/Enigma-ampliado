@@ -44,16 +44,15 @@ public class GeneradorContrasenas {
     }
 
     public static String rotoresAleatoriosAmp(boolean plus) {
-        String r = "";
+        String r = "", s = ".";
         int alea;
-        String s = ".";
         boolean repetido;
-        for (int i = 0; i < (plus ? rotorPlus : rotor); i++) {  // Crea Rotor ampliado o Rotor/Reflector ampliado Plus
+        for (int i = 0; i < (plus ? rotor : rotorPlus); i++) {  // Crea Rotor ampliado o Rotor/Reflector ampliado Plus
             do {
                 alea = alea(4);          // Define siguiente caracter de la contraseña
                 switch (alea) {
                     case 0:
-                        s = plus ? Character.toString(randomSymbol2()) : Character.toString(randomSymbol());   // Define símbolos
+                        s = plus ? Character.toString(randomSymbol()) : Character.toString(randomSymbol2());   // Define símbolos
                         break;
                     case 1:
                         s = Character.toString(randomCharM());   // Define MAYÚSCULAS
@@ -79,9 +78,8 @@ public class GeneradorContrasenas {
     public static String rotoresReflectorAmp() {
         char c1 = '.', c2 = '.';
         boolean repetido = false;
-        ArrayList<Character> r = new ArrayList<>();
+        ArrayList<Character> r = new ArrayList<>(), alfabetoArray = new ArrayList<>();
         String alfabeto = " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", resultado = "";
-        ArrayList<Character> alfabetoArray = new ArrayList<>();
         for (int i = 0; i < alfabeto.length(); i++) {   // Crea arraylist de 74 '.'
             alfabetoArray.add(alfabeto.charAt(i));
             r.add('.');

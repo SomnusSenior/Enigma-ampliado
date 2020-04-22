@@ -14,11 +14,7 @@ public class Clavijero {
      */
     public Clavijero() {
         String panel;
-        if (cifrado == 0) {
-            panel = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // panel de clavijas
-        } else {
-            panel = "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // panel de clavijas AMPLIADO
-        }
+        panel = cifrado == 0 ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         for (int i = 0; i < panel.length(); i++) { // crea las clavijas del panel
             char a = panel.charAt(i);
             this.clavijas.add(a);
@@ -64,7 +60,7 @@ public class Clavijero {
     private int encontrarConexion(char a, char b) {
         for (int i = 0; i < this.conexiones.size(); i++) {
             Clavijas aux = this.conexiones.get(i); // busca si hay una conexión entre las clavijas
-            if ((aux.getPrimera() == a && aux.getSegunda() == b) || (aux.getPrimera() == b && aux.getSegunda() == a)) { // comprueba las entradas (indiferente del orden)
+            if ((aux.getA() == a && aux.getB() == b) || (aux.getA() == b && aux.getB() == a)) { // comprueba las entradas (indiferente del orden)
                 return i;
             }
         }
