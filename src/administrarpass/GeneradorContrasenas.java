@@ -2,7 +2,6 @@ package administrarpass;
 
 import static java.lang.Math.random;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -10,51 +9,21 @@ import java.util.Scanner;
  */
 public class GeneradorContrasenas {
 
-    public static int N = 20;   // Longitud de contraseña
-    public static int rotor = 73; // Longitud NUEVOS rotores Plus
-    static Scanner scan = new Scanner(System.in);
-    public static int symbolic = 0;
+    private static int N = 20;   // Longitud de contraseña
+    private static int rotor = 73; // Longitud NUEVOS rotores Plus
+    private static int rotorPlus = 74; // Longitud NUEVOS rotores Plus
+    private static int symbolic = 0;
 
-    public static void RunnerAleatorios() {
-        longitudPregunta();
-    }
-
-    private static void longitudPregunta() {
-        System.out.print("Definir longitud?: ");
-        switch (scan.nextInt()) {
-            case 0:
-                break;
-            case 1:
-                System.out.print("Longitud contraseña: ");
-                N = scan.nextInt();
-                break;
-            default:
-                System.out.println("Opción incorrecta.");
-                break;
-        }
-        symbolPregunta();
-    }
-
-    private static void symbolPregunta() {
-        System.out.print("Con símbolos?: ");
-        switch (scan.nextInt()) {
-            case 0:
-                symbolic = 3;
-                break;
-            case 1:
-                symbolic = 4;
-                break;
-            default:
-                System.out.println("Opción incorrecta.");
-                break;
-        }
-        aleatorio();
-    }
-
-    private static void aleatorio() {
+    /**
+     * Genera una contraseña de forma aleatoria de longitud N y con o sin
+     * símbolos según "symbolic"
+     *
+     * @return Contraseña aleatoria
+     */
+    public static String aleatorio() {
         String pass = "";
         int alea;
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++) {   // Crea pass
             alea = alea(symbolic);  // Define siguiente caracter de la contraseña
             switch (alea) {
                 case 0:
@@ -71,20 +40,20 @@ public class GeneradorContrasenas {
                     break;
             }
         }
-        System.out.println("Pass: " + pass);
+        return pass;
     }
 
-    public static void rotoresAleatorios() {
+    public static String rotoresAleatoriosAmp(boolean plus) {
         String r = "";
         int alea;
         String s = ".";
         boolean repetido;
-        for (int i = 0; i < rotor; i++) {
+        for (int i = 0; i < (plus ? rotorPlus : rotor); i++) {  // Crea Rotor ampliado o Rotor/Reflector ampliado Plus
             do {
                 alea = alea(4);          // Define siguiente caracter de la contraseña
                 switch (alea) {
                     case 0:
-                        s = Character.toString(randomSymbol());   // Define símbolos
+                        s = plus ? Character.toString(randomSymbol2()) : Character.toString(randomSymbol());   // Define símbolos
                         break;
                     case 1:
                         s = Character.toString(randomCharM());   // Define MAYÚSCULAS
@@ -96,7 +65,7 @@ public class GeneradorContrasenas {
                         s = Character.toString(randomNumber());   // Define números
                         break;
                 }
-                if (!r.contains(s)) {
+                if (!r.contains(s)) {   // Comprueba si ya existe el caracter
                     r += s;
                     repetido = false;
                 } else {
@@ -104,20 +73,20 @@ public class GeneradorContrasenas {
                 }
             } while (repetido);
         }
-        System.out.println("Rotor: " + r);
+        return r;
     }
 
-    public static void rotoresReflector() {
+    public static String rotoresReflectorAmp() {
         char c1 = '.', c2 = '.';
         boolean repetido = false;
         ArrayList<Character> r = new ArrayList<>();
         String alfabeto = " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", resultado = "";
         ArrayList<Character> alfabetoArray = new ArrayList<>();
-        for (int i = 0; i < alfabeto.length(); i++) {
+        for (int i = 0; i < alfabeto.length(); i++) {   // Crea arraylist de 74 '.'
             alfabetoArray.add(alfabeto.charAt(i));
             r.add('.');
         }
-        for (int i = 0; i < alfabetoArray.size() / 2; i++) {
+        for (int i = 0; i < alfabetoArray.size() / 2; i++) {    // Crea reflector con permutaciones a pares
             do {
                 int iA = alea(alfabetoArray.size());
                 int iB = alea(alfabetoArray.size());
@@ -125,7 +94,7 @@ public class GeneradorContrasenas {
                     repetido = false;
                     c1 = alfabetoArray.get(iA);
                     c2 = alfabetoArray.get(iB);
-                    if (!r.contains(c1) && !r.contains(c2) && r.get(iA) == '.' && r.get(iB) == '.') {
+                    if (!r.contains(c1) && !r.contains(c2) && r.get(iA) == '.' && r.get(iB) == '.') {   // Comprueba caracter no esté ya seleccionado
                         r.set(iB, c1);
                         r.set(iA, c2);
                         alfabetoArray.set(iA, '.');
@@ -138,11 +107,10 @@ public class GeneradorContrasenas {
                 }
             } while (repetido && !alfabetoArray.isEmpty());
         }
-        for (char c : r) {
+        for (char c : r) {  // Transforma el reflector en una cadena
             resultado = resultado + c;
         }
-        System.out.println("Reflector: ");
-        System.out.println(resultado);
+        return resultado;
     }
 
     private static int alea(int n) {
@@ -169,8 +137,24 @@ public class GeneradorContrasenas {
         return (char) sr;
     }
 
-    public static char randomSymbol2() {
+    private static char randomSymbol2() {
         int sr = (int) (random() * 12) + 32;
         return (char) sr;
+    }
+
+    public static int getN() {
+        return N;
+    }
+
+    public static void setN(int N) {
+        GeneradorContrasenas.N = N;
+    }
+
+    public static int getSymbolic() {
+        return symbolic;
+    }
+
+    public static void setSymbolic(int symbolic) {
+        GeneradorContrasenas.symbolic = symbolic;
     }
 }

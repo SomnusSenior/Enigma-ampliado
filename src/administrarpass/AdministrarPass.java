@@ -7,9 +7,6 @@ package administrarpass;
 
 import static administrarpass.EjecutarEnigma.RunnerEnigma;
 import static administrarpass.EjecutarEnigma.cifrado;
-import static administrarpass.GeneradorContrasenas.RunnerAleatorios;
-import static administrarpass.GeneradorContrasenas.rotoresAleatorios;
-import static administrarpass.GeneradorContrasenas.rotoresReflector;
 import java.util.Scanner;
 
 /**
@@ -29,10 +26,10 @@ public class AdministrarPass {
         System.out.println("0. Enigma base");
         System.out.println("1. Enigma ampliado");
         System.out.println("2. Enigma 'ampliado' Plus");
-        System.out.println("3. Aleatorio");
+        System.out.println("3. Aleatorio (pasado al menu)");
         System.out.println("4. Aleatorio rotores ampliados (sin funcionamiento)");
-        System.out.println("5. Aleatorio rotores 'ampliados' Plus");
-        System.out.println("6. Aleatorio rotor reflector");
+        System.out.println("5. Aleatorio rotores 'ampliados' Plus (pasado al menu)");
+        System.out.println("6. Aleatorio rotor reflector (pasado al menu)");
 
         cifrado = scan.nextInt();
         switch (cifrado) {
@@ -42,16 +39,16 @@ public class AdministrarPass {
                 RunnerEnigma();
                 break;
             case 3:
-                RunnerAleatorios();
+                
                 break;
             case 4:
 
                 break;
             case 5:
-                rotoresAleatorios();
+                
                 break;
             case 6:
-                rotoresReflector();
+                
                 break;
             default:
                 System.out.println("Opción incorrecta.");

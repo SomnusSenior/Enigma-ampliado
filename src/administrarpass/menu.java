@@ -1,6 +1,7 @@
 package administrarpass;
 
 import static administrarpass.EjecutarEnigma.procesar;
+import static administrarpass.GeneradorContrasenas.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -9,11 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javafx.scene.input.Clipboard.getSystemClipboard;
 import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -64,11 +69,6 @@ public class menu extends JFrame {
         initialize();
     }
 
-    private void showFrame() {
-
-        jCheckBoxRotorIzqAmp2.isSelected();
-    }
-
     private void iniciar() {
         ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new filtroMensaje());
         jTextFieldMensaje.getDocument().addDocumentListener(new listenerMensaje());
@@ -79,6 +79,8 @@ public class menu extends JFrame {
 
         ((AbstractDocument) jTextFieldClavija1.getDocument()).setDocumentFilter(new filtro1char());
         ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new filtro1char());
+
+        ((AbstractDocument) jTextFieldLongitudPass.getDocument()).setDocumentFilter(new filtroInt());
     }
 
     class listenerMensaje implements DocumentListener {
@@ -153,7 +155,7 @@ public class menu extends JFrame {
         jComboBoxRotorCen.setEnabled(b);
         jComboBoxRotorDer.setEnabled(b);
 
-        jList1.setEnabled(b);
+        jListClavijas.setEnabled(b);
     }
 
     private static void acomodarClavijas() {
@@ -217,8 +219,24 @@ public class menu extends JFrame {
         }
     }
 
+    class filtroInt extends DocumentFilter {
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            char c = 0;
+            String s = "";
+            for (int i = 0; i < text.length(); i++) {
+                c = text.charAt(i);
+                if (c >= 48 && c <= 57) {
+                    s += c;
+                }
+            }
+            super.replace(fb, offset, length, s, attrs);
+        }
+    }
+
     private void initialize() {
-        posRY = 140;    //Reflector
+        posRY = 150;    //Reflector
         posIY = 220;    //Izquierdo
         posCY = 300;    //Central
         posDY = 380;    //Derecho
@@ -382,13 +400,14 @@ public class menu extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupGenerador = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelRotorIzq = new javax.swing.JLabel();
+        jLabelRotorCen = new javax.swing.JLabel();
+        jLabelRotorDer = new javax.swing.JLabel();
         jComboBoxRotorIzq = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelClaves = new javax.swing.JLabel();
         jTextFieldClaveIzq = new javax.swing.JTextField();
         jTextFieldClaveCen = new javax.swing.JTextField();
         jTextFieldClaveDer = new javax.swing.JTextField();
@@ -396,7 +415,7 @@ public class menu extends JFrame {
         jLabelMensaje = new javax.swing.JLabel();
         jLabelCifrado = new javax.swing.JLabel();
         jTextFieldCifrado = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        jLabelClavijas = new javax.swing.JLabel();
         jTextFieldClavija1 = new javax.swing.JTextField();
         jTextFieldClavija2 = new javax.swing.JTextField();
         jButtonClavijaAdd = new javax.swing.JButton();
@@ -406,57 +425,66 @@ public class menu extends JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListClavijas = new javax.swing.JList<>();
         jLabelBufferedImage = new javax.swing.JLabel();
-        jlabelClave = new javax.swing.JLabel();
-        jlabelCaminoIda = new javax.swing.JLabel();
-        jlabelCaminoVuelta = new javax.swing.JLabel();
+        jlabelLeyendaClave = new javax.swing.JLabel();
+        jlabelLeyendaCaminoIda = new javax.swing.JLabel();
+        jlabelLeyendaCaminoVuelta = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabelMensaje1 = new javax.swing.JLabel();
-        jTextFieldMensaje1 = new javax.swing.JTextField();
+        jTextFieldMensajeAmp = new javax.swing.JTextField();
         jLabelCifrado1 = new javax.swing.JLabel();
-        jTextFieldCifrado1 = new javax.swing.JTextField();
+        jTextFieldCifradoAmp = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldClaveIzq1 = new javax.swing.JTextField();
-        jTextFieldClaveCen1 = new javax.swing.JTextField();
-        jTextFieldClaveDer1 = new javax.swing.JTextField();
+        jLabelClavesAmp = new javax.swing.JLabel();
+        jTextFieldClaveIzqAmp = new javax.swing.JTextField();
+        jTextFieldClaveCenAmp = new javax.swing.JTextField();
+        jTextFieldClaveDerAmp = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
-        jLabel8 = new javax.swing.JLabel();
-        jTextFieldClavija3 = new javax.swing.JTextField();
-        jTextFieldClavija4 = new javax.swing.JTextField();
-        jButtonClavijaAdd1 = new javax.swing.JButton();
-        jButtonClavijaDelete1 = new javax.swing.JButton();
+        jLabelClavijasAmp = new javax.swing.JLabel();
+        jTextFieldClavijaAmp1 = new javax.swing.JTextField();
+        jTextFieldClavijaAmp2 = new javax.swing.JTextField();
+        jButtonClavijaAddAmp = new javax.swing.JButton();
+        jButtonClavijaDeleteAmp = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        jTextFieldRotorIzq1 = new javax.swing.JTextField();
-        jLabelRotorIzq1 = new javax.swing.JLabel();
-        jLabelRotorCen1 = new javax.swing.JLabel();
-        jTextFieldRotorCen1 = new javax.swing.JTextField();
-        jLabelRotorDer1 = new javax.swing.JLabel();
-        jTextFieldRotorDer1 = new javax.swing.JTextField();
-        jTextFieldReflector2 = new javax.swing.JTextField();
-        jLabelReflector2 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBoxRotorIzqAmp2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jListClavijasAmp = new javax.swing.JList<>();
+        jTextFieldRotorIzqAmp = new javax.swing.JTextField();
+        jLabelRotorIzqAmp = new javax.swing.JLabel();
+        jLabelRotorCenAmp = new javax.swing.JLabel();
+        jTextFieldRotorCenAmp = new javax.swing.JTextField();
+        jLabelRotorDerAmp = new javax.swing.JLabel();
+        jTextFieldRotorDerAmp = new javax.swing.JTextField();
+        jTextFieldReflectorAmp = new javax.swing.JTextField();
+        jLabelReflectorAmp = new javax.swing.JLabel();
+        jCheckBoxReflectorAmp = new javax.swing.JCheckBox();
+        jCheckBoxRotorIzqAmp = new javax.swing.JCheckBox();
+        jCheckBoxRotorCenAmp = new javax.swing.JCheckBox();
+        jCheckBoxRotorDerAmp = new javax.swing.JCheckBox();
+        jButtonValidarRI = new javax.swing.JButton();
+        jButtonValidarRC = new javax.swing.JButton();
+        jButtonValidarRD = new javax.swing.JButton();
+        jButtonCifrarAmp = new javax.swing.JButton();
+        jButtonValidarR = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
+        jButtonGenerarRotor = new javax.swing.JButton();
+        jCheckBoxSymbols = new javax.swing.JCheckBox();
         jSeparator5 = new javax.swing.JSeparator();
+        jTextFieldLongitudPass = new javax.swing.JTextField();
+        jLabelMensaje2 = new javax.swing.JLabel();
+        jTextFieldRotorReflector = new javax.swing.JTextField();
+        jTextFieldPass = new javax.swing.JTextField();
+        jLabelMensaje3 = new javax.swing.JLabel();
+        jLabelMensaje4 = new javax.swing.JLabel();
+        jButtonGenerarPass = new javax.swing.JButton();
+        jLabelMensaje5 = new javax.swing.JLabel();
+        jLabelMensaje6 = new javax.swing.JLabel();
+        jCheckBoxLongitudPass = new javax.swing.JCheckBox();
+        jRadioButtonRRAmpPlus = new javax.swing.JRadioButton();
+        jRadioButtonRotorAmp = new javax.swing.JRadioButton();
+        jRadioButtonReflectorAmp = new javax.swing.JRadioButton();
+        jButtonGenerarPassCopy = new javax.swing.JButton();
+        jButtonGenerarRotorCopy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -466,25 +494,25 @@ public class menu extends JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(805, 680));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Rotor Izquierdo:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 26, -1, -1));
+        jLabelRotorIzq.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorIzq.setText("Rotor Izquierdo:");
+        jPanel1.add(jLabelRotorIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 26, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Rotor Central:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 76, -1, -1));
+        jLabelRotorCen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorCen.setText("Rotor Central:");
+        jPanel1.add(jLabelRotorCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 76, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Rotor Derecho:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 126, -1, -1));
+        jLabelRotorDer.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorDer.setText("Rotor Derecho:");
+        jPanel1.add(jLabelRotorDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 126, -1, -1));
 
         jComboBoxRotorIzq.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jComboBoxRotorIzq.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I", "II", "III", "IV", "V" }));
         jPanel1.add(jComboBoxRotorIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 21, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Claves:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 181, -1, -1));
+        jLabelClaves.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelClaves.setText("Claves:");
+        jPanel1.add(jLabelClaves, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 181, -1, -1));
 
         jTextFieldClaveIzq.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClaveIzq.setText("A");
@@ -517,9 +545,9 @@ public class menu extends JFrame {
         jTextFieldCifrado.setDragEnabled(true);
         jPanel1.add(jTextFieldCifrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 592, 389, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel7.setText("Clavijas:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 226, -1, -1));
+        jLabelClavijas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelClavijas.setText("Clavijas:");
+        jPanel1.add(jLabelClavijas, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 226, -1, -1));
 
         jTextFieldClavija1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldClavija1.setText("A");
@@ -538,7 +566,7 @@ public class menu extends JFrame {
                 jButtonClavijaAddMouseClicked(evt);
             }
         });
-        jPanel1.add(jButtonClavijaAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 260, -1, -1));
+        jPanel1.add(jButtonClavijaAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 270, -1, -1));
 
         jComboBoxRotorCen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jComboBoxRotorCen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I", "II", "III", "IV", "V" }));
@@ -557,30 +585,30 @@ public class menu extends JFrame {
                 jButtonClavijaDeleteMouseClicked(evt);
             }
         });
-        jPanel1.add(jButtonClavijaDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(677, 260, -1, -1));
+        jPanel1.add(jButtonClavijaDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 270, -1, -1));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 165, 221, 10));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 211, 221, 9));
 
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jScrollPane2.setViewportView(jList1);
+        jListClavijas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane2.setViewportView(jListClavijas);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(621, 310, 84, 302));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 330, 84, 302));
         jPanel1.add(jLabelBufferedImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 480));
 
-        jlabelClave.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jlabelClave.setForeground(new java.awt.Color(0, 220, 220));
-        jlabelClave.setText("Clave");
-        jPanel1.add(jlabelClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, -1, -1));
+        jlabelLeyendaClave.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jlabelLeyendaClave.setForeground(new java.awt.Color(0, 220, 220));
+        jlabelLeyendaClave.setText("Clave");
+        jPanel1.add(jlabelLeyendaClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, -1, -1));
 
-        jlabelCaminoIda.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jlabelCaminoIda.setForeground(Color.red);
-        jlabelCaminoIda.setText("Camino Ida");
-        jPanel1.add(jlabelCaminoIda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, -1));
+        jlabelLeyendaCaminoIda.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jlabelLeyendaCaminoIda.setForeground(Color.red);
+        jlabelLeyendaCaminoIda.setText("Camino Ida");
+        jPanel1.add(jlabelLeyendaCaminoIda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, -1));
 
-        jlabelCaminoVuelta.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jlabelCaminoVuelta.setForeground(Color.magenta);
-        jlabelCaminoVuelta.setText("Camino Vuelta");
-        jPanel1.add(jlabelCaminoVuelta, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 420, -1, -1));
+        jlabelLeyendaCaminoVuelta.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jlabelLeyendaCaminoVuelta.setForeground(Color.magenta);
+        jlabelLeyendaCaminoVuelta.setText("Camino Vuelta");
+        jPanel1.add(jlabelLeyendaCaminoVuelta, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 420, -1, -1));
 
         jTabbedPane1.addTab("Enigma clásica", jPanel1);
 
@@ -591,132 +619,196 @@ public class menu extends JFrame {
         jLabelMensaje1.setText("Introduce tu mensaje:");
         jPanel2.add(jLabelMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 415, -1, -1));
 
-        jTextFieldMensaje1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 449, 389, -1));
+        jTextFieldMensajeAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextFieldMensajeAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 449, 389, -1));
 
         jLabelCifrado1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelCifrado1.setText("Mensaje cifrado:");
         jPanel2.add(jLabelCifrado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 497, -1, -1));
 
-        jTextFieldCifrado1.setEditable(false);
-        jTextFieldCifrado1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldCifrado1.setDragEnabled(true);
-        jPanel2.add(jTextFieldCifrado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 525, 389, -1));
+        jTextFieldCifradoAmp.setEditable(false);
+        jTextFieldCifradoAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldCifradoAmp.setDragEnabled(true);
+        jPanel2.add(jTextFieldCifradoAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 525, 389, -1));
         jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 157, 221, 10));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Claves:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 173, -1, -1));
+        jLabelClavesAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelClavesAmp.setText("Claves:");
+        jPanel2.add(jLabelClavesAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 173, -1, -1));
 
-        jTextFieldClaveIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldClaveIzq1.setText("A");
-        jTextFieldClaveIzq1.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel2.add(jTextFieldClaveIzq1, new org.netbeans.lib.awtextra.AbsoluteConstraints(626, 174, -1, -1));
+        jTextFieldClaveIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveIzqAmp.setText("A");
+        jTextFieldClaveIzqAmp.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel2.add(jTextFieldClaveIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(626, 174, -1, -1));
 
-        jTextFieldClaveCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldClaveCen1.setText("A");
-        jTextFieldClaveCen1.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel2.add(jTextFieldClaveCen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(664, 174, -1, -1));
+        jTextFieldClaveCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveCenAmp.setText("A");
+        jTextFieldClaveCenAmp.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel2.add(jTextFieldClaveCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(664, 174, -1, -1));
 
-        jTextFieldClaveDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldClaveDer1.setText("A");
-        jTextFieldClaveDer1.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel2.add(jTextFieldClaveDer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(702, 174, -1, -1));
+        jTextFieldClaveDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClaveDerAmp.setText("A");
+        jTextFieldClaveDerAmp.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel2.add(jTextFieldClaveDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(702, 174, -1, -1));
         jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 207, 221, 9));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel8.setText("Clavijas:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 219, -1, -1));
+        jLabelClavijasAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelClavijasAmp.setText("Clavijas:");
+        jPanel2.add(jLabelClavijasAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 219, -1, -1));
 
-        jTextFieldClavija3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldClavija3.setText("A");
-        jTextFieldClavija3.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel2.add(jTextFieldClavija3, new org.netbeans.lib.awtextra.AbsoluteConstraints(626, 220, -1, -1));
+        jTextFieldClavijaAmp1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClavijaAmp1.setText("A");
+        jTextFieldClavijaAmp1.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel2.add(jTextFieldClavijaAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(626, 220, -1, -1));
 
-        jTextFieldClavija4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextFieldClavija4.setText("A");
-        jTextFieldClavija4.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel2.add(jTextFieldClavija4, new org.netbeans.lib.awtextra.AbsoluteConstraints(664, 220, -1, -1));
+        jTextFieldClavijaAmp2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldClavijaAmp2.setText("A");
+        jTextFieldClavijaAmp2.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel2.add(jTextFieldClavijaAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(664, 220, -1, -1));
 
-        jButtonClavijaAdd1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButtonClavijaAdd1.setText("Añadir");
-        jButtonClavijaAdd1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonClavijaAddAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonClavijaAddAmp.setText("Añadir");
+        jButtonClavijaAddAmp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonClavijaAdd1MouseClicked(evt);
+                jButtonClavijaAddAmpMouseClicked(evt);
             }
         });
-        jPanel2.add(jButtonClavijaAdd1, new org.netbeans.lib.awtextra.AbsoluteConstraints(543, 253, -1, -1));
+        jPanel2.add(jButtonClavijaAddAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 270, -1, -1));
 
-        jButtonClavijaDelete1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButtonClavijaDelete1.setText("Eliminar");
-        jButtonClavijaDelete1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButtonClavijaDeleteAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonClavijaDeleteAmp.setText("Eliminar");
+        jButtonClavijaDeleteAmp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonClavijaDelete1MouseClicked(evt);
+                jButtonClavijaDeleteAmpMouseClicked(evt);
             }
         });
-        jPanel2.add(jButtonClavijaDelete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(641, 253, -1, -1));
+        jPanel2.add(jButtonClavijaDeleteAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 270, -1, -1));
 
-        jList2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jScrollPane3.setViewportView(jList2);
+        jListClavijasAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane3.setViewportView(jListClavijasAmp);
 
-        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(561, 303, 84, 302));
+        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 330, 84, 302));
 
-        jTextFieldRotorIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorIzq1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 76, 250, -1));
+        jTextFieldRotorIzqAmp.setEditable(false);
+        jTextFieldRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextFieldRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 76, 330, -1));
 
-        jLabelRotorIzq1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelRotorIzq1.setText("Rotor Izquierdo:");
-        jPanel2.add(jLabelRotorIzq1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 42, -1, -1));
+        jLabelRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorIzqAmp.setText("Rotor Izquierdo:");
+        jPanel2.add(jLabelRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 42, -1, -1));
 
-        jLabelRotorCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelRotorCen1.setText("Rotor Central:");
-        jPanel2.add(jLabelRotorCen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 124, -1, -1));
+        jLabelRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorCenAmp.setText("Rotor Central:");
+        jPanel2.add(jLabelRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 124, -1, -1));
 
-        jTextFieldRotorCen1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorCen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 158, 250, -1));
+        jTextFieldRotorCenAmp.setEditable(false);
+        jTextFieldRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextFieldRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 158, 330, -1));
 
-        jLabelRotorDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelRotorDer1.setText("Rotor Derecho:");
-        jPanel2.add(jLabelRotorDer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 206, -1, -1));
+        jLabelRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelRotorDerAmp.setText("Rotor Derecho:");
+        jPanel2.add(jLabelRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 206, -1, -1));
 
-        jTextFieldRotorDer1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorDer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 240, 250, -1));
+        jTextFieldRotorDerAmp.setEditable(false);
+        jTextFieldRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextFieldRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 240, 330, -1));
 
-        jTextFieldReflector2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldReflector2, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 322, 250, -1));
+        jTextFieldReflectorAmp.setEditable(false);
+        jTextFieldReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextFieldReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 322, 330, -1));
 
-        jLabelReflector2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelReflector2.setText("Reflector:");
-        jPanel2.add(jLabelReflector2, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 288, -1, -1));
+        jLabelReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelReflectorAmp.setText("Reflector:");
+        jPanel2.add(jLabelReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 288, -1, -1));
 
-        jCheckBox1.setText("jCheckBox1");
-        jPanel2.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, -1, -1));
-
-        jCheckBoxRotorIzqAmp2.setText("Por defecto");
-        jCheckBoxRotorIzqAmp2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxRotorIzqAmp2ActionPerformed(evt);
+        jCheckBoxReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCheckBoxReflectorAmp.setSelected(true);
+        jCheckBoxReflectorAmp.setText("Por defecto");
+        jCheckBoxReflectorAmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxReflectorAmpMouseClicked(evt);
             }
         });
-        jPanel2.add(jCheckBoxRotorIzqAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, -1, -1));
+        jPanel2.add(jCheckBoxReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(275, 290, -1, -1));
 
-        jCheckBox3.setText("jCheckBox1");
-        jPanel2.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
+        jCheckBoxRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCheckBoxRotorIzqAmp.setSelected(true);
+        jCheckBoxRotorIzqAmp.setText("Por defecto");
+        jCheckBoxRotorIzqAmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxRotorIzqAmpMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jCheckBoxRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(275, 40, -1, -1));
 
-        jCheckBox4.setText("jCheckBox1");
-        jPanel2.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 208, -1, -1));
+        jCheckBoxRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCheckBoxRotorCenAmp.setSelected(true);
+        jCheckBoxRotorCenAmp.setText("Por defecto");
+        jCheckBoxRotorCenAmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxRotorCenAmpMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jCheckBoxRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(275, 120, -1, -1));
 
-        jButton2.setText("Validar");
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, -1, -1));
+        jCheckBoxRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCheckBoxRotorDerAmp.setSelected(true);
+        jCheckBoxRotorDerAmp.setText("Por defecto");
+        jCheckBoxRotorDerAmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxRotorDerAmpMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jCheckBoxRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(275, 208, -1, -1));
 
-        jButton3.setText("jButton3");
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 150, -1, -1));
+        jButtonValidarRI.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonValidarRI.setText("Validar");
+        jButtonValidarRI.setEnabled(false);
+        jButtonValidarRI.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonValidarRIMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButtonValidarRI, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, -1, -1));
 
-        jButton4.setText("jButton4");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, -1, -1));
+        jButtonValidarRC.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonValidarRC.setText("Validar");
+        jButtonValidarRC.setEnabled(false);
+        jButtonValidarRC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonValidarRCMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButtonValidarRC, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 150, -1, -1));
 
-        jButton5.setText("jButton5");
-        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 320, -1, -1));
+        jButtonValidarRD.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonValidarRD.setText("Validar");
+        jButtonValidarRD.setEnabled(false);
+        jButtonValidarRD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonValidarRDMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButtonValidarRD, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 230, -1, -1));
+
+        jButtonCifrarAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonCifrarAmp.setText("Cifrar");
+        jButtonCifrarAmp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCifrarAmpMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButtonCifrarAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 440, -1, -1));
+
+        jButtonValidarR.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonValidarR.setText("Validar");
+        jButtonValidarR.setEnabled(false);
+        jButtonValidarR.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonValidarRMouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButtonValidarR, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 310, -1, -1));
 
         jTabbedPane1.addTab("Enigma ampliada", jPanel2);
 
@@ -725,39 +817,108 @@ public class menu extends JFrame {
 
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Generar");
-        jPanel7.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
-
-        jLabel6.setText("Longitud");
-        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, -1, -1));
-
-        jLabel10.setText("Contraseña");
-        jPanel7.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
-
-        jCheckBox2.setText("Símbolos");
-        jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+        jButtonGenerarRotor.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonGenerarRotor.setText("Generar");
+        jButtonGenerarRotor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonGenerarRotorMouseClicked(evt);
             }
         });
-        jPanel7.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, -1, -1));
+        jPanel7.add(jButtonGenerarRotor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, -1, -1));
 
-        jTextField1.setText("jTextField1");
-        jPanel7.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, -1, -1));
+        jCheckBoxSymbols.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jCheckBoxSymbols.setText("Símbolos");
+        jCheckBoxSymbols.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel7.add(jCheckBoxSymbols, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));
+        jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 680, 10));
 
-        jTextField2.setText("jTextField2");
-        jPanel7.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, -1, -1));
+        jTextFieldLongitudPass.setEditable(false);
+        jTextFieldLongitudPass.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel7.add(jTextFieldLongitudPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 70, -1));
 
-        jCheckBox5.setText("Rotor Ampliado");
-        jPanel7.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 350, -1, -1));
+        jLabelMensaje2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje2.setText("Longitud:");
+        jPanel7.add(jLabelMensaje2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, -1));
 
-        jCheckBox6.setText("Rotor/Reflector ampliado++");
-        jPanel7.add(jCheckBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 350, -1, -1));
+        jTextFieldRotorReflector.setEditable(false);
+        jTextFieldRotorReflector.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel7.add(jTextFieldRotorReflector, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, 700, -1));
 
-        jCheckBox8.setText("Reflector ampliado");
-        jPanel7.add(jCheckBox8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 350, -1, -1));
-        jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, 500, 10));
+        jTextFieldPass.setEditable(false);
+        jTextFieldPass.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel7.add(jTextFieldPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 700, -1));
+
+        jLabelMensaje3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje3.setText("Generador de contraseñas:");
+        jPanel7.add(jLabelMensaje3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
+
+        jLabelMensaje4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje4.setText("Contraseña:");
+        jPanel7.add(jLabelMensaje4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
+
+        jButtonGenerarPass.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonGenerarPass.setText("Generar");
+        jButtonGenerarPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonGenerarPassMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonGenerarPassMouseEntered(evt);
+            }
+        });
+        jPanel7.add(jButtonGenerarPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, -1, -1));
+
+        jLabelMensaje5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje5.setText("Rotor:");
+        jPanel7.add(jLabelMensaje5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 490, -1, -1));
+
+        jLabelMensaje6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelMensaje6.setText("Generador de rotores y reflectores:");
+        jPanel7.add(jLabelMensaje6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));
+
+        jCheckBoxLongitudPass.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCheckBoxLongitudPass.setSelected(true);
+        jCheckBoxLongitudPass.setText("Por defecto");
+        jCheckBoxLongitudPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBoxLongitudPassMouseClicked(evt);
+            }
+        });
+        jPanel7.add(jCheckBoxLongitudPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, -1));
+
+        buttonGroupGenerador.add(jRadioButtonRRAmpPlus);
+        jRadioButtonRRAmpPlus.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonRRAmpPlus.setText("Rotor/Reflector Ampliado++");
+        jPanel7.add(jRadioButtonRRAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 420, -1, -1));
+
+        buttonGroupGenerador.add(jRadioButtonRotorAmp);
+        jRadioButtonRotorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonRotorAmp.setSelected(true);
+        jRadioButtonRotorAmp.setText("Rotor Ampliado");
+        jPanel7.add(jRadioButtonRotorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
+
+        buttonGroupGenerador.add(jRadioButtonReflectorAmp);
+        jRadioButtonReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonReflectorAmp.setText("Reflector Ampliado");
+        jPanel7.add(jRadioButtonReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 420, -1, -1));
+
+        jButtonGenerarPassCopy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonGenerarPassCopy.setText("Copiar");
+        jButtonGenerarPassCopy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonGenerarPassCopyMouseClicked(evt);
+            }
+        });
+        jPanel7.add(jButtonGenerarPassCopy, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 210, -1, -1));
+
+        jButtonGenerarRotorCopy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonGenerarRotorCopy.setText("Copiar");
+        jButtonGenerarRotorCopy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonGenerarRotorCopyMouseClicked(evt);
+            }
+        });
+        jPanel7.add(jButtonGenerarRotorCopy, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 480, -1, -1));
 
         jTabbedPane1.addTab("Generardor de contraseñas", jPanel7);
 
@@ -780,23 +941,23 @@ public class menu extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonClavijaAdd1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaAdd1MouseClicked
+    private void jButtonClavijaAddAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaAddAmpMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonClavijaAdd1MouseClicked
+    }//GEN-LAST:event_jButtonClavijaAddAmpMouseClicked
 
-    private void jButtonClavijaDelete1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDelete1MouseClicked
+    private void jButtonClavijaDeleteAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDeleteAmpMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonClavijaDelete1MouseClicked
+    }//GEN-LAST:event_jButtonClavijaDeleteAmpMouseClicked
 
     private void jButtonClavijaDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClavijaDeleteMouseClicked
         String s[];
-        if (!jList1.isSelectionEmpty()) {
-            conex.remove(jList1.getSelectedIndex());
+        if (!jListClavijas.isSelectionEmpty()) {
+            conex.remove(jListClavijas.getSelectedIndex());
             s = new String[conex.size()];
             for (int i = 0; i < conex.size(); i++) {
                 s[i] = conex.get(i).getPrimera() + " - " + conex.get(i).getSegunda();
             }
-            jList1.setListData(s);
+            jListClavijas.setListData(s);
         }
     }//GEN-LAST:event_jButtonClavijaDeleteMouseClicked
 
@@ -823,18 +984,103 @@ public class menu extends JFrame {
                 for (int i = 0; i < conex.size(); i++) {
                     s[i] = conex.get(i).getPrimera() + " - " + conex.get(i).getSegunda();
                 }
-                jList1.setListData(s);
+                jListClavijas.setListData(s);
             }
         }
     }//GEN-LAST:event_jButtonClavijaAddMouseClicked
 
-    private void jCheckBoxRotorIzqAmp2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxRotorIzqAmp2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxRotorIzqAmp2ActionPerformed
+    private void jButtonGenerarPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerarPassMouseClicked
+        setSymbolic(jCheckBoxSymbols.isSelected() ? 4 : 3);
+        if (!jCheckBoxLongitudPass.isSelected()) {
+            setN(Integer.parseInt(jTextFieldLongitudPass.getText()));
+        }
+        jTextFieldPass.setText(aleatorio());
+    }//GEN-LAST:event_jButtonGenerarPassMouseClicked
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jButtonGenerarRotorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerarRotorMouseClicked
+        if (jRadioButtonRotorAmp.isSelected()) {
+            jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(false));
+        } else if (jRadioButtonReflectorAmp.isSelected()) {
+            jTextFieldRotorReflector.setText(rotoresReflectorAmp());
+        } else if (jRadioButtonRRAmpPlus.isSelected()) {
+            jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(true));
+        }
+    }//GEN-LAST:event_jButtonGenerarRotorMouseClicked
+
+    private void jButtonValidarRIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValidarRIMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_jButtonValidarRIMouseClicked
+
+    private void jButtonValidarRCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValidarRCMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonValidarRCMouseClicked
+
+    private void jButtonValidarRDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValidarRDMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonValidarRDMouseClicked
+
+    private void jButtonValidarRMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonValidarRMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonValidarRMouseClicked
+
+    private void jButtonCifrarAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCifrarAmpMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonCifrarAmpMouseClicked
+
+    private void jCheckBoxRotorIzqAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxRotorIzqAmpMouseClicked
+        changeButtonStateValidar(jTextFieldRotorIzqAmp, jButtonValidarRI);
+    }//GEN-LAST:event_jCheckBoxRotorIzqAmpMouseClicked
+
+    private void jCheckBoxRotorCenAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxRotorCenAmpMouseClicked
+        changeButtonStateValidar(jTextFieldRotorCenAmp, jButtonValidarRC);
+    }//GEN-LAST:event_jCheckBoxRotorCenAmpMouseClicked
+
+    private void jCheckBoxRotorDerAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxRotorDerAmpMouseClicked
+        changeButtonStateValidar(jTextFieldRotorDerAmp, jButtonValidarRD);
+    }//GEN-LAST:event_jCheckBoxRotorDerAmpMouseClicked
+
+    private void jCheckBoxReflectorAmpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxReflectorAmpMouseClicked
+        changeButtonStateValidar(jTextFieldReflectorAmp, jButtonValidarR);
+    }//GEN-LAST:event_jCheckBoxReflectorAmpMouseClicked
+
+    private void jCheckBoxLongitudPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxLongitudPassMouseClicked
+        setN(20);
+        changeButtonStateValidar(jTextFieldLongitudPass);
+    }//GEN-LAST:event_jCheckBoxLongitudPassMouseClicked
+
+    private void jButtonGenerarPassCopyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerarPassCopyMouseClicked
+        copyToClipboard(jTextFieldPass);
+    }//GEN-LAST:event_jButtonGenerarPassCopyMouseClicked
+
+    private void jButtonGenerarRotorCopyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerarRotorCopyMouseClicked
+        copyToClipboard(jTextFieldRotorReflector);
+    }//GEN-LAST:event_jButtonGenerarRotorCopyMouseClicked
+
+    private void jButtonGenerarPassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerarPassMouseEntered
+        if (!jCheckBoxLongitudPass.isSelected()) {
+            if (jTextFieldLongitudPass.getText().isEmpty()) {
+                jButtonGenerarPass.setEnabled(false);
+                jButtonGenerarPassCopy.setEnabled(false);
+            } else {
+                jButtonGenerarPass.setEnabled(true);
+                jButtonGenerarPassCopy.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_jButtonGenerarPassMouseEntered
+
+    private void copyToClipboard(javax.swing.JTextField jtextfield) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(new StringSelection(jtextfield.getText()), null);
+    }
+
+    private void changeButtonStateValidar(javax.swing.JTextField jtextfield) {
+        jtextfield.setEditable(!jtextfield.isEditable());
+    }
+
+    private void changeButtonStateValidar(javax.swing.JTextField jtextfield, javax.swing.JButton jbutton) {
+        jtextfield.setEditable(!jtextfield.isEditable());
+        jbutton.setEnabled(!jbutton.isEnabled());
+    }
 
     /**
      * @param args the command line arguments
@@ -875,50 +1121,59 @@ public class menu extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.ButtonGroup buttonGroupGenerador;
+    private javax.swing.JButton jButtonCifrarAmp;
     private javax.swing.JButton jButtonClavijaAdd;
-    private javax.swing.JButton jButtonClavijaAdd1;
+    private javax.swing.JButton jButtonClavijaAddAmp;
     private javax.swing.JButton jButtonClavijaDelete;
-    private javax.swing.JButton jButtonClavijaDelete1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox8;
-    private javax.swing.JCheckBox jCheckBoxRotorIzqAmp2;
+    private javax.swing.JButton jButtonClavijaDeleteAmp;
+    private javax.swing.JButton jButtonGenerarPass;
+    private javax.swing.JButton jButtonGenerarPassCopy;
+    private javax.swing.JButton jButtonGenerarRotor;
+    private javax.swing.JButton jButtonGenerarRotorCopy;
+    private javax.swing.JButton jButtonValidarR;
+    private javax.swing.JButton jButtonValidarRC;
+    private javax.swing.JButton jButtonValidarRD;
+    private javax.swing.JButton jButtonValidarRI;
+    private javax.swing.JCheckBox jCheckBoxLongitudPass;
+    private javax.swing.JCheckBox jCheckBoxReflectorAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorCenAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorDerAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorIzqAmp;
+    private javax.swing.JCheckBox jCheckBoxSymbols;
     private javax.swing.JComboBox<String> jComboBoxRotorCen;
     private javax.swing.JComboBox<String> jComboBoxRotorDer;
     private javax.swing.JComboBox<String> jComboBoxRotorIzq;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelBufferedImage;
     private javax.swing.JLabel jLabelCifrado;
     private javax.swing.JLabel jLabelCifrado1;
+    private javax.swing.JLabel jLabelClaves;
+    private javax.swing.JLabel jLabelClavesAmp;
+    private javax.swing.JLabel jLabelClavijas;
+    private javax.swing.JLabel jLabelClavijasAmp;
     private javax.swing.JLabel jLabelMensaje;
     private javax.swing.JLabel jLabelMensaje1;
-    private javax.swing.JLabel jLabelReflector2;
-    private javax.swing.JLabel jLabelRotorCen1;
-    private javax.swing.JLabel jLabelRotorDer1;
-    private javax.swing.JLabel jLabelRotorIzq1;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JLabel jLabelMensaje2;
+    private javax.swing.JLabel jLabelMensaje3;
+    private javax.swing.JLabel jLabelMensaje4;
+    private javax.swing.JLabel jLabelMensaje5;
+    private javax.swing.JLabel jLabelMensaje6;
+    private javax.swing.JLabel jLabelReflectorAmp;
+    private javax.swing.JLabel jLabelRotorCen;
+    private javax.swing.JLabel jLabelRotorCenAmp;
+    private javax.swing.JLabel jLabelRotorDer;
+    private javax.swing.JLabel jLabelRotorDerAmp;
+    private javax.swing.JLabel jLabelRotorIzq;
+    private javax.swing.JLabel jLabelRotorIzqAmp;
+    private javax.swing.JList<String> jListClavijas;
+    private javax.swing.JList<String> jListClavijasAmp;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JRadioButton jRadioButtonRRAmpPlus;
+    private javax.swing.JRadioButton jRadioButtonReflectorAmp;
+    private javax.swing.JRadioButton jRadioButtonRotorAmp;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
@@ -927,28 +1182,29 @@ public class menu extends JFrame {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextFieldCifrado;
-    private javax.swing.JTextField jTextFieldCifrado1;
+    private javax.swing.JTextField jTextFieldCifradoAmp;
     private javax.swing.JTextField jTextFieldClaveCen;
-    private javax.swing.JTextField jTextFieldClaveCen1;
+    private javax.swing.JTextField jTextFieldClaveCenAmp;
     private javax.swing.JTextField jTextFieldClaveDer;
-    private javax.swing.JTextField jTextFieldClaveDer1;
+    private javax.swing.JTextField jTextFieldClaveDerAmp;
     private javax.swing.JTextField jTextFieldClaveIzq;
-    private javax.swing.JTextField jTextFieldClaveIzq1;
+    private javax.swing.JTextField jTextFieldClaveIzqAmp;
     private javax.swing.JTextField jTextFieldClavija1;
     private javax.swing.JTextField jTextFieldClavija2;
-    private javax.swing.JTextField jTextFieldClavija3;
-    private javax.swing.JTextField jTextFieldClavija4;
+    private javax.swing.JTextField jTextFieldClavijaAmp1;
+    private javax.swing.JTextField jTextFieldClavijaAmp2;
+    public javax.swing.JTextField jTextFieldLongitudPass;
     public javax.swing.JTextField jTextFieldMensaje;
-    public javax.swing.JTextField jTextFieldMensaje1;
-    public javax.swing.JTextField jTextFieldReflector2;
-    public javax.swing.JTextField jTextFieldRotorCen1;
-    public javax.swing.JTextField jTextFieldRotorDer1;
-    public javax.swing.JTextField jTextFieldRotorIzq1;
-    private javax.swing.JLabel jlabelCaminoIda;
-    private javax.swing.JLabel jlabelCaminoVuelta;
-    private javax.swing.JLabel jlabelClave;
+    public javax.swing.JTextField jTextFieldMensajeAmp;
+    public javax.swing.JTextField jTextFieldPass;
+    public javax.swing.JTextField jTextFieldReflectorAmp;
+    public javax.swing.JTextField jTextFieldRotorCenAmp;
+    public javax.swing.JTextField jTextFieldRotorDerAmp;
+    public javax.swing.JTextField jTextFieldRotorIzqAmp;
+    public javax.swing.JTextField jTextFieldRotorReflector;
+    private javax.swing.JLabel jlabelLeyendaCaminoIda;
+    private javax.swing.JLabel jlabelLeyendaCaminoVuelta;
+    private javax.swing.JLabel jlabelLeyendaClave;
     // End of variables declaration//GEN-END:variables
 }
