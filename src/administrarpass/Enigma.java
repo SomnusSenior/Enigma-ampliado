@@ -1,6 +1,5 @@
 package administrarpass;
 
-import static administrarpass.EjecutarEnigma.cifrado;
 import static administrarpass.EjecutarEnigma.modo;
 
 public class Enigma {
@@ -30,6 +29,13 @@ public class Enigma {
         this.rotorCentral = rCen;
         this.rotorIzquierda = rIz;
         this.plugboard = new Clavijero();
+    }
+
+    public Enigma(Rotor rIz, Rotor rCen, Rotor rDe, boolean plus) {
+        this.rotorDerecha = rDe;
+        this.rotorCentral = rCen;
+        this.rotorIzquierda = rIz;
+        this.plugboard = new Clavijero(plus);
     }
 
     /**
@@ -122,7 +128,7 @@ public class Enigma {
      * @param c Caracter del mensaje para cifrar
      * @return Caracter cifrado del mensaje
      */
-    public char cifradoBase(char c) {
+    public char cifrado(char c) {
         char aux;
         int i;
         indiceP = 0;
@@ -161,7 +167,7 @@ public class Enigma {
         i = this.rotorCentral.cifrarIdaAmpliado(i, plus);
         i = this.rotorIzquierda.cifrarIdaAmpliado(i, plus);
         i = plus ? (modo == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus))
-                : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 -> Ampliado | modo = 1 -> Ampliado Plus
+                : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -> Ampliado Plus
         i = this.rotorIzquierda.cifrarVueltaAmpliado(i, plus);
         i = this.rotorCentral.cifrarVueltaAmpliado(i, plus);
         i = this.rotorDerecha.cifrarVueltaAmpliado(i, plus);
@@ -178,6 +184,18 @@ public class Enigma {
     public void ponerClavija(char a, char b) {
         if (this.plugboard.establecerConexion(a, b)) {
             moverClavijas(a, b);
+        }
+    }
+
+    /**
+     * Pone la conexión de las clavijas en el alfabeto ampliado
+     *
+     * @param a clavija a
+     * @param b clavija b
+     */
+    public void ponerClavijaAmpliado(char a, char b, boolean plus) {
+        if (this.plugboard.establecerConexion(a, b)) {
+            moverClavijasAmpliado(a, b, plus);
         }
     }
 
@@ -201,7 +219,7 @@ public class Enigma {
     public void moverClavijas(char a, char b) {
         String aux = "", contenido;
         char susIzq, susDer, c;
-        contenido = cifrado == 0 ? this.entrada.obtenerContenido() : this.entradaAmpliadoPlus.obtenerContenido();
+        contenido = this.entrada.obtenerContenido();
         // ordena las clavijas
         susIzq = a < b ? a : b;
         susDer = a < b ? b : a;
@@ -209,10 +227,24 @@ public class Enigma {
             c = contenido.charAt(i);
             aux += c == susIzq ? susDer : (c == susDer ? susIzq : c); // reordena el alfabeto de escritura
         }
-        if (cifrado == 0) {
-            this.entrada = new Rotor(aux, this.entrada.obtenerPuntoGiro());
-        } else {
+        this.entrada = new Rotor(aux, this.entrada.obtenerPuntoGiro());
+    }
+
+    public void moverClavijasAmpliado(char a, char b, boolean plus) {
+        String aux = "", contenido;
+        char susIzq, susDer, c;
+        contenido = plus ? this.entradaAmpliadoPlus.obtenerContenido() : this.entradaAmpliado.obtenerContenido();
+        // ordena las clavijas
+        susIzq = a < b ? a : b;
+        susDer = a < b ? b : a;
+        for (int i = 0; i < contenido.length(); i++) {
+            c = contenido.charAt(i);
+            aux += c == susIzq ? susDer : (c == susDer ? susIzq : c); // reordena el alfabeto de escritura
+        }
+        if (plus) {
             this.entradaAmpliadoPlus = new Rotor(aux, this.entradaAmpliadoPlus.obtenerPuntoGiro());
+        } else {
+            this.entradaAmpliado = new Rotor(aux, this.entradaAmpliado.obtenerPuntoGiro());
         }
     }
 
@@ -231,16 +263,15 @@ public class Enigma {
      * @param plugboard
      */
     public static void setPlugboard(Clavijero plugboard) {
-        plugboard = plugboard;
+        Enigma.plugboard = plugboard;
     }
 
     public static void setReflectorAmpliado(Rotor reflectorAmpliado) {
-        reflectorAmpliado = reflectorAmpliado;
+        Enigma.reflectorAmpliado = reflectorAmpliado;
     }
 
     public static void setReflectorAmpliadoPlus(Rotor reflectorAmpliadoPlus) {
-        reflectorAmpliadoPlus = reflectorAmpliadoPlus;
+        Enigma.reflectorAmpliadoPlus = reflectorAmpliadoPlus;
     }
-    
-    
+
 }

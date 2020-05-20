@@ -75,7 +75,7 @@ public class GeneradorContrasenas {
         return r;
     }
 
-    public static String rotoresReflectorAmp() {
+    public static String rotorReflectorAmp() {
         char c1 = '.', c2 = '.';
         boolean repetido = false;
         ArrayList<Character> r = new ArrayList<>(), alfabetoArray = new ArrayList<>();

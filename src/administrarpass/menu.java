@@ -47,7 +47,9 @@ public class menu extends JFrame {
             rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'), //NUEVO tipo Cen Plus I 
             rDerAmpPlus = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'), //NUEVO tipo Der Plus i
             rIzqAmpPlusNuevo, rCenAmpPlusNuevo, rDerAmpPlusNuevo, reflectorAmpPlusNuevo;
-    private boolean eni = false;
+    private boolean eni = false,
+            validarRotorIzqAmp = false, validarRotorCenAmp = false, validarRotorDerAmp = false, validarReflectorAmp = false,
+            aceptarRotorIzqAmp = false, aceptarRotorCenAmp = false, aceptarRotorDerAmp = false;
     private static int posIY, posCY, posDY, posTY, posRY, posClaY, contEleccion;
     private static Map<String, Integer> posRX = new HashMap<>(),
             posClaX = new HashMap<>(),
@@ -60,9 +62,7 @@ public class menu extends JFrame {
             posPerDX = new HashMap<>();
     private static Map<String, String> rotoresString = new HashMap<>();
     private static Map<String, Rotor> rotores = new HashMap<>();
-    private static char cI, cC, cD,
-            cIAmp, cCAmp, cDAmp,
-            cIAmpPlus, cCAmpPlus, cDAmpPlus;
+    private static char cI, cC, cD;
     private static Enigma enigma,
             enigmaAmp,
             enigmaAmpPlus;
@@ -77,12 +77,12 @@ public class menu extends JFrame {
     public menu() {
         super();
         initComponents();
-        iniciar();
-        initialize();
-        addActions();
+        addFiltersText();
+        inicializarPosicionesYRotores();
+        addActionListeners();
     }
 
-    private void iniciar() {
+    private void addFiltersText() {
         ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new filtroMensaje());
         jTextFieldMensaje.getDocument().addDocumentListener(new listenerMensaje());
 
@@ -96,10 +96,10 @@ public class menu extends JFrame {
         ((AbstractDocument) jTextFieldLongitudPass.getDocument()).setDocumentFilter(new filtroInt());
         jTextFieldLongitudPass.getDocument().addDocumentListener(new listenerLongitudPass());
 
-        jTextFieldRotorIzqAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRIAmp));
-        jTextFieldRotorCenAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRCAmp));
-        jTextFieldRotorDerAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRDAmp));
-        jTextFieldReflectorAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRAmp));
+        jTextFieldRotorIzqAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRIAmp, jLabelColorValidarIzq, jLabelColorAceptarIzq, false));
+        jTextFieldRotorCenAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRCAmp, jLabelColorValidarCen, jLabelColorAceptarCen, false));
+        jTextFieldRotorDerAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRDAmp, jLabelColorValidarDer, jLabelColorAceptarDer, false));
+        jTextFieldReflectorAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRAmp, jLabelColorValidarR, null, true));
 
         ((AbstractDocument) jTextFieldClaveIzqAmp.getDocument()).setDocumentFilter(new filtro1Amp());
         ((AbstractDocument) jTextFieldClaveCenAmp.getDocument()).setDocumentFilter(new filtro1Amp());
@@ -133,7 +133,7 @@ public class menu extends JFrame {
         }
 
         public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("updateField: " + action);
+            //System.out.println("listenerMensaje updateField: " + action);
             enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorCen.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
@@ -190,20 +190,28 @@ public class menu extends JFrame {
         }
 
         public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("updateField: " + action);
+            //System.out.println("listenerLongitudPass updateField: " + action);
             if (!jCheckBoxLongitudPass.isSelected()) {
-                jButtonGenerarPass.setEnabled((!jTextFieldLongitudPass.getText().isEmpty()));
-                jButtonGenerarPassCopy.setEnabled((!jTextFieldLongitudPass.getText().isEmpty()));
+                jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());
+                jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());
             }
         }
     }
 
     class listenerValidezRotoresYReflectores implements DocumentListener {
 
-        private javax.swing.JButton jbutton;
+        private javax.swing.JButton jbuttonValidar;
+        private javax.swing.JLabel jlabelValidar;
+        private javax.swing.JLabel jlabelAceptar;
+        private boolean reflector;
 
-        public listenerValidezRotoresYReflectores(javax.swing.JButton jb) {
-            jbutton = jb;
+        public listenerValidezRotoresYReflectores(javax.swing.JButton jbValidar, javax.swing.JLabel jlValidar, javax.swing.JLabel jlAceptar, boolean reflector) {
+            jbuttonValidar = jbValidar;
+            jlabelValidar = jlValidar;
+            if (!reflector) {
+                jlabelAceptar = jlAceptar;
+            }
+            this.reflector = reflector;
         }
 
         @Override
@@ -222,8 +230,12 @@ public class menu extends JFrame {
         }
 
         public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("updateField: " + action);
-            jbutton.setBackground(Color.magenta);
+            //System.out.println("listenerValidezRotoresYReflectores updateField: " + action);
+            jbuttonValidar.setBackground(Color.magenta);
+            jlabelValidar.setBackground(Color.magenta);
+            if (!reflector) {
+                jlabelAceptar.setBackground(Color.magenta);
+            }
         }
     }
 
@@ -267,34 +279,6 @@ public class menu extends JFrame {
 
     public static void setcD(char cD) {
         menu.cD = cD;
-    }
-
-    public static void setcIAmp(char cIAmp) {
-        menu.cIAmp = cIAmp;
-    }
-
-    public static void setcCAmp(char cCAmp) {
-        menu.cCAmp = cCAmp;
-    }
-
-    public static void setcDAmp(char cDAmp) {
-        menu.cDAmp = cDAmp;
-    }
-
-    public static void setcIAmpPlus(char cIAmpPlus) {
-        menu.cIAmpPlus = cIAmpPlus;
-    }
-
-    public static void setcCAmpPlus(char cCAmpPlus) {
-        menu.cCAmpPlus = cCAmpPlus;
-    }
-
-    public static void setcDAmpPlus(char cDAmpPlus) {
-        menu.cDAmpPlus = cDAmpPlus;
-    }
-
-    public static void setConex(ArrayList<Clavijas> conex) {
-        menu.conex = conex;
     }
 
     class filtroMensaje extends DocumentFilter {
@@ -385,7 +369,7 @@ public class menu extends JFrame {
         }
     }
 
-    private void initialize() {
+    private void inicializarPosicionesYRotores() {
         posRY = 150;    //Reflector
         posIY = 220;    //Izquierdo
         posCY = 300;    //Central
@@ -410,7 +394,10 @@ public class menu extends JFrame {
         jTabbedPane1.setFont(new Font(jTabbedPane1.getFont().getFontName(), Font.BOLD, jTabbedPane1.getFont().getSize() + 6));
     }
 
-    private void addActions() {
+    private void addActionListeners() {
+        /**
+         * VENTANA 1 - ENIGMA
+         */
         jTabbedPane1.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -420,6 +407,7 @@ public class menu extends JFrame {
             }
         });
 
+        // COMBOBOX ROTORES
         jComboBoxRotorIzq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -439,6 +427,7 @@ public class menu extends JFrame {
             }
         });
 
+        // BOTONES ADD Y DELETE CLAVIJAS
         jButtonClavijaAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -484,127 +473,68 @@ public class menu extends JFrame {
             }
         });
 
+        /**
+         * VENTANA 2 - ENIGMA AMPLIADA
+         */
+        // CHECKBOX ROTORES Y REFLECTOR
         jCheckBoxRotorIzqAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeButtonStateValidar(jCheckBoxRotorIzqAmp, jTextFieldRotorIzqAmp, jButtonValidarRIAmp);
+                changeButtonStateValidar(jCheckBoxRotorIzqAmp, jTextFieldRotorIzqAmp, jButtonValidarRIAmp, jTextFieldRotorIzqAmpGiro, jButtonAceptarIzqAmp);
             }
         });
         jCheckBoxRotorCenAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeButtonStateValidar(jCheckBoxRotorCenAmp, jTextFieldRotorCenAmp, jButtonValidarRCAmp);
+                changeButtonStateValidar(jCheckBoxRotorCenAmp, jTextFieldRotorCenAmp, jButtonValidarRCAmp, jTextFieldRotorCenAmpGiro, jButtonAceptarCenAmp);
             }
         });
         jCheckBoxRotorDerAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeButtonStateValidar(jCheckBoxRotorDerAmp, jTextFieldRotorDerAmp, jButtonValidarRDAmp);
+                changeButtonStateValidar(jCheckBoxRotorDerAmp, jTextFieldRotorDerAmp, jButtonValidarRDAmp, jTextFieldRotorDerAmpGiro, jButtonAceptarDerAmp);
             }
         });
         jCheckBoxReflectorAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeButtonStateValidar(jCheckBoxReflectorAmp, jTextFieldReflectorAmp, jButtonValidarRAmp);
-            }
-        });
-        jCheckBoxLongitudPass.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setN(20);
-                jTextFieldLongitudPass.setEditable(!jCheckBoxLongitudPass.isSelected());
-                jButtonGenerarPass.setEnabled(jCheckBoxLongitudPass.isSelected());
-                jButtonGenerarPassCopy.setEnabled(jCheckBoxLongitudPass.isSelected());
-                if (!jCheckBoxLongitudPass.isSelected()) {
-                    jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty() ? true : false);
-                    jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty() ? true : false);
-                }
+                jTextFieldReflectorAmp.setEditable(!jCheckBoxReflectorAmp.isSelected());
+                jButtonValidarRAmp.setEnabled(!jCheckBoxReflectorAmp.isSelected());
             }
         });
 
-        jButtonGenerarPass.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSymbolic(jCheckBoxSymbols.isSelected() ? 4 : 3);
-                if (!jCheckBoxLongitudPass.isSelected()) {
-                    setN(Integer.parseInt(jTextFieldLongitudPass.getText()));
-                }
-                jTextFieldPass.setText(aleatorio());
-            }
-        });
-        jButtonGenerarPassCopy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                copyToClipboard(jTextFieldPass.getText());
-            }
-        });
-        jButtonGenerarRotor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (jRadioButtonRotorAmp.isSelected()) {
-                    jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(false));
-                } else if (jRadioButtonReflectorAmp.isSelected()) {
-                    jTextFieldRotorReflector.setText(rotoresReflectorAmp());
-                } else if (jRadioButtonRRAmpPlus.isSelected()) {
-                    jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(true));
-                }
-            }
-        });
-        jButtonGenerarRotorCopy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                copyToClipboard(jTextFieldRotorReflector.getText());
-            }
-        });
-
+        // VALIDAR ROTORES Y REFLECTOR AMPLIADOS
         jButtonValidarRIAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean valido = false;
-                valido = checkValidarRotorAmp(jTextFieldRotorIzqAmp.getText(), false, false);
-                if (valido) {
-                    jTextFieldRotorIzqAmpGiro.setEditable(true);
-                    jButtonAceptarIzqAmp.setEnabled(true);
-                }
-                jButtonValidarRIAmp.setBackground(valido ? Color.green : Color.red);
+                validarRotorIzqAmp = checkRotorAmp(jButtonValidarRIAmp, jTextFieldRotorIzqAmp, jLabelColorValidarIzq);
             }
         });
         jButtonValidarRCAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean valido = false;
-                valido = checkValidarRotorAmp(jTextFieldRotorCenAmp.getText(), false, false);
-                if (valido) {
-                    jTextFieldRotorCenAmpGiro.setEditable(true);
-                    jButtonAceptarCenAmp.setEnabled(true);
-                }
-                jButtonValidarRCAmp.setBackground(valido ? Color.green : Color.red);
+                validarRotorCenAmp = checkRotorAmp(jButtonValidarRCAmp, jTextFieldRotorCenAmp, jLabelColorValidarCen);
             }
         });
         jButtonValidarRDAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean valido = false;
-                valido = checkValidarRotorAmp(jTextFieldRotorDerAmp.getText(), false, false);
-                if (valido) {
-                    jTextFieldRotorDerAmpGiro.setEditable(true);
-                    jButtonAceptarDerAmp.setEnabled(true);
-                }
-                jButtonValidarRDAmp.setBackground(valido ? Color.green : Color.red);
+                validarRotorDerAmp = checkRotorAmp(jButtonValidarRDAmp, jTextFieldRotorDerAmp, jLabelColorValidarDer);
             }
         });
         jButtonValidarRAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean valido = false;
-                valido = checkValidarRotorAmp(jTextFieldReflectorAmp.getText(), false, true);
-                if (valido) {
+                validarReflectorAmp = checkValidarRotorAmp(jTextFieldReflectorAmp.getText(), false, true);
+                if (validarReflectorAmp) {
                     reflectorAmpNuevo = new Rotor(jTextFieldReflectorAmp.getText(), '-');
                 }
-                jButtonValidarRAmp.setBackground(valido ? Color.green : Color.red);
+                jButtonValidarRAmp.setBackground(validarReflectorAmp ? Color.green : Color.red);
+                jLabelColorValidarR.setBackground(validarReflectorAmp ? Color.green : Color.red);
             }
         });
 
+        // BOTONES ADD Y DELETE CLAVIJAS AMPLIADAS
         jButtonClavijaAddAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -650,36 +580,60 @@ public class menu extends JFrame {
             }
         });
 
+        // BOTONES ACEPTAR ROTORES Y CIFRAR
         jButtonAceptarIzqAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rIzqAmpNuevo = new Rotor(jTextFieldRotorIzqAmp.getText(), jTextFieldRotorIzqAmpGiro.getText().charAt(0));
-                jButtonAceptarIzqAmp.setBackground(Color.green);
+                if (!jTextFieldRotorIzqAmpGiro.getText().isEmpty() && validarRotorIzqAmp) {
+                    rIzqAmpNuevo = new Rotor(jTextFieldRotorIzqAmp.getText(), jTextFieldRotorIzqAmpGiro.getText().charAt(0));
+                    jButtonAceptarIzqAmp.setBackground(Color.green);
+                    jLabelColorAceptarIzq.setBackground(Color.green);
+                    aceptarRotorIzqAmp = true;
+                } else {
+                    jButtonAceptarIzqAmp.setBackground(Color.red);
+                    jLabelColorAceptarIzq.setBackground(Color.red);
+                }
             }
         });
         jButtonAceptarCenAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rCenAmpNuevo = new Rotor(jTextFieldRotorCenAmp.getText(), jTextFieldRotorCenAmpGiro.getText().charAt(0));
-                jButtonAceptarCenAmp.setBackground(Color.green);
+                if (!jTextFieldRotorCenAmpGiro.getText().isEmpty() && validarRotorCenAmp) {
+                    rCenAmpNuevo = new Rotor(jTextFieldRotorCenAmp.getText(), jTextFieldRotorCenAmpGiro.getText().charAt(0));
+                    jButtonAceptarCenAmp.setBackground(Color.green);
+                    jLabelColorAceptarCen.setBackground(Color.green);
+                    aceptarRotorCenAmp = true;
+                } else {
+                    jButtonAceptarCenAmp.setBackground(Color.red);
+                    jLabelColorAceptarCen.setBackground(Color.red);
+                }
             }
         });
         jButtonAceptarDerAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rDerAmpNuevo = new Rotor(jTextFieldRotorDerAmp.getText(), jTextFieldRotorDerAmpGiro.getText().charAt(0));
-                jButtonAceptarDerAmp.setBackground(Color.green);
+                if (!jTextFieldRotorDerAmpGiro.getText().isEmpty() && validarRotorDerAmp) {
+                    rDerAmpNuevo = new Rotor(jTextFieldRotorDerAmp.getText(), jTextFieldRotorDerAmpGiro.getText().charAt(0));
+                    jButtonAceptarDerAmp.setBackground(Color.green);
+                    jLabelColorAceptarDer.setBackground(Color.green);
+                    aceptarRotorDerAmp = true;
+                } else {
+                    jButtonAceptarDerAmp.setBackground(Color.red);
+                    jLabelColorAceptarDer.setBackground(Color.red);
+                }
             }
         });
         jButtonCifrarAmp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean plus = false;
-                enigmaAmp = new Enigma(jCheckBoxRotorIzqAmp.isSelected() ? rIzqAmp : rIzqAmpNuevo,
-                        jCheckBoxRotorCenAmp.isSelected() ? rCenAmp : rCenAmpNuevo,
-                        jCheckBoxRotorDerAmp.isSelected() ? rDerAmp : rDerAmpNuevo); // Crea la máquina enigmaAmp
+                enigmaAmp = new Enigma((aceptarRotorIzqAmp && !jCheckBoxRotorIzqAmp.isSelected()) ? rIzqAmpNuevo : rIzqAmp,
+                        (aceptarRotorCenAmp && !jCheckBoxRotorCenAmp.isSelected()) ? rCenAmpNuevo : rCenAmp,
+                        (aceptarRotorDerAmp && !jCheckBoxRotorDerAmp.isSelected()) ? rDerAmpNuevo : rDerAmp,
+                        plus
+                ); // Crea la máquina enigmaAmp
                 for (Clavijas cla : conexAmp) {
-                    enigmaAmp.ponerClavija(cla.getA(), cla.getB());
+                    enigmaAmp.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);
                 }
                 char cIAmp = 'A', cCAmp = 'A', cDAmp = 'A';
                 if ((jTextFieldClaveIzqAmp.getText().length() & jTextFieldClaveCenAmp.getText().length() & jTextFieldClaveDerAmp.getText().length()) > 0) {
@@ -690,20 +644,95 @@ public class menu extends JFrame {
                 enigmaAmp.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);
                 String mensaje = jTextFieldMensajeAmp.getText();
                 //modo = 0;
-                enigmaAmp.setReflectorAmpliado(reflectorAmpNuevo);
+                if (validarReflectorAmp && !jCheckBoxReflectorAmp.isSelected()) {
+                    enigmaAmp.setReflectorAmpliado(reflectorAmpNuevo);
+                }
                 jTextFieldCifradoAmp.setText(procesarAmpliadoPlus(enigmaAmp, mensaje, plus));
-                setcIAmp(cIAmp);
-                setcCAmp(cCAmp);
-                setcDAmp(cDAmp);
+            }
+        });
+
+        /**
+         * VENTANA 3 - ENIGMA AMPLIADA PLUS
+         */
+        // .
+        /**
+         * VENTANA 4 - GENERADOR PASS
+         */
+        jCheckBoxLongitudPass.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setN(20);
+                jTextFieldLongitudPass.setEditable(!jCheckBoxLongitudPass.isSelected());
+                jButtonGenerarPass.setEnabled(jCheckBoxLongitudPass.isSelected());
+                jButtonGenerarPassCopy.setEnabled(jCheckBoxLongitudPass.isSelected());
+                if (!jCheckBoxLongitudPass.isSelected()) {
+                    jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty() ? true : false);
+                    jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty() ? true : false);
+                }
+            }
+        });
+
+        // GENERAR Y COPIAR PASS Y ROTOR/REFLECTOR
+        jButtonGenerarPass.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSymbolic(jCheckBoxSymbols.isSelected() ? 4 : 3);
+                if (!jCheckBoxLongitudPass.isSelected()) {
+                    setN(Integer.parseInt(jTextFieldLongitudPass.getText()));
+                }
+                jTextFieldPass.setText(aleatorio());
+            }
+        });
+        jButtonGenerarPassCopy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyToClipboard(jTextFieldPass.getText());
+            }
+        });
+        jButtonGenerarRotor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jRadioButtonRotorAmp.isSelected()) {
+                    jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(false));
+                } else if (jRadioButtonReflectorAmp.isSelected()) {
+                    jTextFieldRotorReflector.setText(rotorReflectorAmp());
+                } else if (jRadioButtonRRAmpPlus.isSelected()) {
+                    jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(true));
+                }
+            }
+        });
+        jButtonGenerarRotorCopy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyToClipboard(jTextFieldRotorReflector.getText());
             }
         });
     }
 
-    private void changeButtonStateValidar(javax.swing.JCheckBox jcheckbox, javax.swing.JTextField jtextfield, javax.swing.JButton jbutton) {
-        jtextfield.setEditable(!jcheckbox.isSelected());
-        jbutton.setEnabled(!jcheckbox.isSelected());
+    private boolean checkRotorAmp(javax.swing.JButton jbuttonValidar, javax.swing.JTextField rotorAmp, javax.swing.JLabel jlabelColorValidar) {
+        boolean valido = checkValidarRotorAmp(rotorAmp.getText(), false, false);
+        if (valido) {
+        }
+        jbuttonValidar.setBackground(valido ? Color.green : Color.red);
+        jlabelColorValidar.setBackground(valido ? Color.green : Color.red);
+        return valido;
     }
 
+    private void changeButtonStateValidar(javax.swing.JCheckBox jcheckbox, javax.swing.JTextField jtextfield, javax.swing.JButton jbutton, javax.swing.JTextField rotorAmpGiro, javax.swing.JButton jbuttonAceptar) {
+        jtextfield.setEditable(!jcheckbox.isSelected());
+        jbutton.setEnabled(!jcheckbox.isSelected());
+        rotorAmpGiro.setEditable(!jcheckbox.isSelected());
+        jbuttonAceptar.setEnabled(!jcheckbox.isSelected());
+    }
+
+    /**
+     * Comprueba si es válida la cadena de texto introducida
+     *
+     * @param s Texto a comprobar
+     * @param plus Indica si es ampliado plus
+     * @param reflector Indica si es un reflector
+     * @return
+     */
     private boolean checkValidarRotorAmp(String s, boolean plus, boolean reflector) {
         return checkLongitud(s, plus ? 73 : 74) && checkContenido(s, plus) && checkRepetido(s) && (!reflector ? true : checkPermutacion(s));
     }
@@ -742,7 +771,7 @@ public class menu extends JFrame {
             cS = s.charAt(i);
             cA = alfabeto.charAt(i);
             if (s.contains(Character.toString(cA))) {
-                if (!(s.charAt(s.indexOf(cA)) == cA && alfabeto.charAt(alfabeto.indexOf(cS)) == cS)) {
+                if (!(alfabeto.charAt(s.indexOf(cA)) == cS && s.charAt(alfabeto.indexOf(cS)) == cA)) {
                     return false;
                 }
             } else {
@@ -948,6 +977,13 @@ public class menu extends JFrame {
         jSeparator7 = new javax.swing.JSeparator();
         jLabelClavijasAmp1 = new javax.swing.JLabel();
         jSeparator8 = new javax.swing.JSeparator();
+        jLabelColorValidarIzq = new javax.swing.JLabel();
+        jLabelColorValidarDer = new javax.swing.JLabel();
+        jLabelColorValidarR = new javax.swing.JLabel();
+        jLabelColorValidarCen = new javax.swing.JLabel();
+        jLabelColorAceptarDer = new javax.swing.JLabel();
+        jLabelColorAceptarIzq = new javax.swing.JLabel();
+        jLabelColorAceptarCen = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jButtonGenerarRotor = new javax.swing.JButton();
@@ -1142,11 +1178,11 @@ public class menu extends JFrame {
 
         jButtonClavijaAddAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonClavijaAddAmp.setText("Añadir");
-        jPanel2.add(jButtonClavijaAddAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, -1, -1));
+        jPanel2.add(jButtonClavijaAddAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 380, -1, -1));
 
         jButtonClavijaDeleteAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonClavijaDeleteAmp.setText("Eliminar");
-        jPanel2.add(jButtonClavijaDeleteAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 430, -1, -1));
+        jPanel2.add(jButtonClavijaDeleteAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 430, -1, -1));
 
         jListClavijasAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane3.setViewportView(jListClavijasAmp);
@@ -1155,125 +1191,174 @@ public class menu extends JFrame {
 
         jTextFieldRotorIzqAmp.setEditable(false);
         jTextFieldRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 330, -1));
+        jPanel2.add(jTextFieldRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 330, -1));
 
         jLabelRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorIzqAmp.setText("Rotor Izquierdo:");
-        jPanel2.add(jLabelRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, -1));
+        jPanel2.add(jLabelRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
 
         jLabelRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorCenAmp.setText("Rotor Central:");
-        jPanel2.add(jLabelRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+        jPanel2.add(jLabelRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         jTextFieldRotorCenAmp.setEditable(false);
         jTextFieldRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 330, -1));
+        jPanel2.add(jTextFieldRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 330, -1));
 
         jLabelRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorDerAmp.setText("Rotor Derecho:");
-        jPanel2.add(jLabelRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
+        jPanel2.add(jLabelRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
         jTextFieldRotorDerAmp.setEditable(false);
         jTextFieldRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 330, -1));
+        jPanel2.add(jTextFieldRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 330, -1));
 
         jTextFieldReflectorAmp.setEditable(false);
         jTextFieldReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 330, -1));
+        jPanel2.add(jTextFieldReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 330, -1));
 
         jLabelReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelReflectorAmp.setText("Reflector:");
-        jPanel2.add(jLabelReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, -1, -1));
+        jPanel2.add(jLabelReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));
 
         jCheckBoxReflectorAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBoxReflectorAmp.setSelected(true);
         jCheckBoxReflectorAmp.setText("Por defecto");
-        jPanel2.add(jCheckBoxReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, -1, -1));
+        jPanel2.add(jCheckBoxReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 280, -1, -1));
 
         jCheckBoxRotorIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBoxRotorIzqAmp.setSelected(true);
         jCheckBoxRotorIzqAmp.setText("Por defecto");
-        jPanel2.add(jCheckBoxRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, -1, -1));
+        jPanel2.add(jCheckBoxRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, -1));
 
         jCheckBoxRotorCenAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBoxRotorCenAmp.setSelected(true);
         jCheckBoxRotorCenAmp.setText("Por defecto");
-        jPanel2.add(jCheckBoxRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, -1, -1));
+        jPanel2.add(jCheckBoxRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, -1, -1));
 
         jCheckBoxRotorDerAmp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBoxRotorDerAmp.setSelected(true);
         jCheckBoxRotorDerAmp.setText("Por defecto");
-        jPanel2.add(jCheckBoxRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, -1, -1));
+        jPanel2.add(jCheckBoxRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));
 
         jButtonValidarRIAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonValidarRIAmp.setText("Validar");
         jButtonValidarRIAmp.setEnabled(false);
-        jPanel2.add(jButtonValidarRIAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, -1, -1));
+        jPanel2.add(jButtonValidarRIAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 56, -1, -1));
 
         jButtonValidarRCAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonValidarRCAmp.setText("Validar");
         jButtonValidarRCAmp.setEnabled(false);
-        jPanel2.add(jButtonValidarRCAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, -1, -1));
+        jPanel2.add(jButtonValidarRCAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 136, -1, -1));
 
         jButtonValidarRDAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonValidarRDAmp.setText("Validar");
         jButtonValidarRDAmp.setEnabled(false);
-        jPanel2.add(jButtonValidarRDAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 220, -1, -1));
+        jPanel2.add(jButtonValidarRDAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 226, -1, -1));
 
         jButtonCifrarAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonCifrarAmp.setText("Cifrar");
-        jPanel2.add(jButtonCifrarAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 500, -1, -1));
+        jPanel2.add(jButtonCifrarAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 506, -1, -1));
 
         jButtonValidarRAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonValidarRAmp.setText("Validar");
         jButtonValidarRAmp.setEnabled(false);
-        jPanel2.add(jButtonValidarRAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, -1, -1));
+        jPanel2.add(jButtonValidarRAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 306, -1, -1));
         jPanel2.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, 190, 10));
 
         jTextFieldRotorDerAmpGiro.setEditable(false);
         jTextFieldRotorDerAmpGiro.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorDerAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, 60, -1));
+        jPanel2.add(jTextFieldRotorDerAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 230, 60, -1));
 
         jTextFieldRotorIzqAmpGiro.setEditable(false);
         jTextFieldRotorIzqAmpGiro.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorIzqAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 60, -1));
+        jPanel2.add(jTextFieldRotorIzqAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 60, -1));
 
         jTextFieldRotorCenAmpGiro.setEditable(false);
         jTextFieldRotorCenAmpGiro.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel2.add(jTextFieldRotorCenAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 60, -1));
+        jPanel2.add(jTextFieldRotorCenAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 60, -1));
 
         jLabelRotorIzqAmp1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorIzqAmp1.setText("Punto de giro:");
-        jPanel2.add(jLabelRotorIzqAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, -1, -1));
+        jPanel2.add(jLabelRotorIzqAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, -1, -1));
 
         jLabelRotorIzqAmp2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorIzqAmp2.setText("Punto de giro:");
-        jPanel2.add(jLabelRotorIzqAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, -1, -1));
+        jPanel2.add(jLabelRotorIzqAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));
 
         jLabelRotorIzqAmp3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelRotorIzqAmp3.setText("Punto de giro:");
-        jPanel2.add(jLabelRotorIzqAmp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, -1, -1));
+        jPanel2.add(jLabelRotorIzqAmp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, -1, -1));
 
         jButtonAceptarDerAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonAceptarDerAmp.setText("Aceptar");
         jButtonAceptarDerAmp.setEnabled(false);
-        jPanel2.add(jButtonAceptarDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 220, -1, -1));
+        jPanel2.add(jButtonAceptarDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 226, -1, -1));
 
         jButtonAceptarIzqAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonAceptarIzqAmp.setText("Aceptar");
         jButtonAceptarIzqAmp.setEnabled(false);
-        jPanel2.add(jButtonAceptarIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 60, -1, -1));
+        jPanel2.add(jButtonAceptarIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 56, -1, -1));
 
         jButtonAceptarCenAmp.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonAceptarCenAmp.setText("Aceptar");
         jButtonAceptarCenAmp.setEnabled(false);
-        jPanel2.add(jButtonAceptarCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, -1, -1));
+        jPanel2.add(jButtonAceptarCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 136, -1, -1));
         jPanel2.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, 180, 9));
 
         jLabelClavijasAmp1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelClavijasAmp1.setText("Clavijas:");
         jPanel2.add(jLabelClavijasAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 410, -1, -1));
         jPanel2.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 390, 160, 10));
+
+        jLabelColorValidarIzq.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarIzq.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarIzq.setOpaque(true);
+        jLabelColorValidarIzq.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarIzq.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorValidarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, -1, -1));
+
+        jLabelColorValidarDer.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarDer.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarDer.setOpaque(true);
+        jLabelColorValidarDer.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarDer.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorValidarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 230, -1, -1));
+
+        jLabelColorValidarR.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarR.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarR.setOpaque(true);
+        jLabelColorValidarR.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarR.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorValidarR, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 310, -1, -1));
+
+        jLabelColorValidarCen.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarCen.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarCen.setOpaque(true);
+        jLabelColorValidarCen.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorValidarCen.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorValidarCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 150, -1, -1));
+
+        jLabelColorAceptarDer.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarDer.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarDer.setOpaque(true);
+        jLabelColorAceptarDer.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarDer.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorAceptarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 230, -1, -1));
+
+        jLabelColorAceptarIzq.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarIzq.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarIzq.setOpaque(true);
+        jLabelColorAceptarIzq.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarIzq.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorAceptarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 70, -1, -1));
+
+        jLabelColorAceptarCen.setMaximumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarCen.setMinimumSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarCen.setOpaque(true);
+        jLabelColorAceptarCen.setPreferredSize(new java.awt.Dimension(20, 20));
+        jLabelColorAceptarCen.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelColorAceptarCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 150, -1, -1));
 
         jTabbedPane1.addTab("Enigma ampliada", jPanel2);
 
@@ -1451,6 +1536,13 @@ public class menu extends JFrame {
     private javax.swing.JLabel jLabelClavijas;
     private javax.swing.JLabel jLabelClavijasAmp;
     private javax.swing.JLabel jLabelClavijasAmp1;
+    private javax.swing.JLabel jLabelColorAceptarCen;
+    private javax.swing.JLabel jLabelColorAceptarDer;
+    private javax.swing.JLabel jLabelColorAceptarIzq;
+    private javax.swing.JLabel jLabelColorValidarCen;
+    private javax.swing.JLabel jLabelColorValidarDer;
+    private javax.swing.JLabel jLabelColorValidarIzq;
+    private javax.swing.JLabel jLabelColorValidarR;
     private javax.swing.JLabel jLabelMensaje;
     private javax.swing.JLabel jLabelMensaje1;
     private javax.swing.JLabel jLabelMensaje2;

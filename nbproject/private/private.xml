@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/AdministrarPass.java</file>
-            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/prueba.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/EjecutarEnigma.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/Enigma.java</file>
             <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/menu.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/GeneradorContrasenas.java</file>
+            <file>file:/C:/Users/LEONARDOCARDOZOGOMEZ/Documents/NetBeansProjects/AdministrarPass/src/administrarpass/Rotor.java</file>
         </group>
     </open-files>
 </project-private>

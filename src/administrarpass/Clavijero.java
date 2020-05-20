@@ -14,7 +14,20 @@ public class Clavijero {
      */
     public Clavijero() {
         String panel;
-        panel = cifrado == 0 ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        panel = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (int i = 0; i < panel.length(); i++) { // crea las clavijas del panel
+            char a = panel.charAt(i);
+            this.clavijas.add(a);
+            this.clavijasLibres.add(a);
+        }
+    }
+
+    /**
+     * Crea el panel ampliado de clavijas
+     */
+    public Clavijero(boolean plus) {
+        String panel;
+        panel = plus ? "!\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" : " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         for (int i = 0; i < panel.length(); i++) { // crea las clavijas del panel
             char a = panel.charAt(i);
             this.clavijas.add(a);
@@ -88,6 +101,11 @@ public class Clavijero {
         return true;
     }
 
+    /**
+     * Obtiene la lista de Clavijas
+     *
+     * @return lista de clavijas
+     */
     public ArrayList<Clavijas> getConexiones() {
         return conexiones;
     }
