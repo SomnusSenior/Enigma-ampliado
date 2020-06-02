@@ -3,7 +3,7 @@
 // * To change this template file, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package administrarpass;
+package administrarpass;
 //
 //import java.awt.Color;
 //import java.awt.Font;
