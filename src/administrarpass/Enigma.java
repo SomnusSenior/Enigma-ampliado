@@ -259,7 +259,7 @@ public class Enigma {
      */
     public void moverClavijasAmpliado(char a, char b, boolean plus) {
         StringBuilder aux = new StringBuilder();
-        String contenido = plus ? this.entrada.obtenerContenido() : this.entrada.obtenerContenido();
+        String contenido = plus ? this.entradaAmpliadoPlus.obtenerContenido() : this.entradaAmpliado.obtenerContenido();
         // ordena las clavijas
         char susIzq = a < b ? a : b;
         char susDer = a < b ? b : a;
