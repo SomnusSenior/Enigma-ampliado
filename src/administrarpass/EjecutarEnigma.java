@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class EjecutarEnigma {
 
-    public static int modo;
+    public static int modo = 0;
     public static int cifrado;
     static Scanner scan = new Scanner(System.in);
     public static char cI, cC, cD;

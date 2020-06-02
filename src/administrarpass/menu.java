@@ -669,7 +669,6 @@ public class menu extends JFrame {
                 }
                 enigmaAmp.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);
                 String mensaje = jTextFieldMensajeAmp.getText();
-                //modo = 0;
                 if (validarReflectorAmp && !jCheckBoxReflectorAmp.isSelected()) {
                     enigmaAmp.setReflectorAmpliado(reflectorAmpNuevo);
                 }
@@ -835,7 +834,7 @@ public class menu extends JFrame {
                         (aceptarRotorCenAmpPlus && !jCheckBoxRotorCenAmpPlus.isSelected()) ? rCenAmpPlusNuevo : rCenAmpPlus,
                         (aceptarRotorDerAmpPlus && !jCheckBoxRotorDerAmpPlus.isSelected()) ? rDerAmpPlusNuevo : rDerAmpPlus,
                         plus
-                ); // Crea la máquina enigmaAmp
+                ); // Crea la máquina enigmaAmpPlus
                 for (Clavijas cla : conexAmpPlus) {
                     enigmaAmpPlus.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);
                 }
@@ -847,10 +846,7 @@ public class menu extends JFrame {
                 }
                 enigmaAmpPlus.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);
                 String mensaje = jTextFieldMensajeAmpPlus.getText();
-                
-                //if
-                //modo = 0;
-                
+                modo = jRadioButtonModo0.isSelected() ? 0 : 1;
                 if (validarReflectorAmpPlus && !jCheckBoxReflectorAmpPlus.isSelected()) {
                     enigmaAmpPlus.setReflectorAmpliado(reflectorAmpPlusNuevo);
                 }
@@ -1265,6 +1261,7 @@ public class menu extends JFrame {
         jButtonGenerarRotorCopy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Simulador Enigma Plus");
         setResizable(false);
 
         jTabbedPane1.setOpaque(true);
@@ -1858,10 +1855,13 @@ public class menu extends JFrame {
         jPanel5.add(jButtonCifrarAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 510, -1, -1));
 
         buttonGroupModoAmpPlus.add(jRadioButtonModo0);
+        jRadioButtonModo0.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jRadioButtonModo0.setSelected(true);
         jRadioButtonModo0.setText("Cifrado");
         jPanel5.add(jRadioButtonModo0, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 480, -1, -1));
 
         buttonGroupModoAmpPlus.add(jRadioButtonModo1);
+        jRadioButtonModo1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jRadioButtonModo1.setText("Descifrado");
         jPanel5.add(jRadioButtonModo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 540, -1, -1));
 
