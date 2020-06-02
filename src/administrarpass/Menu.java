@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,51 +33,75 @@ import javax.swing.JFrame;
 /**
  * @author 49904022
  */
-public class menu extends JFrame {
+public class Menu extends JFrame {
 
-    private Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'), //tipo I Q
-            rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'), //tipo II E
-            rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'), //tipo III V
-            rIV = new Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'J'), //tipo IV J
-            rV = new Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z'); //tipo V Z
-    private Rotor rIzqAmp = new Rotor("4\"HIr(c36!5fs+kB28l#$mjO%tGAo)*1Md9Dy7'EhWJgavVS0exRN ZuF&PnqYipCUzLwTbKQX", 'X'), //NUEVO tipo Izq X
-            rCenAmp = new Rotor("YZh!+76W&Ig%fiPsnUuSQC21v49q3B'5j)(TA8kGdmX$ O#0KbRJF*HNtEwc\"zVxaoerMplDyL", '\''), //NUEVO tipo Cen '
-            rDerAmp = new Rotor("X14&w92 5!\"khP#Ij6*BdvLQGUE%p$ql7Fa3KuDn(Z8MbmTo'iHSWA0YCRytJ+OfzVsgN)cxre", 'J'), //NUEVO tipo Der J
-            rIzqAmpNuevo, rCenAmpNuevo, rDerAmpNuevo, reflectorAmpNuevo;
-    private Rotor rIzqAmpPlus = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'), //NUEVO tipo Izq Plus h
-            rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'), //NUEVO tipo Cen Plus I 
-            rDerAmpPlus = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'), //NUEVO tipo Der Plus i
-            rIzqAmpPlusNuevo, rCenAmpPlusNuevo, rDerAmpPlusNuevo, reflectorAmpPlusNuevo;
-    private boolean eni = false,
-            validarRotorIzqAmp = false, validarRotorCenAmp = false, validarRotorDerAmp = false, validarReflectorAmp = false,
-            aceptarRotorIzqAmp = false, aceptarRotorCenAmp = false, aceptarRotorDerAmp = false,
-            validarRotorIzqAmpPlus = false, validarRotorCenAmpPlus = false, validarRotorDerAmpPlus = false, validarReflectorAmpPlus = false,
-            aceptarRotorIzqAmpPlus = false, aceptarRotorCenAmpPlus = false, aceptarRotorDerAmpPlus = false;
-    private static int posIY, posCY, posDY, posTY, posRY, posClaY, contEleccion;
-    private static Map<String, Integer> posRX = new HashMap<>(),
-            posClaX = new HashMap<>(),
-            posTX = new HashMap<>(),
-            posIX = new HashMap<>(),
-            posPerIX = new HashMap<>(),
-            posCX = new HashMap<>(),
-            posPerCX = new HashMap<>(),
-            posDX = new HashMap<>(),
-            posPerDX = new HashMap<>();
+    private final Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
+    private final Rotor rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
+    private final Rotor rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
+    private final Rotor rIV = new Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'J'); //tipo IV J
+    private final Rotor rV = new Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z'); //tipo V Z
+    private final Rotor rIzqAmp = new Rotor("4\"HIr(c36!5fs+kB28l#$mjO%tGAo)*1Md9Dy7'EhWJgavVS0exRN ZuF&PnqYipCUzLwTbKQX", 'X'); //NUEVO tipo Izq X
+    private final Rotor rCenAmp = new Rotor("YZh!+76W&Ig%fiPsnUuSQC21v49q3B'5j)(TA8kGdmX$ O#0KbRJF*HNtEwc\"zVxaoerMplDyL", '\''); //NUEVO tipo Cen '
+    private final Rotor rDerAmp = new Rotor("X14&w92 5!\"khP#Ij6*BdvLQGUE%p$ql7Fa3KuDn(Z8MbmTo'iHSWA0YCRytJ+OfzVsgN)cxre", 'J'); //NUEVO tipo Der J
+    private Rotor rIzqAmpNuevo;
+    private Rotor rCenAmpNuevo;
+    private Rotor rDerAmpNuevo;
+    private Rotor reflectorAmpNuevo;
+    private final Rotor rIzqAmpPlus = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo Izq Plus h
+    private final Rotor rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo Cen Plus I 
+    private final Rotor rDerAmpPlus = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo Der Plus i
+    private Rotor rIzqAmpPlusNuevo;
+    private Rotor rCenAmpPlusNuevo;
+    private Rotor rDerAmpPlusNuevo;
+    private Rotor reflectorAmpPlusNuevo;
+    private boolean eni = false;
+    private boolean validarRotorIzqAmp = false;
+    private boolean validarRotorCenAmp = false;
+    private boolean validarRotorDerAmp = false;
+    private boolean validarReflectorAmp = false;
+    private boolean aceptarRotorIzqAmp = false;
+    private boolean aceptarRotorCenAmp = false;
+    private boolean aceptarRotorDerAmp = false;
+    private boolean validarRotorIzqAmpPlus = false;
+    private boolean validarRotorCenAmpPlus = false;
+    private boolean validarRotorDerAmpPlus = false;
+    private boolean validarReflectorAmpPlus = false;
+    private boolean aceptarRotorIzqAmpPlus = false;
+    private boolean aceptarRotorCenAmpPlus = false;
+    private boolean aceptarRotorDerAmpPlus = false;
+    private static int posIY;
+    private static int posCY;
+    private static int posDY;
+    private static int posTY;
+    private static int posRY;
+    private static int posClaY;
+    private static int contEleccion;
+    private static Map<String, Integer> posRX = new HashMap<>();
+    private static Map<String, Integer> posClaX = new HashMap<>();
+    private static Map<String, Integer> posTX = new HashMap<>();
+    private static Map<String, Integer> posIX = new HashMap<>();
+    private static Map<String, Integer> posPerIX = new HashMap<>();
+    private static Map<String, Integer> posCX = new HashMap<>();
+    private static Map<String, Integer> posPerCX = new HashMap<>();
+    private static Map<String, Integer> posDX = new HashMap<>();
+    private static Map<String, Integer> posPerDX = new HashMap<>();
     private static Map<String, String> rotoresString = new HashMap<>();
     private static Map<String, Rotor> rotores = new HashMap<>();
-    private static char cI, cC, cD;
-    private static Enigma enigma,
-            enigmaAmp,
-            enigmaAmpPlus;
-    private static ArrayList<Clavijas> conex = new ArrayList<>(),
-            conexAmp = new ArrayList<>(),
-            conexAmpPlus = new ArrayList<>();
-    private tableroPintar tablero = new tableroPintar();
+    private static char cI;
+    private static char cC;
+    private static char cD;
+    private static Enigma enigma;
+    private static Enigma enigmaAmp;
+    private static Enigma enigmaAmpPlus;
+    private static ArrayList<Clavijas> conex = new ArrayList<>();
+    private static ArrayList<Clavijas> conexAmp = new ArrayList<>();
+    private static ArrayList<Clavijas> conexAmpPlus = new ArrayList<>();
+    private TableroPintar tablero = new TableroPintar();
 
     /**
      * Creates new form menu
      */
-    public menu() {
+    public Menu() {
         super();
         initComponents();
         addFiltersText();
@@ -85,81 +110,80 @@ public class menu extends JFrame {
     }
 
     private void addFiltersText() {
-        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new filtroMensaje());
-        jTextFieldMensaje.getDocument().addDocumentListener(new listenerMensaje());
+        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new FiltroMensaje());
+        jTextFieldMensaje.getDocument().addDocumentListener(new ListenerMensaje());
 
-        ((AbstractDocument) jTextFieldClaveIzq.getDocument()).setDocumentFilter(new filtro1char());
-        ((AbstractDocument) jTextFieldClaveCen.getDocument()).setDocumentFilter(new filtro1char());
-        ((AbstractDocument) jTextFieldClaveDer.getDocument()).setDocumentFilter(new filtro1char());
+        ((AbstractDocument) jTextFieldClaveIzq.getDocument()).setDocumentFilter(new Filtro1char());
+        ((AbstractDocument) jTextFieldClaveCen.getDocument()).setDocumentFilter(new Filtro1char());
+        ((AbstractDocument) jTextFieldClaveDer.getDocument()).setDocumentFilter(new Filtro1char());
 
-        ((AbstractDocument) jTextFieldClavija1.getDocument()).setDocumentFilter(new filtro1char());
-        ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new filtro1char());
+        ((AbstractDocument) jTextFieldClavija1.getDocument()).setDocumentFilter(new Filtro1char());
+        ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new Filtro1char());
 
-        ((AbstractDocument) jTextFieldLongitudPass.getDocument()).setDocumentFilter(new filtroInt());
-        jTextFieldLongitudPass.getDocument().addDocumentListener(new listenerLongitudPass());
+        ((AbstractDocument) jTextFieldLongitudPass.getDocument()).setDocumentFilter(new FiltroInt());
+        jTextFieldLongitudPass.getDocument().addDocumentListener(new ListenerLongitudPass());
 
         /**
          * Ampliado
          */
-        jTextFieldRotorIzqAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRIAmp, jLabelColorValidarIzq, jLabelColorAceptarIzq, false));
-        jTextFieldRotorCenAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRCAmp, jLabelColorValidarCen, jLabelColorAceptarCen, false));
-        jTextFieldRotorDerAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRDAmp, jLabelColorValidarDer, jLabelColorAceptarDer, false));
-        jTextFieldReflectorAmp.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRAmp, jLabelColorValidarR, null, true));
+        jTextFieldRotorIzqAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRIAmp, jLabelColorValidarIzq, jLabelColorAceptarIzq, false));
+        jTextFieldRotorCenAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRCAmp, jLabelColorValidarCen, jLabelColorAceptarCen, false));
+        jTextFieldRotorDerAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRDAmp, jLabelColorValidarDer, jLabelColorAceptarDer, false));
+        jTextFieldReflectorAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRAmp, jLabelColorValidarR, null, true));
 
-        ((AbstractDocument) jTextFieldClaveIzqAmp.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClaveCenAmp.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClaveDerAmp.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveIzqAmp.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveCenAmp.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveDerAmp.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldClavijaAmp1.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClavijaAmp2.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldClavijaAmp1.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClavijaAmp2.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldRotorIzqAmpGiro.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldRotorCenAmpGiro.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldRotorDerAmpGiro.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorIzqAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorCenAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorDerAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldMensajeAmp.getDocument()).setDocumentFilter(new filtroMensajeAmp());
-        
+        ((AbstractDocument) jTextFieldMensajeAmp.getDocument()).setDocumentFilter(new FiltroMensajeAmp());
+
         /**
          * Ampliado Plus
          */
-        jTextFieldRotorIzqAmpPlus.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRIAmpPlus, jLabelColorValidarIzqPlus, jLabelColorAceptarIzqPlus, false));
-        jTextFieldRotorCenAmpPlus.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRCAmpPlus, jLabelColorValidarCenPlus, jLabelColorAceptarCenPlus, false));
-        jTextFieldRotorDerAmpPlus.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRDAmpPlus, jLabelColorValidarDerPlus, jLabelColorAceptarDerPlus, false));
-        jTextFieldReflectorAmpPlus.getDocument().addDocumentListener(new listenerValidezRotoresYReflectores(jButtonValidarRAmpPlus, jLabelColorValidarRPlus, null, true));
+        jTextFieldRotorIzqAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRIAmpPlus, jLabelColorValidarIzqPlus, jLabelColorAceptarIzqPlus, false));
+        jTextFieldRotorCenAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRCAmpPlus, jLabelColorValidarCenPlus, jLabelColorAceptarCenPlus, false));
+        jTextFieldRotorDerAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRDAmpPlus, jLabelColorValidarDerPlus, jLabelColorAceptarDerPlus, false));
+        jTextFieldReflectorAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRAmpPlus, jLabelColorValidarRPlus, null, true));
 
-        ((AbstractDocument) jTextFieldClaveIzqAmpPlus.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClaveCenAmpPlus.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClaveDerAmpPlus.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveIzqAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveCenAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClaveDerAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldClavijaAmpPlus1.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldClavijaAmpPlus2.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldClavijaAmpPlus1.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldClavijaAmpPlus2.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldRotorIzqAmpGiroPlus.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldRotorCenAmpGiroPlus.getDocument()).setDocumentFilter(new filtro1Amp());
-        ((AbstractDocument) jTextFieldRotorDerAmpGiroPlus.getDocument()).setDocumentFilter(new filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorIzqAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorCenAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
+        ((AbstractDocument) jTextFieldRotorDerAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldMensajeAmpPlus.getDocument()).setDocumentFilter(new filtroMensajeAmp());
+        ((AbstractDocument) jTextFieldMensajeAmpPlus.getDocument()).setDocumentFilter(new FiltroMensajeAmp());
     }
 
-    class listenerMensaje implements DocumentListener {
+    class ListenerMensaje implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            updateFieldState(e, "insert");
+            updateFieldState(e);
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-            updateFieldState(e, "remove");
+            updateFieldState(e);
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-            updateFieldState(e, "change");
+            updateFieldState(e);
         }
 
-        public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("listenerMensaje updateField: " + action);
+        public void updateFieldState(DocumentEvent e) {
             enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorCen.getSelectedItem().toString()),
                     rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma
@@ -181,7 +205,7 @@ public class menu extends JFrame {
             try {
                 doc = e.getDocument().getText(0, len);
             } catch (BadLocationException ex) {
-                Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (!doc.isEmpty()) {
                 eni = true;
@@ -198,25 +222,24 @@ public class menu extends JFrame {
         }
     }
 
-    class listenerLongitudPass implements DocumentListener {
+    class ListenerLongitudPass implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            updateFieldState(e, "insert");
+            updateFieldState();
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-            updateFieldState(e, "remove");
+            updateFieldState();
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-            updateFieldState(e, "change");
+            updateFieldState();
         }
 
-        public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("listenerLongitudPass updateField: " + action);
+        public void updateFieldState() {
             if (!jCheckBoxLongitudPass.isSelected()) {
                 jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());
                 jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());
@@ -224,14 +247,14 @@ public class menu extends JFrame {
         }
     }
 
-    class listenerValidezRotoresYReflectores implements DocumentListener {
+    class ListenerValidezRotoresYReflectores implements DocumentListener {
 
         private javax.swing.JButton jbuttonValidar;
         private javax.swing.JLabel jlabelValidar;
         private javax.swing.JLabel jlabelAceptar;
         private boolean reflector;
 
-        public listenerValidezRotoresYReflectores(javax.swing.JButton jbValidar, javax.swing.JLabel jlValidar, javax.swing.JLabel jlAceptar, boolean reflector) {
+        public ListenerValidezRotoresYReflectores(javax.swing.JButton jbValidar, javax.swing.JLabel jlValidar, javax.swing.JLabel jlAceptar, boolean reflector) {
             jbuttonValidar = jbValidar;
             jlabelValidar = jlValidar;
             if (!reflector) {
@@ -242,21 +265,20 @@ public class menu extends JFrame {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            updateFieldState(e, "insert");
+            updateFieldState();
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-            updateFieldState(e, "remove");
+            updateFieldState();
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-            updateFieldState(e, "change");
+            updateFieldState();
         }
 
-        public void updateFieldState(DocumentEvent e, String action) {
-            //System.out.println("listenerValidezRotoresYReflectores updateField: " + action);
+        public void updateFieldState() {
             jbuttonValidar.setBackground(Color.magenta);
             jlabelValidar.setBackground(Color.magenta);
             if (!reflector) {
@@ -283,8 +305,10 @@ public class menu extends JFrame {
     }
 
     private static void acomodarClavijas() {
-        int primeraValue = 0, segundaValue = 0;
-        char primera = 0, segunda = 0;
+        int primeraValue;
+        int segundaValue;
+        char primera;
+        char segunda;
         for (Clavijas conexion : enigma.getPlugboard().getConexiones()) {
             primera = conexion.getA();
             segunda = conexion.getB();
@@ -296,54 +320,54 @@ public class menu extends JFrame {
     }
 
     public static void setcI(char cI) {
-        menu.cI = cI;
+        Menu.cI = cI;
     }
 
     public static void setcC(char cC) {
-        menu.cC = cC;
+        Menu.cC = cC;
     }
 
     public static void setcD(char cD) {
-        menu.cD = cD;
+        Menu.cD = cD;
     }
 
-    class filtroMensaje extends DocumentFilter {
+    class FiltroMensaje extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             char c = 0;
-            String s = "";
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < text.length(); i++) {
                 c = text.charAt(i);
                 if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
-                    s += c;
+                    s.append(c);
                 }
             }
-            super.replace(fb, offset, length, s, attrs);
+            super.replace(fb, offset, length, s.toString(), attrs);
         }
     }
 
-    class filtroMensajeAmp extends DocumentFilter {
+    class FiltroMensajeAmp extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             char c = 0;
-            String s = "";
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < text.length(); i++) {
                 c = text.charAt(i);
                 if (((c >= 32 && c <= 43) || (c >= 47 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
-                    s += c;
+                    s.append(c);
                 }
             }
-            super.replace(fb, offset, length, s, attrs);
+            super.replace(fb, offset, length, s.toString(), attrs);
         }
     }
 
-    class filtro1char extends DocumentFilter {
+    class Filtro1char extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            boolean valido = false;
+            boolean valido;
             char c = text.charAt(0);
             if (((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) && offset == 0) {
                 valido = true;
@@ -359,27 +383,27 @@ public class menu extends JFrame {
         }
     }
 
-    class filtroInt extends DocumentFilter {
+    class FiltroInt extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             char c = 0;
-            String s = "";
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < text.length(); i++) {
                 c = text.charAt(i);
                 if (c >= 48 && c <= 57) {
-                    s += c;
+                    s.append(c);
                 }
             }
-            super.replace(fb, offset, length, s, attrs);
+            super.replace(fb, offset, length, s.toString(), attrs);
         }
     }
 
-    class filtro1Amp extends DocumentFilter {
+    class Filtro1Amp extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            boolean valido = false;
+            boolean valido;
             char c = text.charAt(0);
             if (((c >= 32 && c <= 43) || (c >= 47 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122)) && offset == 0) {
                 valido = true;
@@ -402,24 +426,28 @@ public class menu extends JFrame {
         posDY = 380;    //Derecho
         posClaY = 440;  //Clavijero
         posTY = 500;    //Teclado
-        //System.out.println("Posiciones Y teclado, clavijero, reflector y rotores inicializadas");
+        // Posiciones Y teclado, clavijero, reflector y rotores inicializadas"
         contEleccion = 0;
-        //System.out.println("Colocación rotores inicializada");
+        // Colocación rotores inicializada
         rotoresString.put("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotoresString.put("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE");
         rotoresString.put("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO");
         rotoresString.put("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB");
         rotoresString.put("V", "VZBRGITYUPSDNHLXAWMJQOFECK");
-        //System.out.println("Rotores pintar inicializados");
+        // Rotores pintar inicializados
         rotores.put("I", rI);
         rotores.put("II", rII);
         rotores.put("III", rIII);
         rotores.put("IV", rIV);
         rotores.put("V", rV);
-        //System.out.println("Rotores inicializados");
+        // Rotores inicializados
         jTabbedPane1.setFont(new Font(jTabbedPane1.getFont().getFontName(), Font.BOLD, jTabbedPane1.getFont().getSize() + 6));
+        // Fuente inicializada
     }
 
+    /**
+     * Configura todos los actionListeners de los objetos.
+     */
     private void addActionListeners() {
         /**
          * VENTANA 1 - ENIGMA
@@ -460,8 +488,8 @@ public class menu extends JFrame {
                 String s[];
                 boolean nuevo = false;
                 if ((jTextFieldClavija1.getText().length() & jTextFieldClavija2.getText().length()) > 0) {
-                    char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0)),
-                            c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
+                    char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0));
+                    char c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));
                     if (c1 != c2) {
                         if (conex.isEmpty()) {
                             conex.add(new Clavijas(c1, c2));
@@ -567,8 +595,8 @@ public class menu extends JFrame {
                 String s[];
                 boolean nuevo = false;
                 if ((jTextFieldClavijaAmp1.getText().length() & jTextFieldClavijaAmp2.getText().length()) > 0) {
-                    char cAmp1 = jTextFieldClavijaAmp1.getText().charAt(0),
-                            cAmp2 = jTextFieldClavijaAmp2.getText().charAt(0);
+                    char cAmp1 = jTextFieldClavijaAmp1.getText().charAt(0);
+                    char cAmp2 = jTextFieldClavijaAmp2.getText().charAt(0);
                     if (cAmp1 != cAmp2) {
                         if (conexAmp.isEmpty()) {
                             conexAmp.add(new Clavijas(cAmp1, cAmp2));
@@ -661,7 +689,9 @@ public class menu extends JFrame {
                 for (Clavijas cla : conexAmp) {
                     enigmaAmp.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);
                 }
-                char cIAmp = 'A', cCAmp = 'A', cDAmp = 'A';
+                char cIAmp = 'A';
+                char cCAmp = 'A';
+                char cDAmp = 'A';
                 if ((jTextFieldClaveIzqAmp.getText().length() & jTextFieldClaveCenAmp.getText().length() & jTextFieldClaveDerAmp.getText().length()) > 0) {
                     cIAmp = jTextFieldClaveIzqAmp.getText().charAt(0);
                     cCAmp = jTextFieldClaveCenAmp.getText().charAt(0);
@@ -744,8 +774,8 @@ public class menu extends JFrame {
                 String s[];
                 boolean nuevo = false;
                 if ((jTextFieldClavijaAmpPlus1.getText().length() & jTextFieldClavijaAmpPlus2.getText().length()) > 0) {
-                    char cAmp1 = jTextFieldClavijaAmpPlus1.getText().charAt(0),
-                            cAmp2 = jTextFieldClavijaAmpPlus2.getText().charAt(0);
+                    char cAmp1 = jTextFieldClavijaAmpPlus1.getText().charAt(0);
+                    char cAmp2 = jTextFieldClavijaAmpPlus2.getText().charAt(0);
                     if (cAmp1 != cAmp2) {
                         if (conexAmpPlus.isEmpty()) {
                             conexAmpPlus.add(new Clavijas(cAmp1, cAmp2));
@@ -838,7 +868,9 @@ public class menu extends JFrame {
                 for (Clavijas cla : conexAmpPlus) {
                     enigmaAmpPlus.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);
                 }
-                char cIAmp = 'A', cCAmp = 'A', cDAmp = 'A';
+                char cIAmp = 'A';
+                char cCAmp = 'A';
+                char cDAmp = 'A';
                 if ((jTextFieldClaveIzqAmpPlus.getText().length() & jTextFieldClaveCenAmpPlus.getText().length() & jTextFieldClaveDerAmpPlus.getText().length()) > 0) {
                     cIAmp = jTextFieldClaveIzqAmpPlus.getText().charAt(0);
                     cCAmp = jTextFieldClaveCenAmpPlus.getText().charAt(0);
@@ -846,21 +878,21 @@ public class menu extends JFrame {
                 }
                 enigmaAmpPlus.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);
                 String mensaje = jTextFieldMensajeAmpPlus.getText();
-                modo = jRadioButtonModo0.isSelected() ? 0 : 1;
+                setModo(jRadioButtonModo0.isSelected() ? 0 : 1);
                 if (validarReflectorAmpPlus && !jCheckBoxReflectorAmpPlus.isSelected()) {
                     enigmaAmpPlus.setReflectorAmpliado(reflectorAmpPlusNuevo);
                 }
                 jTextFieldCifradoAmpPlus.setText(procesarAmpliadoPlus(enigmaAmpPlus, mensaje, plus));
             }
         });
-        
+
         /**
          * VENTANA 4 - GENERADOR PASS
          */
         jCheckBoxLongitudPass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setN(20);
+                setn(20);
                 jTextFieldLongitudPass.setEditable(!jCheckBoxLongitudPass.isSelected());
                 jButtonGenerarPass.setEnabled(jCheckBoxLongitudPass.isSelected());
                 jButtonGenerarPassCopy.setEnabled(jCheckBoxLongitudPass.isSelected());
@@ -877,7 +909,7 @@ public class menu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setSymbolic(jCheckBoxSymbols.isSelected() ? 4 : 3);
                 if (!jCheckBoxLongitudPass.isSelected()) {
-                    setN(Integer.parseInt(jTextFieldLongitudPass.getText()));
+                    setn(Integer.parseInt(jTextFieldLongitudPass.getText()));
                 }
                 jTextFieldPass.setText(aleatorio());
             }
@@ -910,8 +942,6 @@ public class menu extends JFrame {
 
     private boolean checkRotorAmp(javax.swing.JButton jbuttonValidar, javax.swing.JTextField rotorAmp, javax.swing.JLabel jlabelColorValidar, boolean plus) {
         boolean valido = checkValidarRotorAmp(rotorAmp.getText(), plus, false);
-        if (valido) {
-        }
         jbuttonValidar.setBackground(valido ? Color.green : Color.red);
         jlabelColorValidar.setBackground(valido ? Color.green : Color.red);
         return valido;
@@ -933,7 +963,9 @@ public class menu extends JFrame {
      * @return
      */
     private boolean checkValidarRotorAmp(String s, boolean plus, boolean reflector) {
-        return checkLongitud(s, plus ? 73 : 74) && checkContenido(s, plus) && checkRepetido(s) && ((!reflector) ? true : checkPermutacion(s));
+        boolean permutacion = (!reflector) ? true : checkPermutacion(s);
+        int longitud = plus ? 73 : 74;
+        return checkLongitud(s, longitud) && checkContenido(s, plus) && checkRepetido(s) && permutacion;
     }
 
     private boolean checkLongitud(String s, int longitud) {
@@ -941,10 +973,11 @@ public class menu extends JFrame {
     }
 
     private boolean checkContenido(String s, boolean plus) {
-        char c = 0;
+        char c;
+        int longitud = plus ? 33 : 32;
         for (int i = 0; i < s.length(); i++) {
             c = s.charAt(i);
-            if (!((c >= (plus ? 33 : 32) && c <= 43) || (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
+            if (!((c >= longitud && c <= 43) || (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
                 return false;
             }
         }
@@ -952,7 +985,7 @@ public class menu extends JFrame {
     }
 
     private boolean checkRepetido(String s) {
-        String aux = "";
+        String aux;
         while (!s.isEmpty()) {
             aux = s.substring(0, 1);
             s = s.substring(1);
@@ -964,7 +997,8 @@ public class menu extends JFrame {
     }
 
     private boolean checkPermutacion(String s) {
-        char cS = '0', cA = '0';
+        char cS;
+        char cA;
         String alfabeto = " !\"#$%&'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         for (int i = 0; i < s.length(); i++) {
             cS = s.charAt(i);
@@ -985,7 +1019,7 @@ public class menu extends JFrame {
         clipboard.setContents(new StringSelection(s), null);
     }
 
-    class tableroPintar {
+    class TableroPintar implements Serializable {
 
         public BufferedImage pintarTablero() {
             Font font = new Font("Monospaced", Font.BOLD, 22);
@@ -1027,7 +1061,9 @@ public class menu extends JFrame {
         }
 
         private void pintarBucle(int character, Graphics g, String eleccion, int offset) {
-            String s = rotoresString.get(eleccion), abc = "", per = "";
+            String s = rotoresString.get(eleccion);
+            String abc = "";
+            String per = "";
             int n = 0;
             char c = 0;
             for (int i = 0; i < 26; i++) {
@@ -1982,14 +2018,15 @@ public class menu extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -2000,7 +2037,7 @@ public class menu extends JFrame {
                 new menu().setVisible(true);
             }
         });*/
-        new menu().setVisible(true);
+        new Menu().setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2144,24 +2181,24 @@ public class menu extends JFrame {
     private javax.swing.JTextField jTextFieldClavijaAmpPlus2;
     public javax.swing.JTextField jTextFieldLongitudPass;
     public javax.swing.JTextField jTextFieldMensaje;
-    public javax.swing.JTextField jTextFieldMensajeAmp;
-    public javax.swing.JTextField jTextFieldMensajeAmpPlus;
-    public javax.swing.JTextField jTextFieldPass;
-    public javax.swing.JTextField jTextFieldReflectorAmp;
-    public javax.swing.JTextField jTextFieldReflectorAmpPlus;
-    public javax.swing.JTextField jTextFieldRotorCenAmp;
-    public javax.swing.JTextField jTextFieldRotorCenAmpGiro;
-    public javax.swing.JTextField jTextFieldRotorCenAmpGiroPlus;
-    public javax.swing.JTextField jTextFieldRotorCenAmpPlus;
-    public javax.swing.JTextField jTextFieldRotorDerAmp;
-    public javax.swing.JTextField jTextFieldRotorDerAmpGiro;
-    public javax.swing.JTextField jTextFieldRotorDerAmpGiroPlus;
-    public javax.swing.JTextField jTextFieldRotorDerAmpPlus;
-    public javax.swing.JTextField jTextFieldRotorIzqAmp;
-    public javax.swing.JTextField jTextFieldRotorIzqAmpGiro;
-    public javax.swing.JTextField jTextFieldRotorIzqAmpGiroPlus;
-    public javax.swing.JTextField jTextFieldRotorIzqAmpPlus;
-    public javax.swing.JTextField jTextFieldRotorReflector;
+    private javax.swing.JTextField jTextFieldMensajeAmp;
+    private javax.swing.JTextField jTextFieldMensajeAmpPlus;
+    private javax.swing.JTextField jTextFieldPass;
+    private javax.swing.JTextField jTextFieldReflectorAmp;
+    private javax.swing.JTextField jTextFieldReflectorAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorCenAmp;
+    private javax.swing.JTextField jTextFieldRotorCenAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorCenAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorCenAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorDerAmp;
+    private javax.swing.JTextField jTextFieldRotorDerAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorDerAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorDerAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorIzqAmp;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorReflector;
     private javax.swing.JLabel jlabelLeyendaCaminoIda;
     private javax.swing.JLabel jlabelLeyendaCaminoVuelta;
     private javax.swing.JLabel jlabelLeyendaClave;

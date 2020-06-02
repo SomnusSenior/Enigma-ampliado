@@ -1,13 +1,15 @@
 package administrarpass;
 
-import java.util.Scanner;
-
 public class EjecutarEnigma {
 
-    public static int modo = 0;
-    public static int cifrado;
-    static Scanner scan = new Scanner(System.in);
-    public static char cI, cC, cD;
+    private static int modo = 0;
+
+    /**
+     * Constructor privado.
+     */
+    private EjecutarEnigma() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Ejecución de la máquina Enigma
@@ -17,8 +19,8 @@ public class EjecutarEnigma {
      * @return Regresa el resultado de la traducción de la cadena pasada
      */
     public static String procesar(Enigma enigma, String s) {
-        String resultado = "";
-        char c = '0';
+        StringBuilder resultado = new StringBuilder();
+        char c;
         for (int i = 0; i < s.length(); i++) { // analiza la cadena de caracteres introducida
             c = s.charAt(i);
             if (c >= '0' && c <= '9' || s.isEmpty()) { // comprueba si uno de los caracteres 
@@ -26,22 +28,30 @@ public class EjecutarEnigma {
                 System.exit(0);
             }
             c = pasarMayus(c); // transforma en mayúscula los caracteres
-            resultado += enigma.cifrado(c); //.cifrado(c);
+            resultado.append(enigma.cifrado(c));
         }
-        return resultado;
+        return resultado.toString();
     }
 
+    /**
+     * Ejecución de la máquina Enigma
+     *
+     * @param enigma máquina enigma
+     * @param s Cadena pasada a traducir, ya sea cifrar o descifrar
+     * @param plus Indica si el alfabeto es plus
+     * @return Regresa el resultado de la traducción de la cadena pasada
+     */
     public static String procesarAmpliadoPlus(Enigma enigma, String s, boolean plus) {
-        String resultado = "";
-        char c = '0';
+        StringBuilder resultado = new StringBuilder();
+        char c;
         for (int i = 0; i < s.length(); i++) { // analiza la cadena de caracteres introducida
             c = s.charAt(i);
             if (s.isEmpty()) { // comprueba si no ha sido introducido un caracter
                 System.exit(0);
             }
-            resultado += enigma.cifradoAmpliadoPlus(c, plus);
+            resultado.append(enigma.cifradoAmpliadoPlus(c, plus));
         }
-        return resultado;
+        return resultado.toString();
     }
 
     /**
@@ -52,5 +62,23 @@ public class EjecutarEnigma {
      */
     public static char pasarMayus(char c) {
         return ('Z' - c < 0) ? (char) (c + 'A' - 'a') : c;
+    }
+
+    /**
+     * Configurado el cifrado ida y el cifrado vuelta de enigma ampliada plus
+     *
+     * @param modo
+     */
+    public static void setModo(int modo) {
+        EjecutarEnigma.modo = modo;
+    }
+
+    /**
+     * Devuelve el valor de modo
+     *
+     * @return modo
+     */
+    public static int getModo() {
+        return modo;
     }
 }

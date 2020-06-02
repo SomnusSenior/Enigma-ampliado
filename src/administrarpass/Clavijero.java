@@ -1,7 +1,7 @@
 package administrarpass;
 
-import static administrarpass.EjecutarEnigma.cifrado;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Clavijero {
 
@@ -24,6 +24,8 @@ public class Clavijero {
 
     /**
      * Crea el panel ampliado de clavijas
+     *
+     * @param plus Indica si el abecedario es plus
      */
     public Clavijero(boolean plus) {
         String panel;
@@ -53,11 +55,11 @@ public class Clavijero {
                     }
                 }
             } else {
-                System.out.println("La clavija tiene otra conexión");
+                // La clavija tiene otra conexión
                 return false;
             }
         } else {
-            System.out.println("No existe la clavija");
+            // No existe la clavija
             return false;
         }
         return true;
@@ -95,7 +97,7 @@ public class Clavijero {
             this.clavijasLibres.add(b);
             this.conexiones.remove(i);
         } else {
-            System.out.println("No existe la conexion a eliminar");
+            // No existe la conexion a eliminar
             return false;
         }
         return true;
@@ -106,7 +108,7 @@ public class Clavijero {
      *
      * @return lista de clavijas
      */
-    public ArrayList<Clavijas> getConexiones() {
+    public List<Clavijas> getConexiones() {
         return conexiones;
     }
 }

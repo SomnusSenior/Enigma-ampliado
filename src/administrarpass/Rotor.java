@@ -1,7 +1,5 @@
 package administrarpass;
 
-import static administrarpass.EjecutarEnigma.cifrado;
-
 public class Rotor {
 
     private String contenido; // alfabeto del rotor
@@ -69,32 +67,39 @@ public class Rotor {
      * @return un nuevo rotor con el contenido "girado"
      */
     public Rotor giro(int offset) {
-        String aux = "", mensaje = "";
+        StringBuilder aux = new StringBuilder();
+        StringBuilder mensaje = new StringBuilder();
         int nuevaPos = this.tam + offset; // calcula la nueva posición del rotor
         for (int i = 0; i < this.tam; i++) {
-            aux += (i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam); // giro del rotor : giro del rotor al dar una vuelta completa
-            mensaje += (i + offset < this.tam) ? this.contEscritura.charAt(i + offset) : this.contEscritura.charAt(i + offset - this.tam);
+            aux.append((i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam)); // giro del rotor : giro del rotor al dar una vuelta completa
+            mensaje.append((i + offset < this.tam) ? this.contEscritura.charAt(i + offset) : this.contEscritura.charAt(i + offset - this.tam));
         }
-        return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
+        return new Rotor(aux.toString(), nuevaPos, mensaje.toString(), this.puntoGiro);
     }
 
     /**
-     * Gira el rotor
+     * Gira el rotor ampliado
      *
      * @param offset numero de posiciones a desplazar
      * @param plus Indica si es ampliado plus
      * @return un nuevo rotor con el contenido "girado"
      */
     public Rotor giroAmpliado(int offset, boolean plus) {
-        String aux = "", mensaje = "";
+        StringBuilder aux = new StringBuilder();
+        StringBuilder mensaje = new StringBuilder();
         int nuevaPos = this.tam + offset; // calcula la nueva posición del rotor
+        char c; // si el índice se sale o no del array
         for (int i = 0; i < this.tam; i++) {
             // giro del rotor : giro del rotor al dar una vuelta completa
-            aux += (i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam);
-            mensaje += (i + offset < this.tam) ? (plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset) : this.contEscrituraAmpliado.charAt(i + offset))
-                    : (plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset - this.tam) : this.contEscrituraAmpliado.charAt(i + offset - this.tam));
+            aux.append((i + offset < this.tam) ? this.contenido.charAt(i + offset) : this.contenido.charAt(i + offset - this.tam));
+            if (i + offset < this.tam) {
+                c = plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset) : this.contEscrituraAmpliado.charAt(i + offset);
+            } else {
+                c = plus ? this.contEscrituraAmpliadoPlus.charAt(i + offset - this.tam) : this.contEscrituraAmpliado.charAt(i + offset - this.tam);
+            }
+            mensaje.append(c);
         }
-        return new Rotor(aux, nuevaPos, mensaje, this.puntoGiro);
+        return new Rotor(aux.toString(), nuevaPos, mensaje.toString(), this.puntoGiro);
     }
 
     /**
@@ -132,18 +137,29 @@ public class Rotor {
         return iCifrada;
     }
 
+    /**
+     * Cifra a la "ida"
+     *
+     * @param i
+     * @param plus
+     * @return nuevo índice
+     */
     public int cifrarIdaAmpliado(int i, boolean plus) {
-        int iCifrada;
         char c = this.contenido.charAt(i); // obtiene el caracter con ese índice en el alfabeto del rotor
-        iCifrada = plus ? this.contEscrituraAmpliadoPlus.indexOf(c) : this.contEscrituraAmpliado.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
-        return iCifrada;
+        return plus ? this.contEscrituraAmpliadoPlus.indexOf(c) : this.contEscrituraAmpliado.indexOf(c); // obtiene el índice del caracter pasado con respecto al alfabeto de escritura
     }
 
+    /**
+     * Cifra a la "vuelta"
+     *
+     * @param i
+     * @param plus
+     * @return nuevo índice
+     */
     public int cifrarVueltaAmpliado(int i, boolean plus) {
         char c;
         c = plus ? this.contEscrituraAmpliadoPlus.charAt(i) : this.contEscrituraAmpliado.charAt(i); // obtiene el caracter con ese índice en el alfabeto de escritura
-        int iCifrada = this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
-        return iCifrada;
+        return this.contenido.indexOf(c); // obtiene el índice del caracter pasado al alfabeto del rotor
     }
 
     /**
