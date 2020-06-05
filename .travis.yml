@@ -1,6 +1,6 @@
 language: java
 jdk: openjdk8
+install: ant deps
 
 script:
-  - cd test/administrarpass
   - ant test
