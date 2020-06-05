@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -21,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -166,7 +164,7 @@ public class Menu extends JFrame {
         ((AbstractDocument) jTextFieldRotorCenAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
         ((AbstractDocument) jTextFieldRotorDerAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());
 
-        ((AbstractDocument) jTextFieldMensajeAmpPlus.getDocument()).setDocumentFilter(new FiltroMensajeAmp());
+        ((AbstractDocument) jTextFieldMensajeAmpPlus.getDocument()).setDocumentFilter(new FiltroMensajeAmpPlus());
     }
 
     class ListenerMensaje implements DocumentListener {
@@ -345,6 +343,22 @@ public class Menu extends JFrame {
             for (int i = 0; i < text.length(); i++) {
                 c = text.charAt(i);
                 if (((c >= 32 && c <= 43) || (c >= 47 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
+                    s.append(c);
+                }
+            }
+            super.replace(fb, offset, length, s.toString(), attrs);
+        }
+    }
+    
+    class FiltroMensajeAmpPlus extends DocumentFilter {
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            char c = 0;
+            StringBuilder s = new StringBuilder();
+            for (int i = 0; i < text.length(); i++) {
+                c = text.charAt(i);
+                if (((c >= 33 && c <= 43) || (c >= 47 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))) {
                     s.append(c);
                 }
             }

@@ -64,7 +64,7 @@ public class GeneradorContrasenas {
         StringBuilder r = new StringBuilder();
         String s = ".";
         int alea;
-        int ro = plus ? rotor : rotorPlus;
+        int ro = plus ? rotor : rotorPlus; // 73 : 74
         boolean repetido;
         for (int i = 0; i < ro; i++) {  // Crea Rotor ampliado o Rotor/Reflector ampliado Plus
             do {
@@ -99,7 +99,7 @@ public class GeneradorContrasenas {
     /**
      * Genera un reflector ampliado de forma aleatoria
      *
-     * @return reflecto ampliado
+     * @return reflector ampliado
      */
     public static String rotorReflectorAmp() {
         char c1;
