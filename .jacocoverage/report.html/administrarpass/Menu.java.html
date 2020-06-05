@@ -1,0 +1,2202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Menu.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;AdministrarPass&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">administrarpass</a> &gt; <span class="el_source">Menu.java</span></div><h1>Menu.java</h1><pre class="source lang-java linenums">package administrarpass;
+
+import static administrarpass.EjecutarEnigma.*;
+import static administrarpass.GeneradorContrasenas.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.JFrame;
+
+/**
+ * @author 49904022
+ */
+public class Menu extends JFrame {
+
+<span class="nc" id="L36">    private final Rotor rI = new Rotor(&quot;EKMFLGDQVZNTOWYHXUSPAIBRCJ&quot;, 'Q'); //tipo I Q</span>
+<span class="nc" id="L37">    private final Rotor rII = new Rotor(&quot;AJDKSIRUXBLHWTMCQGZNPYFVOE&quot;, 'E'); //tipo II E</span>
+<span class="nc" id="L38">    private final Rotor rIII = new Rotor(&quot;BDFHJLCPRTXVZNYEIWGAKMUSQO&quot;, 'V'); //tipo III V</span>
+<span class="nc" id="L39">    private final Rotor rIV = new Rotor(&quot;ESOVPZJAYQUIRHXLNFTGKDCMWB&quot;, 'J'); //tipo IV J</span>
+<span class="nc" id="L40">    private final Rotor rV = new Rotor(&quot;VZBRGITYUPSDNHLXAWMJQOFECK&quot;, 'Z'); //tipo V Z</span>
+<span class="nc" id="L41">    private final Rotor rIzqAmp = new Rotor(&quot;4\&quot;HIr(c36!5fs+kB28l#$mjO%tGAo)*1Md9Dy7'EhWJgavVS0exRN ZuF&amp;PnqYipCUzLwTbKQX&quot;, 'X'); //NUEVO tipo Izq X</span>
+<span class="nc" id="L42">    private final Rotor rCenAmp = new Rotor(&quot;YZh!+76W&amp;Ig%fiPsnUuSQC21v49q3B'5j)(TA8kGdmX$ O#0KbRJF*HNtEwc\&quot;zVxaoerMplDyL&quot;, '\''); //NUEVO tipo Cen '</span>
+<span class="nc" id="L43">    private final Rotor rDerAmp = new Rotor(&quot;X14&amp;w92 5!\&quot;khP#Ij6*BdvLQGUE%p$ql7Fa3KuDn(Z8MbmTo'iHSWA0YCRytJ+OfzVsgN)cxre&quot;, 'J'); //NUEVO tipo Der J</span>
+    private Rotor rIzqAmpNuevo;
+    private Rotor rCenAmpNuevo;
+    private Rotor rDerAmpNuevo;
+    private Rotor reflectorAmpNuevo;
+<span class="nc" id="L48">    private final Rotor rIzqAmpPlus = new Rotor(&quot;#1q2OXy%x\&quot;*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&amp;Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb&quot;, 'h'); //NUEVO tipo Izq Plus h</span>
+<span class="nc" id="L49">    private final Rotor rCenAmpPlus = new Rotor(&quot;R9(24Dpd%yKV0F!l#Jmz&amp;gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\&quot;IeqhjXboiZNx&quot;, 'I'); //NUEVO tipo Cen Plus I </span>
+<span class="nc" id="L50">    private final Rotor rDerAmpPlus = new Rotor(&quot;0xoOdh2G91DyXn+3kT8BP$(4\&quot;V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&amp;QM&quot;, 'i'); //NUEVO tipo Der Plus i</span>
+    private Rotor rIzqAmpPlusNuevo;
+    private Rotor rCenAmpPlusNuevo;
+    private Rotor rDerAmpPlusNuevo;
+    private Rotor reflectorAmpPlusNuevo;
+<span class="nc" id="L55">    private boolean eni = false;</span>
+<span class="nc" id="L56">    private boolean validarRotorIzqAmp = false;</span>
+<span class="nc" id="L57">    private boolean validarRotorCenAmp = false;</span>
+<span class="nc" id="L58">    private boolean validarRotorDerAmp = false;</span>
+<span class="nc" id="L59">    private boolean validarReflectorAmp = false;</span>
+<span class="nc" id="L60">    private boolean aceptarRotorIzqAmp = false;</span>
+<span class="nc" id="L61">    private boolean aceptarRotorCenAmp = false;</span>
+<span class="nc" id="L62">    private boolean aceptarRotorDerAmp = false;</span>
+<span class="nc" id="L63">    private boolean validarRotorIzqAmpPlus = false;</span>
+<span class="nc" id="L64">    private boolean validarRotorCenAmpPlus = false;</span>
+<span class="nc" id="L65">    private boolean validarRotorDerAmpPlus = false;</span>
+<span class="nc" id="L66">    private boolean validarReflectorAmpPlus = false;</span>
+<span class="nc" id="L67">    private boolean aceptarRotorIzqAmpPlus = false;</span>
+<span class="nc" id="L68">    private boolean aceptarRotorCenAmpPlus = false;</span>
+<span class="nc" id="L69">    private boolean aceptarRotorDerAmpPlus = false;</span>
+    private static int posIY;
+    private static int posCY;
+    private static int posDY;
+    private static int posTY;
+    private static int posRY;
+    private static int posClaY;
+    private static int contEleccion;
+<span class="fc" id="L77">    private static Map&lt;String, Integer&gt; posRX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L78">    private static Map&lt;String, Integer&gt; posClaX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L79">    private static Map&lt;String, Integer&gt; posTX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L80">    private static Map&lt;String, Integer&gt; posIX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L81">    private static Map&lt;String, Integer&gt; posPerIX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L82">    private static Map&lt;String, Integer&gt; posCX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L83">    private static Map&lt;String, Integer&gt; posPerCX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L84">    private static Map&lt;String, Integer&gt; posDX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L85">    private static Map&lt;String, Integer&gt; posPerDX = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L86">    private static Map&lt;String, String&gt; rotoresString = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L87">    private static Map&lt;String, Rotor&gt; rotores = new HashMap&lt;&gt;();</span>
+    private static char cI;
+    private static char cC;
+    private static char cD;
+    private Enigma enigma;
+    private Enigma enigmaAmp;
+    private Enigma enigmaAmpPlus;
+<span class="fc" id="L94">    private static ArrayList&lt;Clavijas&gt; conex = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L95">    private static ArrayList&lt;Clavijas&gt; conexAmp = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L96">    private static ArrayList&lt;Clavijas&gt; conexAmpPlus = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L97">    private TableroPintar tablero = new TableroPintar();</span>
+
+    /**
+     * Creates new form menu
+     */
+    public Menu() {
+<span class="nc" id="L103">        super();</span>
+<span class="nc" id="L104">        initComponents();</span>
+<span class="nc" id="L105">        addFiltersText();</span>
+<span class="nc" id="L106">        inicializarPosicionesYRotores();</span>
+<span class="nc" id="L107">        addActionListeners();</span>
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * Añade los filtros y los listener a las cadenas de texto.
+     */
+    private void addFiltersText() {
+<span class="nc" id="L114">        ((AbstractDocument) jTextFieldMensaje.getDocument()).setDocumentFilter(new FiltroMensaje());</span>
+<span class="nc" id="L115">        jTextFieldMensaje.getDocument().addDocumentListener(new ListenerMensaje());</span>
+
+<span class="nc" id="L117">        ((AbstractDocument) jTextFieldClaveIzq.getDocument()).setDocumentFilter(new Filtro1char());</span>
+<span class="nc" id="L118">        ((AbstractDocument) jTextFieldClaveCen.getDocument()).setDocumentFilter(new Filtro1char());</span>
+<span class="nc" id="L119">        ((AbstractDocument) jTextFieldClaveDer.getDocument()).setDocumentFilter(new Filtro1char());</span>
+
+<span class="nc" id="L121">        ((AbstractDocument) jTextFieldClavija1.getDocument()).setDocumentFilter(new Filtro1char());</span>
+<span class="nc" id="L122">        ((AbstractDocument) jTextFieldClavija2.getDocument()).setDocumentFilter(new Filtro1char());</span>
+
+<span class="nc" id="L124">        ((AbstractDocument) jTextFieldLongitudPass.getDocument()).setDocumentFilter(new FiltroInt());</span>
+<span class="nc" id="L125">        jTextFieldLongitudPass.getDocument().addDocumentListener(new ListenerLongitudPass());</span>
+
+        /**
+         * Ampliado
+         */
+<span class="nc" id="L130">        jTextFieldRotorIzqAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRIAmp, jLabelColorValidarIzq, jLabelColorAceptarIzq, false));</span>
+<span class="nc" id="L131">        jTextFieldRotorCenAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRCAmp, jLabelColorValidarCen, jLabelColorAceptarCen, false));</span>
+<span class="nc" id="L132">        jTextFieldRotorDerAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRDAmp, jLabelColorValidarDer, jLabelColorAceptarDer, false));</span>
+<span class="nc" id="L133">        jTextFieldReflectorAmp.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRAmp, jLabelColorValidarR, null, true));</span>
+
+<span class="nc" id="L135">        ((AbstractDocument) jTextFieldClaveIzqAmp.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L136">        ((AbstractDocument) jTextFieldClaveCenAmp.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L137">        ((AbstractDocument) jTextFieldClaveDerAmp.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L139">        ((AbstractDocument) jTextFieldClavijaAmp1.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L140">        ((AbstractDocument) jTextFieldClavijaAmp2.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L142">        ((AbstractDocument) jTextFieldRotorIzqAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L143">        ((AbstractDocument) jTextFieldRotorCenAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L144">        ((AbstractDocument) jTextFieldRotorDerAmpGiro.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L146">        ((AbstractDocument) jTextFieldMensajeAmp.getDocument()).setDocumentFilter(new FiltroMensajeAmp());</span>
+
+        /**
+         * Ampliado Plus
+         */
+<span class="nc" id="L151">        jTextFieldRotorIzqAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRIAmpPlus, jLabelColorValidarIzqPlus, jLabelColorAceptarIzqPlus, false));</span>
+<span class="nc" id="L152">        jTextFieldRotorCenAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRCAmpPlus, jLabelColorValidarCenPlus, jLabelColorAceptarCenPlus, false));</span>
+<span class="nc" id="L153">        jTextFieldRotorDerAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRDAmpPlus, jLabelColorValidarDerPlus, jLabelColorAceptarDerPlus, false));</span>
+<span class="nc" id="L154">        jTextFieldReflectorAmpPlus.getDocument().addDocumentListener(new ListenerValidezRotoresYReflectores(jButtonValidarRAmpPlus, jLabelColorValidarRPlus, null, true));</span>
+
+<span class="nc" id="L156">        ((AbstractDocument) jTextFieldClaveIzqAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L157">        ((AbstractDocument) jTextFieldClaveCenAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L158">        ((AbstractDocument) jTextFieldClaveDerAmpPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L160">        ((AbstractDocument) jTextFieldClavijaAmpPlus1.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L161">        ((AbstractDocument) jTextFieldClavijaAmpPlus2.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L163">        ((AbstractDocument) jTextFieldRotorIzqAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L164">        ((AbstractDocument) jTextFieldRotorCenAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+<span class="nc" id="L165">        ((AbstractDocument) jTextFieldRotorDerAmpGiroPlus.getDocument()).setDocumentFilter(new Filtro1Amp());</span>
+
+<span class="nc" id="L167">        ((AbstractDocument) jTextFieldMensajeAmpPlus.getDocument()).setDocumentFilter(new FiltroMensajeAmpPlus());</span>
+<span class="nc" id="L168">    }</span>
+
+<span class="nc" id="L170">    class ListenerMensaje implements DocumentListener {</span>
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L174">            updateFieldState(e);</span>
+<span class="nc" id="L175">        }</span>
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L179">            updateFieldState(e);</span>
+<span class="nc" id="L180">        }</span>
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L184">            updateFieldState(e);</span>
+<span class="nc" id="L185">        }</span>
+
+        public void updateFieldState(DocumentEvent e) {
+<span class="nc" id="L188">            enigma = new Enigma(rotores.get(jComboBoxRotorIzq.getSelectedItem().toString()),</span>
+<span class="nc" id="L189">                    rotores.get(jComboBoxRotorCen.getSelectedItem().toString()),</span>
+<span class="nc" id="L190">                    rotores.get(jComboBoxRotorDer.getSelectedItem().toString())); // Crea la máquina enigma</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            for (Clavijas cla : conex) {</span>
+<span class="nc" id="L192">                enigma.ponerClavija(cla.getA(), cla.getB());</span>
+<span class="nc" id="L193">            }</span>
+<span class="nc" id="L194">            char cIaux = 'A';</span>
+<span class="nc" id="L195">            char cCaux = 'A';</span>
+<span class="nc" id="L196">            char cDaux = 'A';</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            if ((jTextFieldClaveIzq.getText().length() &amp; jTextFieldClaveCen.getText().length() &amp; jTextFieldClaveDer.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L198">                cIaux = EjecutarEnigma.pasarMayus(jTextFieldClaveIzq.getText().charAt(0));</span>
+<span class="nc" id="L199">                cCaux = EjecutarEnigma.pasarMayus(jTextFieldClaveCen.getText().charAt(0));</span>
+<span class="nc" id="L200">                cDaux = EjecutarEnigma.pasarMayus(jTextFieldClaveDer.getText().charAt(0));</span>
+            }
+<span class="nc" id="L202">            enigma.setRotoresIni(cIaux, cCaux, cDaux);</span>
+<span class="nc" id="L203">            String mensaje = jTextFieldMensaje.getText();</span>
+<span class="nc" id="L204">            jTextFieldCifrado.setText(procesar(enigma, mensaje));</span>
+<span class="nc" id="L205">            int len = e.getDocument().getLength();</span>
+<span class="nc" id="L206">            String doc = &quot;&quot;;</span>
+            try {
+<span class="nc" id="L208">                doc = e.getDocument().getText(0, len);</span>
+<span class="nc" id="L209">            } catch (BadLocationException ex) {</span>
+<span class="nc" id="L210">                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L211">            }</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (!doc.isEmpty()) {</span>
+<span class="nc" id="L213">                eni = true;</span>
+<span class="nc" id="L214">                changeEnabled(false);</span>
+<span class="nc" id="L215">                repaint();</span>
+            } else {
+<span class="nc" id="L217">                eni = false;</span>
+<span class="nc" id="L218">                changeEnabled(true);</span>
+<span class="nc" id="L219">                setcI(cIaux);</span>
+<span class="nc" id="L220">                setcC(cCaux);</span>
+<span class="nc" id="L221">                setcD(cDaux);</span>
+<span class="nc" id="L222">                repaint();</span>
+            }
+<span class="nc" id="L224">        }</span>
+
+        private void changeEnabled(boolean b) {
+<span class="nc" id="L227">            jTextFieldClaveIzq.setEnabled(b);</span>
+<span class="nc" id="L228">            jTextFieldClaveCen.setEnabled(b);</span>
+<span class="nc" id="L229">            jTextFieldClaveDer.setEnabled(b);</span>
+<span class="nc" id="L230">            jTextFieldClavija1.setEnabled(b);</span>
+<span class="nc" id="L231">            jTextFieldClavija2.setEnabled(b);</span>
+
+<span class="nc" id="L233">            jButtonClavijaAdd.setEnabled(b);</span>
+<span class="nc" id="L234">            jButtonClavijaDelete.setEnabled(b);</span>
+
+<span class="nc" id="L236">            jComboBoxRotorIzq.setEnabled(b);</span>
+<span class="nc" id="L237">            jComboBoxRotorCen.setEnabled(b);</span>
+<span class="nc" id="L238">            jComboBoxRotorDer.setEnabled(b);</span>
+
+<span class="nc" id="L240">            jListClavijas.setEnabled(b);</span>
+<span class="nc" id="L241">        }</span>
+    }
+
+<span class="nc" id="L244">    class ListenerLongitudPass implements DocumentListener {</span>
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L248">            updateFieldState();</span>
+<span class="nc" id="L249">        }</span>
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L253">            updateFieldState();</span>
+<span class="nc" id="L254">        }</span>
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L258">            updateFieldState();</span>
+<span class="nc" id="L259">        }</span>
+
+        public void updateFieldState() {
+<span class="nc bnc" id="L262" title="All 2 branches missed.">            if (!jCheckBoxLongitudPass.isSelected()) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">                jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());</span>
+            }
+<span class="nc" id="L266">        }</span>
+    }
+
+    class ListenerValidezRotoresYReflectores implements DocumentListener {
+
+        private javax.swing.JButton jbuttonValidar;
+        private javax.swing.JLabel jlabelValidar;
+        private javax.swing.JLabel jlabelAceptar;
+        private boolean reflector;
+
+<span class="nc" id="L276">        public ListenerValidezRotoresYReflectores(javax.swing.JButton jbValidar, javax.swing.JLabel jlValidar, javax.swing.JLabel jlAceptar, boolean reflector) {</span>
+<span class="nc" id="L277">            jbuttonValidar = jbValidar;</span>
+<span class="nc" id="L278">            jlabelValidar = jlValidar;</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">            if (!reflector) {</span>
+<span class="nc" id="L280">                jlabelAceptar = jlAceptar;</span>
+            }
+<span class="nc" id="L282">            this.reflector = reflector;</span>
+<span class="nc" id="L283">        }</span>
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L287">            updateFieldState();</span>
+<span class="nc" id="L288">        }</span>
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L292">            updateFieldState();</span>
+<span class="nc" id="L293">        }</span>
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L297">            updateFieldState();</span>
+<span class="nc" id="L298">        }</span>
+
+        public void updateFieldState() {
+<span class="nc" id="L301">            jbuttonValidar.setBackground(Color.magenta);</span>
+<span class="nc" id="L302">            jlabelValidar.setBackground(Color.magenta);</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">            if (!reflector) {</span>
+<span class="nc" id="L304">                jlabelAceptar.setBackground(Color.magenta);</span>
+            }
+<span class="nc" id="L306">        }</span>
+    }
+
+    public static void setcI(char cI) {
+<span class="fc" id="L310">        Menu.cI = cI;</span>
+<span class="fc" id="L311">    }</span>
+
+    public static void setcC(char cC) {
+<span class="fc" id="L314">        Menu.cC = cC;</span>
+<span class="fc" id="L315">    }</span>
+
+    public static void setcD(char cD) {
+<span class="fc" id="L318">        Menu.cD = cD;</span>
+<span class="fc" id="L319">    }</span>
+
+<span class="nc" id="L321">    class FiltroMensaje extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+<span class="nc" id="L325">            char c = 0;</span>
+<span class="nc" id="L326">            StringBuilder s = new StringBuilder();</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">            for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="nc" id="L328">                c = text.charAt(i);</span>
+<span class="nc bnc" id="L329" title="All 8 branches missed.">                if ((c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122)) {</span>
+<span class="nc" id="L330">                    s.append(c);</span>
+                }
+            }
+<span class="nc" id="L333">            super.replace(fb, offset, length, s.toString(), attrs);</span>
+<span class="nc" id="L334">        }</span>
+    }
+
+<span class="nc" id="L337">    class FiltroMensajeAmp extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+<span class="nc" id="L341">            char c = 0;</span>
+<span class="nc" id="L342">            StringBuilder s = new StringBuilder();</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">            for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="nc" id="L344">                c = text.charAt(i);</span>
+<span class="nc bnc" id="L345" title="All 16 branches missed.">                if (((c &gt;= 32 &amp;&amp; c &lt;= 43) || (c &gt;= 47 &amp;&amp; c &lt;= 57) || (c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122))) {</span>
+<span class="nc" id="L346">                    s.append(c);</span>
+                }
+            }
+<span class="nc" id="L349">            super.replace(fb, offset, length, s.toString(), attrs);</span>
+<span class="nc" id="L350">        }</span>
+    }
+    
+<span class="nc" id="L353">    class FiltroMensajeAmpPlus extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+<span class="nc" id="L357">            char c = 0;</span>
+<span class="nc" id="L358">            StringBuilder s = new StringBuilder();</span>
+<span class="nc bnc" id="L359" title="All 2 branches missed.">            for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="nc" id="L360">                c = text.charAt(i);</span>
+<span class="nc bnc" id="L361" title="All 16 branches missed.">                if (((c &gt;= 33 &amp;&amp; c &lt;= 43) || (c &gt;= 47 &amp;&amp; c &lt;= 57) || (c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122))) {</span>
+<span class="nc" id="L362">                    s.append(c);</span>
+                }
+            }
+<span class="nc" id="L365">            super.replace(fb, offset, length, s.toString(), attrs);</span>
+<span class="nc" id="L366">        }</span>
+    }
+
+<span class="nc" id="L369">    class Filtro1char extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            boolean valido;
+<span class="nc" id="L374">            char c = text.charAt(0);</span>
+<span class="nc bnc" id="L375" title="All 10 branches missed.">            if (((c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122)) &amp;&amp; offset == 0) {</span>
+<span class="nc" id="L376">                valido = true;</span>
+            } else {
+<span class="nc" id="L378">                valido = false;</span>
+            }
+<span class="nc" id="L380">            String aux = Character.toString(EjecutarEnigma.pasarMayus(c));</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">            if (valido) {</span>
+<span class="nc" id="L382">                super.replace(fb, offset, length, aux, attrs);</span>
+            } else {
+<span class="nc" id="L384">                super.replace(fb, offset, length, &quot;&quot;, attrs);</span>
+            }
+<span class="nc" id="L386">        }</span>
+    }
+
+<span class="nc" id="L389">    class FiltroInt extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+<span class="nc" id="L393">            char c = 0;</span>
+<span class="nc" id="L394">            StringBuilder s = new StringBuilder();</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">            for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="nc" id="L396">                c = text.charAt(i);</span>
+<span class="nc bnc" id="L397" title="All 4 branches missed.">                if (c &gt;= 48 &amp;&amp; c &lt;= 57) {</span>
+<span class="nc" id="L398">                    s.append(c);</span>
+                }
+            }
+<span class="nc" id="L401">            super.replace(fb, offset, length, s.toString(), attrs);</span>
+<span class="nc" id="L402">        }</span>
+    }
+
+<span class="nc" id="L405">    class Filtro1Amp extends DocumentFilter {</span>
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            boolean valido;
+<span class="nc" id="L410">            char c = text.charAt(0);</span>
+<span class="nc bnc" id="L411" title="All 18 branches missed.">            if (((c &gt;= 32 &amp;&amp; c &lt;= 43) || (c &gt;= 47 &amp;&amp; c &lt;= 57) || (c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122)) &amp;&amp; offset == 0) {</span>
+<span class="nc" id="L412">                valido = true;</span>
+            } else {
+<span class="nc" id="L414">                valido = false;</span>
+            }
+<span class="nc" id="L416">            String aux = Character.toString(c);</span>
+<span class="nc bnc" id="L417" title="All 2 branches missed.">            if (valido) {</span>
+<span class="nc" id="L418">                super.replace(fb, offset, length, aux, attrs);</span>
+            } else {
+<span class="nc" id="L420">                super.replace(fb, offset, length, &quot;&quot;, attrs);</span>
+            }
+<span class="nc" id="L422">        }</span>
+    }
+
+    /**
+     * Inicializa las posiciones de la imagen
+     */
+    private void inicializarPosicionesYRotores() {
+<span class="nc" id="L429">        posRY = 150;    //Reflector</span>
+<span class="nc" id="L430">        posIY = 220;    //Izquierdo</span>
+<span class="nc" id="L431">        posCY = 300;    //Central</span>
+<span class="nc" id="L432">        posDY = 380;    //Derecho</span>
+<span class="nc" id="L433">        posClaY = 440;  //Clavijero</span>
+<span class="nc" id="L434">        posTY = 500;    //Teclado</span>
+        // Posiciones Y teclado, clavijero, reflector y rotores inicializadas&quot;
+<span class="nc" id="L436">        contEleccion = 0;</span>
+        // Colocación rotores inicializada
+<span class="nc" id="L438">        rotoresString.put(&quot;I&quot;, &quot;EKMFLGDQVZNTOWYHXUSPAIBRCJ&quot;);</span>
+<span class="nc" id="L439">        rotoresString.put(&quot;II&quot;, &quot;AJDKSIRUXBLHWTMCQGZNPYFVOE&quot;);</span>
+<span class="nc" id="L440">        rotoresString.put(&quot;III&quot;, &quot;BDFHJLCPRTXVZNYEIWGAKMUSQO&quot;);</span>
+<span class="nc" id="L441">        rotoresString.put(&quot;IV&quot;, &quot;ESOVPZJAYQUIRHXLNFTGKDCMWB&quot;);</span>
+<span class="nc" id="L442">        rotoresString.put(&quot;V&quot;, &quot;VZBRGITYUPSDNHLXAWMJQOFECK&quot;);</span>
+        // Rotores pintar inicializados
+<span class="nc" id="L444">        rotores.put(&quot;I&quot;, rI);</span>
+<span class="nc" id="L445">        rotores.put(&quot;II&quot;, rII);</span>
+<span class="nc" id="L446">        rotores.put(&quot;III&quot;, rIII);</span>
+<span class="nc" id="L447">        rotores.put(&quot;IV&quot;, rIV);</span>
+<span class="nc" id="L448">        rotores.put(&quot;V&quot;, rV);</span>
+        // Rotores inicializados
+<span class="nc" id="L450">        jTabbedPane1.setFont(new Font(jTabbedPane1.getFont().getFontName(), Font.BOLD, jTabbedPane1.getFont().getSize() + 6));</span>
+        // Fuente inicializada
+<span class="nc" id="L452">    }</span>
+
+    /**
+     * Configura todos los actionListeners de los objetos.
+     */
+    private void addActionListeners() {
+        /**
+         * VENTANA 1 - ENIGMA
+         */
+<span class="nc" id="L461">        jTabbedPane1.addChangeListener((ChangeEvent e) -&gt; {</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">            if (jTabbedPane1.getSelectedIndex() == 0) {</span>
+<span class="nc" id="L463">                repaint();</span>
+            }
+<span class="nc" id="L465">        });</span>
+
+        // COMBOBOX ROTORES
+<span class="nc" id="L468">        jComboBoxRotorIzq.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L469">            repaint();</span>
+<span class="nc" id="L470">        });</span>
+<span class="nc" id="L471">        jComboBoxRotorCen.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L472">            repaint();</span>
+<span class="nc" id="L473">        });</span>
+<span class="nc" id="L474">        jComboBoxRotorDer.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L475">            repaint();</span>
+<span class="nc" id="L476">        });</span>
+
+        // BOTONES ADD Y DELETE CLAVIJAS
+<span class="nc" id="L479">        jButtonClavijaAdd.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc" id="L481">            boolean nuevo = false;</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">            if ((jTextFieldClavija1.getText().length() &amp; jTextFieldClavija2.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L483">                char c1 = EjecutarEnigma.pasarMayus(jTextFieldClavija1.getText().charAt(0));</span>
+<span class="nc" id="L484">                char c2 = EjecutarEnigma.pasarMayus(jTextFieldClavija2.getText().charAt(0));</span>
+<span class="nc bnc" id="L485" title="All 2 branches missed.">                if (c1 != c2) {</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">                    if (conex.isEmpty()) {</span>
+<span class="nc" id="L487">                        conex.add(new Clavijas(c1, c2));</span>
+                    } else {
+<span class="nc bnc" id="L489" title="All 2 branches missed.">                        for (Clavijas cla : conex) {</span>
+<span class="nc bnc" id="L490" title="All 8 branches missed.">                            if (!(cla.getA() == c1 || cla.getB() == c1) &amp;&amp; !(cla.getA() == c2 || cla.getB() == c2)) {</span>
+<span class="nc" id="L491">                                nuevo = true;</span>
+                            }
+<span class="nc" id="L493">                        }</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">                        if (nuevo) {</span>
+<span class="nc" id="L495">                            conex.add(new Clavijas(c1, c2));</span>
+                        }
+                    }
+<span class="nc" id="L498">                    s = new String[conex.size()];</span>
+<span class="nc bnc" id="L499" title="All 2 branches missed.">                    for (int i = 0; i &lt; conex.size(); i++) {</span>
+<span class="nc" id="L500">                        s[i] = conex.get(i).getA() + &quot; - &quot; + conex.get(i).getB();</span>
+                    }
+<span class="nc" id="L502">                    jListClavijas.setListData(s);</span>
+                }
+            }
+<span class="nc" id="L505">        });</span>
+<span class="nc" id="L506">        jButtonClavijaDelete.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc bnc" id="L508" title="All 2 branches missed.">            if (!jListClavijas.isSelectionEmpty()) {</span>
+<span class="nc" id="L509">                conex.remove(jListClavijas.getSelectedIndex());</span>
+<span class="nc" id="L510">                s = new String[conex.size()];</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">                for (int i = 0; i &lt; conex.size(); i++) {</span>
+<span class="nc" id="L512">                    s[i] = conex.get(i).getA() + &quot; - &quot; + conex.get(i).getB();</span>
+                }
+<span class="nc" id="L514">                jListClavijas.setListData(s);</span>
+            }
+<span class="nc" id="L516">        });</span>
+
+        /**
+         * VENTANA 2 - ENIGMA AMPLIADA
+         */
+        // CHECKBOX ROTORES Y REFLECTOR
+<span class="nc" id="L522">        jCheckBoxRotorIzqAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L523">            changeButtonStateValidar(jCheckBoxRotorIzqAmp, jTextFieldRotorIzqAmp, jButtonValidarRIAmp, jTextFieldRotorIzqAmpGiro, jButtonAceptarIzqAmp);</span>
+<span class="nc" id="L524">        });</span>
+<span class="nc" id="L525">        jCheckBoxRotorCenAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L526">            changeButtonStateValidar(jCheckBoxRotorCenAmp, jTextFieldRotorCenAmp, jButtonValidarRCAmp, jTextFieldRotorCenAmpGiro, jButtonAceptarCenAmp);</span>
+<span class="nc" id="L527">        });</span>
+<span class="nc" id="L528">        jCheckBoxRotorDerAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L529">            changeButtonStateValidar(jCheckBoxRotorDerAmp, jTextFieldRotorDerAmp, jButtonValidarRDAmp, jTextFieldRotorDerAmpGiro, jButtonAceptarDerAmp);</span>
+<span class="nc" id="L530">        });</span>
+<span class="nc" id="L531">        jCheckBoxReflectorAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L532" title="All 2 branches missed.">            jTextFieldReflectorAmp.setEditable(!jCheckBoxReflectorAmp.isSelected());</span>
+<span class="nc bnc" id="L533" title="All 2 branches missed.">            jButtonValidarRAmp.setEnabled(!jCheckBoxReflectorAmp.isSelected());</span>
+<span class="nc" id="L534">        });</span>
+
+        // VALIDAR ROTORES Y REFLECTOR AMPLIADOS
+<span class="nc" id="L537">        jButtonValidarRIAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L538">            validarRotorIzqAmp = checkRotorAmp(jButtonValidarRIAmp, jTextFieldRotorIzqAmp, jLabelColorValidarIzq, false);</span>
+<span class="nc" id="L539">        });</span>
+<span class="nc" id="L540">        jButtonValidarRCAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L541">            validarRotorCenAmp = checkRotorAmp(jButtonValidarRCAmp, jTextFieldRotorCenAmp, jLabelColorValidarCen, false);</span>
+<span class="nc" id="L542">        });</span>
+<span class="nc" id="L543">        jButtonValidarRDAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L544">            validarRotorDerAmp = checkRotorAmp(jButtonValidarRDAmp, jTextFieldRotorDerAmp, jLabelColorValidarDer, false);</span>
+<span class="nc" id="L545">        });</span>
+<span class="nc" id="L546">        jButtonValidarRAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L547">            validarReflectorAmp = checkValidarRotorAmp(jTextFieldReflectorAmp.getText(), false, true);</span>
+<span class="nc bnc" id="L548" title="All 2 branches missed.">            if (validarReflectorAmp) {</span>
+<span class="nc" id="L549">                reflectorAmpNuevo = new Rotor(jTextFieldReflectorAmp.getText(), '-');</span>
+            }
+<span class="nc bnc" id="L551" title="All 2 branches missed.">            jButtonValidarRAmp.setBackground(validarReflectorAmp ? Color.green : Color.red);</span>
+<span class="nc bnc" id="L552" title="All 2 branches missed.">            jLabelColorValidarR.setBackground(validarReflectorAmp ? Color.green : Color.red);</span>
+<span class="nc" id="L553">        });</span>
+
+        // BOTONES ADD Y DELETE CLAVIJAS AMPLIADAS
+<span class="nc" id="L556">        jButtonClavijaAddAmp.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc" id="L558">            boolean nuevo = false;</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">            if ((jTextFieldClavijaAmp1.getText().length() &amp; jTextFieldClavijaAmp2.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L560">                char cAmp1 = jTextFieldClavijaAmp1.getText().charAt(0);</span>
+<span class="nc" id="L561">                char cAmp2 = jTextFieldClavijaAmp2.getText().charAt(0);</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">                if (cAmp1 != cAmp2) {</span>
+<span class="nc bnc" id="L563" title="All 2 branches missed.">                    if (conexAmp.isEmpty()) {</span>
+<span class="nc" id="L564">                        conexAmp.add(new Clavijas(cAmp1, cAmp2));</span>
+                    } else {
+<span class="nc bnc" id="L566" title="All 2 branches missed.">                        for (Clavijas cla : conexAmp) {</span>
+<span class="nc bnc" id="L567" title="All 8 branches missed.">                            if (!(cla.getA() == cAmp1 || cla.getB() == cAmp1) &amp;&amp; !(cla.getA() == cAmp2 || cla.getB() == cAmp2)) {</span>
+<span class="nc" id="L568">                                nuevo = true;</span>
+                            }
+<span class="nc" id="L570">                        }</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">                        if (nuevo) {</span>
+<span class="nc" id="L572">                            conexAmp.add(new Clavijas(cAmp1, cAmp2));</span>
+                        }
+                    }
+<span class="nc" id="L575">                    s = new String[conexAmp.size()];</span>
+<span class="nc bnc" id="L576" title="All 2 branches missed.">                    for (int i = 0; i &lt; conexAmp.size(); i++) {</span>
+<span class="nc" id="L577">                        s[i] = conexAmp.get(i).getA() + &quot; - &quot; + conexAmp.get(i).getB();</span>
+                    }
+<span class="nc" id="L579">                    jListClavijasAmp.setListData(s);</span>
+                }
+            }
+<span class="nc" id="L582">        });</span>
+<span class="nc" id="L583">        jButtonClavijaDeleteAmp.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc bnc" id="L585" title="All 2 branches missed.">            if (!jListClavijasAmp.isSelectionEmpty()) {</span>
+<span class="nc" id="L586">                conexAmp.remove(jListClavijasAmp.getSelectedIndex());</span>
+<span class="nc" id="L587">                s = new String[conexAmp.size()];</span>
+<span class="nc bnc" id="L588" title="All 2 branches missed.">                for (int i = 0; i &lt; conexAmp.size(); i++) {</span>
+<span class="nc" id="L589">                    s[i] = conexAmp.get(i).getA() + &quot; - &quot; + conexAmp.get(i).getB();</span>
+                }
+<span class="nc" id="L591">                jListClavijasAmp.setListData(s);</span>
+            }
+<span class="nc" id="L593">        });</span>
+
+        // BOTONES ACEPTAR ROTORES Y CIFRAR
+<span class="nc" id="L596">        jButtonAceptarIzqAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L597" title="All 4 branches missed.">            if (!jTextFieldRotorIzqAmpGiro.getText().isEmpty() &amp;&amp; validarRotorIzqAmp) {</span>
+<span class="nc" id="L598">                rIzqAmpNuevo = new Rotor(jTextFieldRotorIzqAmp.getText(), jTextFieldRotorIzqAmpGiro.getText().charAt(0));</span>
+<span class="nc" id="L599">                jButtonAceptarIzqAmp.setBackground(Color.green);</span>
+<span class="nc" id="L600">                jLabelColorAceptarIzq.setBackground(Color.green);</span>
+<span class="nc" id="L601">                aceptarRotorIzqAmp = true;</span>
+            } else {
+<span class="nc" id="L603">                jButtonAceptarIzqAmp.setBackground(Color.red);</span>
+<span class="nc" id="L604">                jLabelColorAceptarIzq.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L606">        });</span>
+<span class="nc" id="L607">        jButtonAceptarCenAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L608" title="All 4 branches missed.">            if (!jTextFieldRotorCenAmpGiro.getText().isEmpty() &amp;&amp; validarRotorCenAmp) {</span>
+<span class="nc" id="L609">                rCenAmpNuevo = new Rotor(jTextFieldRotorCenAmp.getText(), jTextFieldRotorCenAmpGiro.getText().charAt(0));</span>
+<span class="nc" id="L610">                jButtonAceptarCenAmp.setBackground(Color.green);</span>
+<span class="nc" id="L611">                jLabelColorAceptarCen.setBackground(Color.green);</span>
+<span class="nc" id="L612">                aceptarRotorCenAmp = true;</span>
+            } else {
+<span class="nc" id="L614">                jButtonAceptarCenAmp.setBackground(Color.red);</span>
+<span class="nc" id="L615">                jLabelColorAceptarCen.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L617">        });</span>
+<span class="nc" id="L618">        jButtonAceptarDerAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L619" title="All 4 branches missed.">            if (!jTextFieldRotorDerAmpGiro.getText().isEmpty() &amp;&amp; validarRotorDerAmp) {</span>
+<span class="nc" id="L620">                rDerAmpNuevo = new Rotor(jTextFieldRotorDerAmp.getText(), jTextFieldRotorDerAmpGiro.getText().charAt(0));</span>
+<span class="nc" id="L621">                jButtonAceptarDerAmp.setBackground(Color.green);</span>
+<span class="nc" id="L622">                jLabelColorAceptarDer.setBackground(Color.green);</span>
+<span class="nc" id="L623">                aceptarRotorDerAmp = true;</span>
+            } else {
+<span class="nc" id="L625">                jButtonAceptarDerAmp.setBackground(Color.red);</span>
+<span class="nc" id="L626">                jLabelColorAceptarDer.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L628">        });</span>
+<span class="nc" id="L629">        jButtonCifrarAmp.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L630">            boolean plus = false;</span>
+<span class="nc bnc" id="L631" title="All 6 branches missed.">            enigmaAmp = new Enigma((aceptarRotorIzqAmp &amp;&amp; !jCheckBoxRotorIzqAmp.isSelected()) ? rIzqAmpNuevo : rIzqAmp,</span>
+<span class="nc bnc" id="L632" title="All 4 branches missed.">                    (aceptarRotorCenAmp &amp;&amp; !jCheckBoxRotorCenAmp.isSelected()) ? rCenAmpNuevo : rCenAmp,</span>
+<span class="nc bnc" id="L633" title="All 2 branches missed.">                    (aceptarRotorDerAmp &amp;&amp; !jCheckBoxRotorDerAmp.isSelected()) ? rDerAmpNuevo : rDerAmp,</span>
+                    plus
+            ); // Crea la máquina enigmaAmp
+<span class="nc bnc" id="L636" title="All 2 branches missed.">            for (Clavijas cla : conexAmp) {</span>
+<span class="nc" id="L637">                enigmaAmp.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);</span>
+<span class="nc" id="L638">            }</span>
+<span class="nc" id="L639">            char cIAmp = 'A';</span>
+<span class="nc" id="L640">            char cCAmp = 'A';</span>
+<span class="nc" id="L641">            char cDAmp = 'A';</span>
+<span class="nc bnc" id="L642" title="All 2 branches missed.">            if ((jTextFieldClaveIzqAmp.getText().length() &amp; jTextFieldClaveCenAmp.getText().length() &amp; jTextFieldClaveDerAmp.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L643">                cIAmp = jTextFieldClaveIzqAmp.getText().charAt(0);</span>
+<span class="nc" id="L644">                cCAmp = jTextFieldClaveCenAmp.getText().charAt(0);</span>
+<span class="nc" id="L645">                cDAmp = jTextFieldClaveDerAmp.getText().charAt(0);</span>
+            }
+<span class="nc" id="L647">            enigmaAmp.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);</span>
+<span class="nc" id="L648">            String mensaje = jTextFieldMensajeAmp.getText();</span>
+<span class="nc bnc" id="L649" title="All 4 branches missed.">            if (validarReflectorAmp &amp;&amp; !jCheckBoxReflectorAmp.isSelected()) {</span>
+<span class="nc" id="L650">                enigmaAmp.setReflectorAmpliado(reflectorAmpNuevo);</span>
+            }
+<span class="nc" id="L652">            jTextFieldCifradoAmp.setText(procesarAmpliadoPlus(enigmaAmp, mensaje, plus));</span>
+<span class="nc" id="L653">        });</span>
+
+        /**
+         * VENTANA 3 - ENIGMA AMPLIADA PLUS
+         */
+        // CHECKBOX ROTORES Y REFLECTOR
+<span class="nc" id="L659">        jCheckBoxRotorIzqAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L660">            changeButtonStateValidar(jCheckBoxRotorIzqAmpPlus, jTextFieldRotorIzqAmpPlus, jButtonValidarRIAmpPlus, jTextFieldRotorIzqAmpGiroPlus, jButtonAceptarIzqAmpPlus);</span>
+<span class="nc" id="L661">        });</span>
+<span class="nc" id="L662">        jCheckBoxRotorCenAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L663">            changeButtonStateValidar(jCheckBoxRotorCenAmpPlus, jTextFieldRotorCenAmpPlus, jButtonValidarRCAmpPlus, jTextFieldRotorCenAmpGiroPlus, jButtonAceptarCenAmpPlus);</span>
+<span class="nc" id="L664">        });</span>
+<span class="nc" id="L665">        jCheckBoxRotorDerAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L666">            changeButtonStateValidar(jCheckBoxRotorDerAmpPlus, jTextFieldRotorDerAmpPlus, jButtonValidarRDAmpPlus, jTextFieldRotorDerAmpGiroPlus, jButtonAceptarDerAmpPlus);</span>
+<span class="nc" id="L667">        });</span>
+<span class="nc" id="L668">        jCheckBoxReflectorAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L669" title="All 2 branches missed.">            jTextFieldReflectorAmpPlus.setEditable(!jCheckBoxReflectorAmpPlus.isSelected());</span>
+<span class="nc bnc" id="L670" title="All 2 branches missed.">            jButtonValidarRAmpPlus.setEnabled(!jCheckBoxReflectorAmpPlus.isSelected());</span>
+<span class="nc" id="L671">        });</span>
+
+        // VALIDAR ROTORES Y REFLECTOR AMPLIADOS
+<span class="nc" id="L674">        jButtonValidarRIAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L675">            validarRotorIzqAmpPlus = checkRotorAmp(jButtonValidarRIAmpPlus, jTextFieldRotorIzqAmpPlus, jLabelColorValidarIzqPlus, true);</span>
+<span class="nc" id="L676">        });</span>
+<span class="nc" id="L677">        jButtonValidarRCAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L678">            validarRotorCenAmpPlus = checkRotorAmp(jButtonValidarRCAmpPlus, jTextFieldRotorCenAmpPlus, jLabelColorValidarCenPlus, true);</span>
+<span class="nc" id="L679">        });</span>
+<span class="nc" id="L680">        jButtonValidarRDAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L681">            validarRotorDerAmpPlus = checkRotorAmp(jButtonValidarRDAmpPlus, jTextFieldRotorDerAmpPlus, jLabelColorValidarDerPlus, true);</span>
+<span class="nc" id="L682">        });</span>
+<span class="nc" id="L683">        jButtonValidarRAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L684">            validarReflectorAmpPlus = checkValidarRotorAmp(jTextFieldReflectorAmpPlus.getText(), true, false);</span>
+<span class="nc bnc" id="L685" title="All 2 branches missed.">            if (validarReflectorAmpPlus) {</span>
+<span class="nc" id="L686">                reflectorAmpPlusNuevo = new Rotor(jTextFieldReflectorAmpPlus.getText(), '-');</span>
+            }
+<span class="nc bnc" id="L688" title="All 2 branches missed.">            jButtonValidarRAmpPlus.setBackground(validarReflectorAmpPlus ? Color.green : Color.red);</span>
+<span class="nc bnc" id="L689" title="All 2 branches missed.">            jLabelColorValidarRPlus.setBackground(validarReflectorAmpPlus ? Color.green : Color.red);</span>
+<span class="nc" id="L690">        });</span>
+
+        // BOTONES ADD Y DELETE CLAVIJAS AMPLIADAS
+<span class="nc" id="L693">        jButtonClavijaAddAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc" id="L695">            boolean nuevo = false;</span>
+<span class="nc bnc" id="L696" title="All 2 branches missed.">            if ((jTextFieldClavijaAmpPlus1.getText().length() &amp; jTextFieldClavijaAmpPlus2.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L697">                char cAmp1 = jTextFieldClavijaAmpPlus1.getText().charAt(0);</span>
+<span class="nc" id="L698">                char cAmp2 = jTextFieldClavijaAmpPlus2.getText().charAt(0);</span>
+<span class="nc bnc" id="L699" title="All 2 branches missed.">                if (cAmp1 != cAmp2) {</span>
+<span class="nc bnc" id="L700" title="All 2 branches missed.">                    if (conexAmpPlus.isEmpty()) {</span>
+<span class="nc" id="L701">                        conexAmpPlus.add(new Clavijas(cAmp1, cAmp2));</span>
+                    } else {
+<span class="nc bnc" id="L703" title="All 2 branches missed.">                        for (Clavijas cla : conexAmpPlus) {</span>
+<span class="nc bnc" id="L704" title="All 8 branches missed.">                            if (!(cla.getA() == cAmp1 || cla.getB() == cAmp1) &amp;&amp; !(cla.getA() == cAmp2 || cla.getB() == cAmp2)) {</span>
+<span class="nc" id="L705">                                nuevo = true;</span>
+                            }
+<span class="nc" id="L707">                        }</span>
+<span class="nc bnc" id="L708" title="All 2 branches missed.">                        if (nuevo) {</span>
+<span class="nc" id="L709">                            conexAmpPlus.add(new Clavijas(cAmp1, cAmp2));</span>
+                        }
+                    }
+<span class="nc" id="L712">                    s = new String[conexAmpPlus.size()];</span>
+<span class="nc bnc" id="L713" title="All 2 branches missed.">                    for (int i = 0; i &lt; conexAmpPlus.size(); i++) {</span>
+<span class="nc" id="L714">                        s[i] = conexAmpPlus.get(i).getA() + &quot; - &quot; + conexAmpPlus.get(i).getB();</span>
+                    }
+<span class="nc" id="L716">                    jListClavijasAmpPlus.setListData(s);</span>
+                }
+            }
+<span class="nc" id="L719">        });</span>
+<span class="nc" id="L720">        jButtonClavijaDeleteAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+            String[] s;
+<span class="nc bnc" id="L722" title="All 2 branches missed.">            if (!jListClavijasAmpPlus.isSelectionEmpty()) {</span>
+<span class="nc" id="L723">                conexAmpPlus.remove(jListClavijasAmpPlus.getSelectedIndex());</span>
+<span class="nc" id="L724">                s = new String[conexAmpPlus.size()];</span>
+<span class="nc bnc" id="L725" title="All 2 branches missed.">                for (int i = 0; i &lt; conexAmpPlus.size(); i++) {</span>
+<span class="nc" id="L726">                    s[i] = conexAmpPlus.get(i).getA() + &quot; - &quot; + conexAmpPlus.get(i).getB();</span>
+                }
+<span class="nc" id="L728">                jListClavijasAmpPlus.setListData(s);</span>
+            }
+<span class="nc" id="L730">        });</span>
+
+        // BOTONES ACEPTAR ROTORES Y CIFRAR
+<span class="nc" id="L733">        jButtonAceptarIzqAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L734" title="All 4 branches missed.">            if (!jTextFieldRotorIzqAmpGiroPlus.getText().isEmpty() &amp;&amp; validarRotorIzqAmpPlus) {</span>
+<span class="nc" id="L735">                rIzqAmpPlusNuevo = new Rotor(jTextFieldRotorIzqAmpPlus.getText(), jTextFieldRotorIzqAmpGiroPlus.getText().charAt(0));</span>
+<span class="nc" id="L736">                jButtonAceptarIzqAmpPlus.setBackground(Color.green);</span>
+<span class="nc" id="L737">                jLabelColorAceptarIzqPlus.setBackground(Color.green);</span>
+<span class="nc" id="L738">                aceptarRotorIzqAmpPlus = true;</span>
+            } else {
+<span class="nc" id="L740">                jButtonAceptarIzqAmpPlus.setBackground(Color.red);</span>
+<span class="nc" id="L741">                jLabelColorAceptarIzqPlus.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L743">        });</span>
+<span class="nc" id="L744">        jButtonAceptarCenAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L745" title="All 4 branches missed.">            if (!jTextFieldRotorCenAmpGiroPlus.getText().isEmpty() &amp;&amp; validarRotorCenAmpPlus) {</span>
+<span class="nc" id="L746">                rCenAmpPlusNuevo = new Rotor(jTextFieldRotorCenAmpPlus.getText(), jTextFieldRotorCenAmpGiroPlus.getText().charAt(0));</span>
+<span class="nc" id="L747">                jButtonAceptarCenAmpPlus.setBackground(Color.green);</span>
+<span class="nc" id="L748">                jLabelColorAceptarCenPlus.setBackground(Color.green);</span>
+<span class="nc" id="L749">                aceptarRotorCenAmpPlus = true;</span>
+            } else {
+<span class="nc" id="L751">                jButtonAceptarCenAmpPlus.setBackground(Color.red);</span>
+<span class="nc" id="L752">                jLabelColorAceptarCenPlus.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L754">        });</span>
+<span class="nc" id="L755">        jButtonAceptarDerAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L756" title="All 4 branches missed.">            if (!jTextFieldRotorDerAmpGiroPlus.getText().isEmpty() &amp;&amp; validarRotorDerAmpPlus) {</span>
+<span class="nc" id="L757">                rDerAmpPlusNuevo = new Rotor(jTextFieldRotorDerAmpPlus.getText(), jTextFieldRotorDerAmpGiroPlus.getText().charAt(0));</span>
+<span class="nc" id="L758">                jButtonAceptarDerAmpPlus.setBackground(Color.green);</span>
+<span class="nc" id="L759">                jLabelColorAceptarDerPlus.setBackground(Color.green);</span>
+<span class="nc" id="L760">                aceptarRotorDerAmpPlus = true;</span>
+            } else {
+<span class="nc" id="L762">                jButtonAceptarDerAmpPlus.setBackground(Color.red);</span>
+<span class="nc" id="L763">                jLabelColorAceptarDerPlus.setBackground(Color.red);</span>
+            }
+<span class="nc" id="L765">        });</span>
+<span class="nc" id="L766">        jButtonCifrarAmpPlus.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L767">            boolean plus = true;</span>
+<span class="nc bnc" id="L768" title="All 6 branches missed.">            enigmaAmpPlus = new Enigma((aceptarRotorIzqAmpPlus &amp;&amp; !jCheckBoxRotorIzqAmpPlus.isSelected()) ? rIzqAmpPlusNuevo : rIzqAmpPlus,</span>
+<span class="nc bnc" id="L769" title="All 4 branches missed.">                    (aceptarRotorCenAmpPlus &amp;&amp; !jCheckBoxRotorCenAmpPlus.isSelected()) ? rCenAmpPlusNuevo : rCenAmpPlus,</span>
+<span class="nc bnc" id="L770" title="All 2 branches missed.">                    (aceptarRotorDerAmpPlus &amp;&amp; !jCheckBoxRotorDerAmpPlus.isSelected()) ? rDerAmpPlusNuevo : rDerAmpPlus,</span>
+                    plus
+            ); // Crea la máquina enigmaAmpPlus
+<span class="nc bnc" id="L773" title="All 2 branches missed.">            for (Clavijas cla : conexAmpPlus) {</span>
+<span class="nc" id="L774">                enigmaAmpPlus.ponerClavijaAmpliado(cla.getA(), cla.getB(), plus);</span>
+<span class="nc" id="L775">            }</span>
+<span class="nc" id="L776">            char cIAmp = 'A';</span>
+<span class="nc" id="L777">            char cCAmp = 'A';</span>
+<span class="nc" id="L778">            char cDAmp = 'A';</span>
+<span class="nc bnc" id="L779" title="All 2 branches missed.">            if ((jTextFieldClaveIzqAmpPlus.getText().length() &amp; jTextFieldClaveCenAmpPlus.getText().length() &amp; jTextFieldClaveDerAmpPlus.getText().length()) &gt; 0) {</span>
+<span class="nc" id="L780">                cIAmp = jTextFieldClaveIzqAmpPlus.getText().charAt(0);</span>
+<span class="nc" id="L781">                cCAmp = jTextFieldClaveCenAmpPlus.getText().charAt(0);</span>
+<span class="nc" id="L782">                cDAmp = jTextFieldClaveDerAmpPlus.getText().charAt(0);</span>
+            }
+<span class="nc" id="L784">            enigmaAmpPlus.setRotoresIniAmpliado(cIAmp, cCAmp, cDAmp, plus);</span>
+<span class="nc" id="L785">            String mensaje = jTextFieldMensajeAmpPlus.getText();</span>
+<span class="nc bnc" id="L786" title="All 2 branches missed.">            setModo(jRadioButtonModo0.isSelected() ? 0 : 1);</span>
+<span class="nc bnc" id="L787" title="All 4 branches missed.">            if (validarReflectorAmpPlus &amp;&amp; !jCheckBoxReflectorAmpPlus.isSelected()) {</span>
+<span class="nc" id="L788">                enigmaAmpPlus.setReflectorAmpliado(reflectorAmpPlusNuevo);</span>
+            }
+<span class="nc" id="L790">            jTextFieldCifradoAmpPlus.setText(procesarAmpliadoPlus(enigmaAmpPlus, mensaje, plus));</span>
+<span class="nc" id="L791">        });</span>
+
+        /**
+         * VENTANA 4 - GENERADOR PASS
+         */
+<span class="nc" id="L796">        jCheckBoxLongitudPass.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L797">            setn(20);</span>
+<span class="nc bnc" id="L798" title="All 2 branches missed.">            jTextFieldLongitudPass.setEditable(!jCheckBoxLongitudPass.isSelected());</span>
+<span class="nc" id="L799">            jButtonGenerarPass.setEnabled(jCheckBoxLongitudPass.isSelected());</span>
+<span class="nc" id="L800">            jButtonGenerarPassCopy.setEnabled(jCheckBoxLongitudPass.isSelected());</span>
+<span class="nc bnc" id="L801" title="All 2 branches missed.">            if (!jCheckBoxLongitudPass.isSelected()) {</span>
+<span class="nc bnc" id="L802" title="All 2 branches missed.">                jButtonGenerarPass.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());</span>
+<span class="nc bnc" id="L803" title="All 2 branches missed.">                jButtonGenerarPassCopy.setEnabled(!jTextFieldLongitudPass.getText().isEmpty());</span>
+            }
+<span class="nc" id="L805">        });</span>
+
+        // GENERAR Y COPIAR PASS Y ROTOR/REFLECTOR
+<span class="nc" id="L808">        jButtonGenerarPass.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L809" title="All 2 branches missed.">            setSymbolic(jCheckBoxSymbols.isSelected() ? 4 : 3);</span>
+<span class="nc bnc" id="L810" title="All 2 branches missed.">            if (!jCheckBoxLongitudPass.isSelected()) {</span>
+<span class="nc" id="L811">                setn(Integer.parseInt(jTextFieldLongitudPass.getText()));</span>
+            }
+<span class="nc" id="L813">            jTextFieldPass.setText(aleatorio());</span>
+<span class="nc" id="L814">        });</span>
+<span class="nc" id="L815">        jButtonGenerarPassCopy.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L816">            copyToClipboard(jTextFieldPass.getText());</span>
+<span class="nc" id="L817">        });</span>
+<span class="nc" id="L818">        jButtonGenerarRotor.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc bnc" id="L819" title="All 2 branches missed.">            if (jRadioButtonRotorAmp.isSelected()) {</span>
+<span class="nc" id="L820">                jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(false));</span>
+<span class="nc bnc" id="L821" title="All 2 branches missed.">            } else if (jRadioButtonReflectorAmp.isSelected()) {</span>
+<span class="nc" id="L822">                jTextFieldRotorReflector.setText(rotorReflectorAmp());</span>
+<span class="nc bnc" id="L823" title="All 2 branches missed.">            } else if (jRadioButtonRRAmpPlus.isSelected()) {</span>
+<span class="nc" id="L824">                jTextFieldRotorReflector.setText(rotoresAleatoriosAmp(true));</span>
+            }
+<span class="nc" id="L826">        });</span>
+<span class="nc" id="L827">        jButtonGenerarRotorCopy.addActionListener((ActionEvent e) -&gt; {</span>
+<span class="nc" id="L828">            copyToClipboard(jTextFieldRotorReflector.getText());</span>
+<span class="nc" id="L829">        });</span>
+<span class="nc" id="L830">    }</span>
+
+    /**
+     * Aporta feedback visual sobre la validez de los rotores
+     *
+     * @param jbuttonValidar
+     * @param rotorAmp
+     * @param jlabelColorValidar
+     * @param plus
+     * @return
+     */
+    private boolean checkRotorAmp(javax.swing.JButton jbuttonValidar, javax.swing.JTextField rotorAmp, javax.swing.JLabel jlabelColorValidar, boolean plus) {
+<span class="nc" id="L842">        boolean valido = checkValidarRotorAmp(rotorAmp.getText(), plus, false);</span>
+<span class="nc bnc" id="L843" title="All 2 branches missed.">        jbuttonValidar.setBackground(valido ? Color.green : Color.red);</span>
+<span class="nc bnc" id="L844" title="All 2 branches missed.">        jlabelColorValidar.setBackground(valido ? Color.green : Color.red);</span>
+<span class="nc" id="L845">        return valido;</span>
+    }
+
+    /**
+     * Habilita o deshabilita funciones de los rotores según se escoja su uso
+     * por default o no
+     *
+     * @param jcheckbox
+     * @param jtextfield
+     * @param jbutton
+     * @param rotorAmpGiro
+     * @param jbuttonAceptar
+     */
+    private void changeButtonStateValidar(javax.swing.JCheckBox jcheckbox, javax.swing.JTextField jtextfield, javax.swing.JButton jbutton, javax.swing.JTextField rotorAmpGiro, javax.swing.JButton jbuttonAceptar) {
+<span class="nc bnc" id="L859" title="All 2 branches missed.">        jtextfield.setEditable(!jcheckbox.isSelected());</span>
+<span class="nc bnc" id="L860" title="All 2 branches missed.">        jbutton.setEnabled(!jcheckbox.isSelected());</span>
+<span class="nc bnc" id="L861" title="All 2 branches missed.">        rotorAmpGiro.setEditable(!jcheckbox.isSelected());</span>
+<span class="nc bnc" id="L862" title="All 2 branches missed.">        jbuttonAceptar.setEnabled(!jcheckbox.isSelected());</span>
+<span class="nc" id="L863">    }</span>
+
+    /**
+     * Comprueba si es válida la cadena de texto introducida
+     *
+     * @param s Texto a comprobar
+     * @param plus Indica si es ampliado plus
+     * @param reflector Indica si es un reflector
+     * @return True si la cadena es válida
+     */
+    private boolean checkValidarRotorAmp(String s, boolean plus, boolean reflector) {
+<span class="nc bnc" id="L874" title="All 2 branches missed.">        boolean permutacion = (!reflector) ? true : checkPermutacion(s);</span>
+<span class="nc bnc" id="L875" title="All 2 branches missed.">        int longitud = plus ? 73 : 74;</span>
+<span class="nc bnc" id="L876" title="All 8 branches missed.">        return checkLongitud(s, longitud) &amp;&amp; checkContenido(s, plus) &amp;&amp; checkRepetido(s) &amp;&amp; permutacion;</span>
+    }
+
+    /**
+     * Comprueba la longitud del rotor según sea ampliado o ampliado plus
+     *
+     * @param s
+     * @param longitud
+     * @return
+     */
+    private boolean checkLongitud(String s, int longitud) {
+<span class="nc bnc" id="L887" title="All 2 branches missed.">        return (s.length() == longitud);</span>
+    }
+
+    /**
+     * Comprueba que la cadena del rotor/reflector corresponde con el contenido
+     * de su tipo
+     *
+     * @param s
+     * @param plus
+     * @return
+     */
+    private boolean checkContenido(String s, boolean plus) {
+        char c;
+<span class="nc bnc" id="L900" title="All 2 branches missed.">        int longitud = plus ? 33 : 32;</span>
+<span class="nc bnc" id="L901" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L902">            c = s.charAt(i);</span>
+<span class="nc bnc" id="L903" title="All 16 branches missed.">            if (!((c &gt;= longitud &amp;&amp; c &lt;= 43) || (c &gt;= 48 &amp;&amp; c &lt;= 57) || (c &gt;= 65 &amp;&amp; c &lt;= 90) || (c &gt;= 97 &amp;&amp; c &lt;= 122))) {</span>
+<span class="nc" id="L904">                return false;</span>
+            }
+        }
+<span class="nc" id="L907">        return true;</span>
+    }
+
+    /**
+     * Comprueba si existen repetidos en el rotor/reflector
+     *
+     * @param s
+     * @return
+     */
+    private boolean checkRepetido(String s) {
+        String aux;
+<span class="nc bnc" id="L918" title="All 2 branches missed.">        while (!s.isEmpty()) {</span>
+<span class="nc" id="L919">            aux = s.substring(0, 1);</span>
+<span class="nc" id="L920">            s = s.substring(1);</span>
+<span class="nc bnc" id="L921" title="All 2 branches missed.">            if (s.contains(aux)) {</span>
+<span class="nc" id="L922">                return false;</span>
+            }
+        }
+<span class="nc" id="L925">        return true;</span>
+    }
+
+    /**
+     * Comprueba las permutaciones a pares del reflector ampliado
+     *
+     * @param s
+     * @return
+     */
+    private boolean checkPermutacion(String s) {
+        char cS;
+        char cA;
+<span class="nc" id="L937">        String alfabeto = &quot; !\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;;</span>
+<span class="nc bnc" id="L938" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L939">            cS = s.charAt(i);</span>
+<span class="nc" id="L940">            cA = alfabeto.charAt(i);</span>
+<span class="nc bnc" id="L941" title="All 2 branches missed.">            if (s.contains(Character.toString(cA))) {</span>
+<span class="nc bnc" id="L942" title="All 4 branches missed.">                if (!(alfabeto.charAt(s.indexOf(cA)) == cS &amp;&amp; s.charAt(alfabeto.indexOf(cS)) == cA)) {</span>
+<span class="nc" id="L943">                    return false;</span>
+                }
+            } else {
+<span class="nc" id="L946">                return false;</span>
+            }
+        }
+<span class="nc" id="L949">        return true;</span>
+    }
+
+    /**
+     * Copia en el portapapeles el contenido de la cadena
+     *
+     * @param s
+     */
+    private void copyToClipboard(String s) {
+<span class="nc" id="L958">        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();</span>
+<span class="nc" id="L959">        clipboard.setContents(new StringSelection(s), null);</span>
+<span class="nc" id="L960">    }</span>
+
+<span class="nc" id="L962">    class TableroPintar implements Serializable {</span>
+
+        public BufferedImage pintarTablero() {
+<span class="nc" id="L965">            Font font = new Font(&quot;Monospaced&quot;, Font.BOLD, 22);</span>
+<span class="nc" id="L966">            int character = 65;</span>
+<span class="nc" id="L967">            BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);</span>
+<span class="nc" id="L968">            Graphics pintar = image.createGraphics();</span>
+<span class="nc" id="L969">            contEleccion = 0;</span>
+<span class="nc" id="L970">            pintar.setColor(Color.black);</span>
+<span class="nc" id="L971">            pintar.setFont(font);</span>
+<span class="nc" id="L972">            pintarBucle(character, pintar, jComboBoxRotorIzq.getSelectedItem().toString(), posIY); //&quot;I&quot;</span>
+<span class="nc" id="L973">            pintarBucle(character, pintar, jComboBoxRotorCen.getSelectedItem().toString(), posCY); //&quot;II&quot;</span>
+<span class="nc" id="L974">            pintarBucle(character, pintar, jComboBoxRotorDer.getSelectedItem().toString(), posDY); //&quot;III&quot;</span>
+<span class="nc" id="L975">            pintarBucle(character, pintar, &quot;R&quot;, posRY);</span>
+<span class="nc" id="L976">            pintarBucle(character, pintar, &quot;C&quot;, posClaY);</span>
+<span class="nc" id="L977">            pintarBucle(character, pintar, &quot;T&quot;, posTY);</span>
+<span class="nc bnc" id="L978" title="All 2 branches missed.">            if (eni) {</span>
+<span class="nc" id="L979">                acomodarClavijas();</span>
+<span class="nc" id="L980">                pintarLinea(pintar);</span>
+            }
+<span class="nc" id="L982">            pintar.dispose();</span>
+<span class="nc" id="L983">            return image;</span>
+        }
+
+        /**
+         * Pinta las lineas entre los rotores, las de ida y las de vuelta
+         *
+         * @param g
+         */
+        private void pintarLinea(Graphics g) {
+<span class="nc" id="L992">            Graphics2D g2d = (Graphics2D) g;</span>
+<span class="nc" id="L993">            g2d.setStroke(new BasicStroke(3));</span>
+<span class="nc" id="L994">            g.setColor(Color.RED); //Pinta camino de ida</span>
+<span class="nc" id="L995">            g2d.drawLine(posTX.get(Character.toString(Enigma.pintar[0])), posTY + 5, posClaX.get(Character.toString(Enigma.pintar[0])), posClaY + 20); // Desde Teclado paraPintar[0] hasta Clavijero</span>
+<span class="nc" id="L996">            g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[0])), posClaY + 5, posDX.get(Character.toString(Enigma.pintar[1])), posDY + 20); // Desde Clavijero  hasta D ABC</span>
+<span class="nc" id="L997">            g2d.drawLine(posPerDX.get(Character.toString(Enigma.pintar[2])), posDY - 15, posCX.get(Character.toString(Enigma.pintar[3])), posCY + 20); // Desde D PER hasta C ABC</span>
+<span class="nc" id="L998">            g2d.drawLine(posPerCX.get(Character.toString(Enigma.pintar[4])), posCY - 15, posIX.get(Character.toString(Enigma.pintar[5])), posIY + 20); // Desde C PER hasta I ABC</span>
+<span class="nc" id="L999">            g2d.drawLine(posPerIX.get(Character.toString(Enigma.pintar[6])), posIY - 15, posRX.get(Character.toString(Enigma.pintar[7])), posRY + 20); // Desde I PER hasta R paraPintar[7]</span>
+<span class="nc" id="L1000">            g2d.setColor(Color.MAGENTA); //Pinta camino de vueta</span>
+<span class="nc" id="L1001">            g2d.drawLine(posRX.get(Character.toString(Enigma.pintar[8])), posRY + 20, posPerIX.get(Character.toString(Enigma.pintar[9])), posIY - 15); // Desde R paraPintar[8] hasta I PER</span>
+<span class="nc" id="L1002">            g2d.drawLine(posIX.get(Character.toString(Enigma.pintar[10])), posIY + 20, posPerCX.get(Character.toString(Enigma.pintar[11])), posCY - 15); // Desde I ABC hasta C PER</span>
+<span class="nc" id="L1003">            g2d.drawLine(posCX.get(Character.toString(Enigma.pintar[12])), posCY + 20, posPerDX.get(Character.toString(Enigma.pintar[13])), posDY - 15); // Desde C ABC hasta D PER</span>
+<span class="nc" id="L1004">            g2d.drawLine(posDX.get(Character.toString(Enigma.pintar[14])), posDY + 20, posClaX.get(Character.toString(Enigma.pintar[15])), posClaY + 5); // Desde D ABC hasta Clavijero </span>
+<span class="nc" id="L1005">            g2d.drawLine(posClaX.get(Character.toString(Enigma.pintar[15])), posClaY + 20, posTX.get(Character.toString(Enigma.pintar[15])), posTY + 5); // Desde Clavijero hasta Teclado paraPintar[15]</span>
+<span class="nc" id="L1006">        }</span>
+
+        /**
+         * Pinta los rotores
+         *
+         * @param character
+         * @param g
+         * @param eleccion
+         * @param offset
+         */
+        private void pintarBucle(int character, Graphics g, String eleccion, int offset) {
+<span class="nc" id="L1017">            String s = rotoresString.get(eleccion);</span>
+<span class="nc" id="L1018">            String abc = &quot;&quot;;</span>
+<span class="nc" id="L1019">            String per = &quot;&quot;;</span>
+            int n;
+<span class="nc" id="L1021">            char c = (char) character;</span>
+<span class="nc bnc" id="L1022" title="All 2 branches missed.">            for (int i = 0; i &lt; 26; i++) {</span>
+<span class="nc" id="L1023">                n = 30 + 20 * i;</span>
+<span class="nc" id="L1024">                abc = Character.toString(c);</span>
+<span class="nc bnc" id="L1025" title="All 6 branches missed.">                if (!&quot;T&quot;.equals(eleccion) &amp;&amp; !&quot;C&quot;.equals(eleccion) &amp;&amp; !&quot;R&quot;.equals(eleccion)) {</span>
+<span class="nc" id="L1026">                    per = Character.toString(s.charAt(i));</span>
+<span class="nc" id="L1027">                    g.setColor(Color.black);</span>
+<span class="nc" id="L1028">                    g.drawString(per, n, offset);</span>
+                }
+<span class="nc bnc" id="L1030" title="All 7 branches missed.">                switch (contEleccion) {</span>
+                    case 0: //Rotor Izquierdo
+<span class="nc" id="L1032">                        actualizarHashMap(posPerIX, per, posIX, abc, n);</span>
+<span class="nc" id="L1033">                        pintarEleccion(c, cI, g, n, offset);</span>
+<span class="nc" id="L1034">                        break;</span>
+                    case 1: //Rotor Central
+<span class="nc" id="L1036">                        actualizarHashMap(posPerCX, per, posCX, abc, n);</span>
+<span class="nc" id="L1037">                        pintarEleccion(c, cC, g, n, offset);</span>
+<span class="nc" id="L1038">                        break;</span>
+                    case 2: //Rotor Derecho
+<span class="nc" id="L1040">                        actualizarHashMap(posPerDX, per, posDX, abc, n);</span>
+<span class="nc" id="L1041">                        pintarEleccion(c, cD, g, n, offset);</span>
+<span class="nc" id="L1042">                        break;</span>
+                    case 3: //Reflector
+<span class="nc" id="L1044">                        posRX.put(abc, n + 5);</span>
+<span class="nc" id="L1045">                        break;</span>
+                    case 4: //Clavijero
+<span class="nc" id="L1047">                        posClaX.put(abc, n + 5);</span>
+<span class="nc" id="L1048">                        break;</span>
+                    case 5: //Teclado
+<span class="nc" id="L1050">                        posTX.put(abc, n + 5);</span>
+<span class="nc" id="L1051">                        break;</span>
+                    default:
+                        break;
+                }
+<span class="nc" id="L1055">                g.setColor(Color.black);</span>
+<span class="nc" id="L1056">                g.drawString(abc, n, offset + 20);</span>
+<span class="nc" id="L1057">                c++;</span>
+            }
+<span class="nc" id="L1059">            contEleccion++;</span>
+<span class="nc" id="L1060">        }</span>
+
+        /**
+         * ACtualiza los HashMap de las posiciones de las letras de la imagen
+         *
+         * @param posPer HashMap de posiciones de permutaciones (rotores)
+         * @param per cadena de permutaciones
+         * @param pos HashMap de posiciones de filas
+         * @param abc cadena de alfabeto
+         * @param n nueva posición
+         */
+        private void actualizarHashMap(Map&lt;String, Integer&gt; posPer, String per, Map&lt;String, Integer&gt; pos, String abc, int n) {
+<span class="nc" id="L1072">            posPer.put(per, n + 5);</span>
+<span class="nc" id="L1073">            pos.put(abc, n + 5);</span>
+<span class="nc" id="L1074">        }</span>
+
+        /**
+         * Pinta en la cadena la clave
+         *
+         * @param c caracter actual del rotor
+         * @param clave clave
+         * @param g gráfico (Graphics)
+         * @param n nueva posición
+         * @param offset distancia entre posiciones para pintar correctamente
+         */
+        private void pintarEleccion(char c, char clave, Graphics g, int n, int offset) {
+<span class="nc bnc" id="L1086" title="All 2 branches missed.">            if (c == clave) {</span>
+<span class="nc" id="L1087">                pintarClave(g, n, offset);</span>
+            }
+<span class="nc" id="L1089">        }</span>
+
+        /**
+         * Resalta la clave en un tono de color cyan
+         *
+         * @param g
+         * @param n
+         * @param offset
+         */
+        private void pintarClave(Graphics g, int n, int offset) {
+<span class="nc" id="L1099">            g.setColor(Color.CYAN);</span>
+<span class="nc" id="L1100">            g.fillRect(n, offset + 5, 15, 18);</span>
+<span class="nc" id="L1101">        }</span>
+
+        /**
+         * Acomoda las clavijas para que se traten correctamente
+         */
+        private void acomodarClavijas() {
+            int primeraValue;
+            int segundaValue;
+            char primera;
+            char segunda;
+<span class="nc bnc" id="L1111" title="All 2 branches missed.">            for (Clavijas conexion : enigma.getPlugboard().getConexiones()) {</span>
+<span class="nc" id="L1112">                primera = conexion.getA();</span>
+<span class="nc" id="L1113">                segunda = conexion.getB();</span>
+<span class="nc" id="L1114">                primeraValue = posClaX.get(Character.toString(primera));</span>
+<span class="nc" id="L1115">                segundaValue = posClaX.get(Character.toString(segunda));</span>
+<span class="nc" id="L1116">                posClaX.put(Character.toString(primera), segundaValue);</span>
+<span class="nc" id="L1117">                posClaX.put(Character.toString(segunda), primeraValue);</span>
+<span class="nc" id="L1118">            }</span>
+<span class="nc" id="L1119">        }</span>
+    }
+
+    @Override
+    public void paint(Graphics g) {
+<span class="nc" id="L1124">        super.paint(g);</span>
+<span class="nc" id="L1125">        jLabelBufferedImage.setIcon(new ImageIcon(tablero.pintarTablero()));</span>
+<span class="nc" id="L1126">        jPanel1.add(jLabelBufferedImage);</span>
+<span class="nc" id="L1127">    }</span>
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L1138">        buttonGroupGenerador = new javax.swing.ButtonGroup();</span>
+<span class="nc" id="L1139">        buttonGroupModoAmpPlus = new javax.swing.ButtonGroup();</span>
+<span class="nc" id="L1140">        jTabbedPane1 = new javax.swing.JTabbedPane();</span>
+<span class="nc" id="L1141">        jPanel1 = new javax.swing.JPanel();</span>
+<span class="nc" id="L1142">        jLabelRotorIzq = new javax.swing.JLabel();</span>
+<span class="nc" id="L1143">        jLabelRotorCen = new javax.swing.JLabel();</span>
+<span class="nc" id="L1144">        jLabelRotorDer = new javax.swing.JLabel();</span>
+<span class="nc" id="L1145">        jComboBoxRotorIzq = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L1146">        jLabelClaves = new javax.swing.JLabel();</span>
+<span class="nc" id="L1147">        jTextFieldClaveIzq = new javax.swing.JTextField();</span>
+<span class="nc" id="L1148">        jTextFieldClaveCen = new javax.swing.JTextField();</span>
+<span class="nc" id="L1149">        jTextFieldClaveDer = new javax.swing.JTextField();</span>
+<span class="nc" id="L1150">        jTextFieldMensaje = new javax.swing.JTextField();</span>
+<span class="nc" id="L1151">        jLabelMensaje = new javax.swing.JLabel();</span>
+<span class="nc" id="L1152">        jLabelCifrado = new javax.swing.JLabel();</span>
+<span class="nc" id="L1153">        jTextFieldCifrado = new javax.swing.JTextField();</span>
+<span class="nc" id="L1154">        jLabelClavijas = new javax.swing.JLabel();</span>
+<span class="nc" id="L1155">        jTextFieldClavija1 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1156">        jTextFieldClavija2 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1157">        jButtonClavijaAdd = new javax.swing.JButton();</span>
+<span class="nc" id="L1158">        jComboBoxRotorCen = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L1159">        jComboBoxRotorDer = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L1160">        jButtonClavijaDelete = new javax.swing.JButton();</span>
+<span class="nc" id="L1161">        jSeparator1 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1162">        jSeparator2 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1163">        jScrollPane2 = new javax.swing.JScrollPane();</span>
+<span class="nc" id="L1164">        jListClavijas = new javax.swing.JList&lt;&gt;();</span>
+<span class="nc" id="L1165">        jLabelBufferedImage = new javax.swing.JLabel();</span>
+<span class="nc" id="L1166">        jlabelLeyendaClave = new javax.swing.JLabel();</span>
+<span class="nc" id="L1167">        jlabelLeyendaCaminoIda = new javax.swing.JLabel();</span>
+<span class="nc" id="L1168">        jlabelLeyendaCaminoVuelta = new javax.swing.JLabel();</span>
+<span class="nc" id="L1169">        jPanel2 = new javax.swing.JPanel();</span>
+<span class="nc" id="L1170">        jLabelMensaje1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1171">        jTextFieldMensajeAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1172">        jLabelCifrado1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1173">        jTextFieldCifradoAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1174">        jSeparator3 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1175">        jLabelClavesAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1176">        jTextFieldClaveIzqAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1177">        jTextFieldClaveCenAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1178">        jTextFieldClaveDerAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1179">        jSeparator4 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1180">        jLabelClavijasAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1181">        jTextFieldClavijaAmp1 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1182">        jTextFieldClavijaAmp2 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1183">        jButtonClavijaAddAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1184">        jButtonClavijaDeleteAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1185">        jScrollPane3 = new javax.swing.JScrollPane();</span>
+<span class="nc" id="L1186">        jListClavijasAmp = new javax.swing.JList&lt;&gt;();</span>
+<span class="nc" id="L1187">        jTextFieldRotorIzqAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1188">        jLabelRotorIzqAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1189">        jLabelRotorCenAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1190">        jTextFieldRotorCenAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1191">        jLabelRotorDerAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1192">        jTextFieldRotorDerAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1193">        jTextFieldReflectorAmp = new javax.swing.JTextField();</span>
+<span class="nc" id="L1194">        jLabelReflectorAmp = new javax.swing.JLabel();</span>
+<span class="nc" id="L1195">        jCheckBoxReflectorAmp = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1196">        jCheckBoxRotorIzqAmp = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1197">        jCheckBoxRotorCenAmp = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1198">        jCheckBoxRotorDerAmp = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1199">        jButtonValidarRIAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1200">        jButtonValidarRCAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1201">        jButtonValidarRDAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1202">        jButtonCifrarAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1203">        jButtonValidarRAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1204">        jSeparator6 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1205">        jTextFieldRotorDerAmpGiro = new javax.swing.JTextField();</span>
+<span class="nc" id="L1206">        jTextFieldRotorIzqAmpGiro = new javax.swing.JTextField();</span>
+<span class="nc" id="L1207">        jTextFieldRotorCenAmpGiro = new javax.swing.JTextField();</span>
+<span class="nc" id="L1208">        jLabelRotorIzqAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1209">        jLabelRotorIzqAmp2 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1210">        jLabelRotorIzqAmp3 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1211">        jButtonAceptarDerAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1212">        jButtonAceptarIzqAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1213">        jButtonAceptarCenAmp = new javax.swing.JButton();</span>
+<span class="nc" id="L1214">        jSeparator7 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1215">        jLabelClavijasAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1216">        jSeparator8 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1217">        jLabelColorValidarIzq = new javax.swing.JLabel();</span>
+<span class="nc" id="L1218">        jLabelColorValidarDer = new javax.swing.JLabel();</span>
+<span class="nc" id="L1219">        jLabelColorValidarR = new javax.swing.JLabel();</span>
+<span class="nc" id="L1220">        jLabelColorValidarCen = new javax.swing.JLabel();</span>
+<span class="nc" id="L1221">        jLabelColorAceptarDer = new javax.swing.JLabel();</span>
+<span class="nc" id="L1222">        jLabelColorAceptarIzq = new javax.swing.JLabel();</span>
+<span class="nc" id="L1223">        jLabelColorAceptarCen = new javax.swing.JLabel();</span>
+<span class="nc" id="L1224">        jPanel5 = new javax.swing.JPanel();</span>
+<span class="nc" id="L1225">        jLabelRotorIzqAmpPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1226">        jCheckBoxRotorIzqAmpPlus = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1227">        jTextFieldRotorIzqAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1228">        jButtonValidarRIAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1229">        jLabelColorValidarIzqPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1230">        jTextFieldRotorIzqAmpGiroPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1231">        jLabelRotorIzqAmp5 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1232">        jButtonAceptarIzqAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1233">        jLabelColorAceptarIzqPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1234">        jLabelColorAceptarCenPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1235">        jButtonAceptarCenAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1236">        jTextFieldRotorCenAmpGiroPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1237">        jLabelRotorIzqAmp6 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1238">        jButtonValidarRCAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1239">        jLabelColorValidarCenPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1240">        jTextFieldRotorCenAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1241">        jCheckBoxRotorCenAmpPlus = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1242">        jLabelRotorCenAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1243">        jLabelRotorDerAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1244">        jTextFieldRotorDerAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1245">        jCheckBoxRotorDerAmpPlus = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1246">        jButtonValidarRDAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1247">        jLabelColorValidarDerPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1248">        jTextFieldRotorDerAmpGiroPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1249">        jLabelRotorIzqAmp7 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1250">        jButtonAceptarDerAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1251">        jLabelColorAceptarDerPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1252">        jLabelColorValidarRPlus = new javax.swing.JLabel();</span>
+<span class="nc" id="L1253">        jButtonValidarRAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1254">        jTextFieldReflectorAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1255">        jCheckBoxReflectorAmpPlus = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1256">        jLabelReflectorAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1257">        jLabelClavijasAmp2 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1258">        jButtonClavijaAddAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1259">        jButtonClavijaDeleteAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1260">        jScrollPane4 = new javax.swing.JScrollPane();</span>
+<span class="nc" id="L1261">        jListClavijasAmpPlus = new javax.swing.JList&lt;&gt;();</span>
+<span class="nc" id="L1262">        jSeparator9 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1263">        jSeparator10 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1264">        jSeparator11 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1265">        jSeparator12 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1266">        jLabelClavijasAmp3 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1267">        jTextFieldClavijaAmpPlus1 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1268">        jTextFieldClavijaAmpPlus2 = new javax.swing.JTextField();</span>
+<span class="nc" id="L1269">        jTextFieldClaveDerAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1270">        jTextFieldClaveCenAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1271">        jTextFieldClaveIzqAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1272">        jLabelClavesAmp1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1273">        jLabelMensaje7 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1274">        jTextFieldMensajeAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1275">        jLabelCifrado2 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1276">        jTextFieldCifradoAmpPlus = new javax.swing.JTextField();</span>
+<span class="nc" id="L1277">        jButtonCifrarAmpPlus = new javax.swing.JButton();</span>
+<span class="nc" id="L1278">        jRadioButtonModo0 = new javax.swing.JRadioButton();</span>
+<span class="nc" id="L1279">        jRadioButtonModo1 = new javax.swing.JRadioButton();</span>
+<span class="nc" id="L1280">        jPanel7 = new javax.swing.JPanel();</span>
+<span class="nc" id="L1281">        jButtonGenerarRotor = new javax.swing.JButton();</span>
+<span class="nc" id="L1282">        jCheckBoxSymbols = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1283">        jSeparator5 = new javax.swing.JSeparator();</span>
+<span class="nc" id="L1284">        jTextFieldLongitudPass = new javax.swing.JTextField();</span>
+<span class="nc" id="L1285">        jLabelMensaje2 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1286">        jTextFieldRotorReflector = new javax.swing.JTextField();</span>
+<span class="nc" id="L1287">        jTextFieldPass = new javax.swing.JTextField();</span>
+<span class="nc" id="L1288">        jLabelMensaje3 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1289">        jLabelMensaje4 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1290">        jButtonGenerarPass = new javax.swing.JButton();</span>
+<span class="nc" id="L1291">        jLabelMensaje5 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1292">        jLabelMensaje6 = new javax.swing.JLabel();</span>
+<span class="nc" id="L1293">        jCheckBoxLongitudPass = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L1294">        jRadioButtonRRAmpPlus = new javax.swing.JRadioButton();</span>
+<span class="nc" id="L1295">        jRadioButtonRotorAmp = new javax.swing.JRadioButton();</span>
+<span class="nc" id="L1296">        jRadioButtonReflectorAmp = new javax.swing.JRadioButton();</span>
+<span class="nc" id="L1297">        jButtonGenerarPassCopy = new javax.swing.JButton();</span>
+<span class="nc" id="L1298">        jButtonGenerarRotorCopy = new javax.swing.JButton();</span>
+
+<span class="nc" id="L1300">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L1301">        setTitle(&quot;Simulador Enigma Plus&quot;);</span>
+<span class="nc" id="L1302">        setResizable(false);</span>
+
+<span class="nc" id="L1304">        jTabbedPane1.setOpaque(true);</span>
+<span class="nc" id="L1305">        jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 700));</span>
+
+<span class="nc" id="L1307">        jPanel1.setPreferredSize(new java.awt.Dimension(805, 680));</span>
+<span class="nc" id="L1308">        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L1310">        jLabelRotorIzq.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1311">        jLabelRotorIzq.setText(&quot;Rotor Izquierdo:&quot;);</span>
+<span class="nc" id="L1312">        jPanel1.add(jLabelRotorIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 26, -1, -1));</span>
+
+<span class="nc" id="L1314">        jLabelRotorCen.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1315">        jLabelRotorCen.setText(&quot;Rotor Central:&quot;);</span>
+<span class="nc" id="L1316">        jPanel1.add(jLabelRotorCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 76, -1, -1));</span>
+
+<span class="nc" id="L1318">        jLabelRotorDer.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1319">        jLabelRotorDer.setText(&quot;Rotor Derecho:&quot;);</span>
+<span class="nc" id="L1320">        jPanel1.add(jLabelRotorDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 126, -1, -1));</span>
+
+<span class="nc" id="L1322">        jComboBoxRotorIzq.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1323">        jComboBoxRotorIzq.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot; }));</span>
+<span class="nc" id="L1324">        jPanel1.add(jComboBoxRotorIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 21, -1, -1));</span>
+
+<span class="nc" id="L1326">        jLabelClaves.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1327">        jLabelClaves.setText(&quot;Claves:&quot;);</span>
+<span class="nc" id="L1328">        jPanel1.add(jLabelClaves, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 181, -1, -1));</span>
+
+<span class="nc" id="L1330">        jTextFieldClaveIzq.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1331">        jTextFieldClaveIzq.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1332">        jTextFieldClaveIzq.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1333">        jPanel1.add(jTextFieldClaveIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(662, 182, -1, -1));</span>
+
+<span class="nc" id="L1335">        jTextFieldClaveCen.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1336">        jTextFieldClaveCen.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1337">        jTextFieldClaveCen.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1338">        jPanel1.add(jTextFieldClaveCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 182, -1, -1));</span>
+
+<span class="nc" id="L1340">        jTextFieldClaveDer.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1341">        jTextFieldClaveDer.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1342">        jTextFieldClaveDer.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1343">        jPanel1.add(jTextFieldClaveDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(738, 182, -1, -1));</span>
+
+<span class="nc" id="L1345">        jTextFieldMensaje.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1346">        jPanel1.add(jTextFieldMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 510, 389, -1));</span>
+
+<span class="nc" id="L1348">        jLabelMensaje.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1349">        jLabelMensaje.setText(&quot;Introduce tu mensaje:&quot;);</span>
+<span class="nc" id="L1350">        jPanel1.add(jLabelMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 482, -1, -1));</span>
+
+<span class="nc" id="L1352">        jLabelCifrado.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1353">        jLabelCifrado.setText(&quot;Mensaje cifrado:&quot;);</span>
+<span class="nc" id="L1354">        jPanel1.add(jLabelCifrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 564, -1, -1));</span>
+
+<span class="nc" id="L1356">        jTextFieldCifrado.setEditable(false);</span>
+<span class="nc" id="L1357">        jTextFieldCifrado.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1358">        jTextFieldCifrado.setDragEnabled(true);</span>
+<span class="nc" id="L1359">        jPanel1.add(jTextFieldCifrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 592, 389, -1));</span>
+
+<span class="nc" id="L1361">        jLabelClavijas.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1362">        jLabelClavijas.setText(&quot;Clavijas:&quot;);</span>
+<span class="nc" id="L1363">        jPanel1.add(jLabelClavijas, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 226, -1, -1));</span>
+
+<span class="nc" id="L1365">        jTextFieldClavija1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1366">        jTextFieldClavija1.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1367">        jTextFieldClavija1.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1368">        jPanel1.add(jTextFieldClavija1, new org.netbeans.lib.awtextra.AbsoluteConstraints(662, 227, -1, -1));</span>
+
+<span class="nc" id="L1370">        jTextFieldClavija2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1371">        jTextFieldClavija2.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1372">        jTextFieldClavija2.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1373">        jPanel1.add(jTextFieldClavija2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 227, -1, -1));</span>
+
+<span class="nc" id="L1375">        jButtonClavijaAdd.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1376">        jButtonClavijaAdd.setText(&quot;Añadir&quot;);</span>
+<span class="nc" id="L1377">        jPanel1.add(jButtonClavijaAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 270, -1, -1));</span>
+
+<span class="nc" id="L1379">        jComboBoxRotorCen.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1380">        jComboBoxRotorCen.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot; }));</span>
+<span class="nc" id="L1381">        jComboBoxRotorCen.setSelectedIndex(1);</span>
+<span class="nc" id="L1382">        jPanel1.add(jComboBoxRotorCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 71, -1, -1));</span>
+
+<span class="nc" id="L1384">        jComboBoxRotorDer.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1385">        jComboBoxRotorDer.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot; }));</span>
+<span class="nc" id="L1386">        jComboBoxRotorDer.setSelectedIndex(2);</span>
+<span class="nc" id="L1387">        jPanel1.add(jComboBoxRotorDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 121, -1, -1));</span>
+
+<span class="nc" id="L1389">        jButtonClavijaDelete.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1390">        jButtonClavijaDelete.setText(&quot;Eliminar&quot;);</span>
+<span class="nc" id="L1391">        jPanel1.add(jButtonClavijaDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 270, -1, -1));</span>
+<span class="nc" id="L1392">        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 165, 221, 10));</span>
+<span class="nc" id="L1393">        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 211, 221, 9));</span>
+
+<span class="nc" id="L1395">        jListClavijas.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1396">        jScrollPane2.setViewportView(jListClavijas);</span>
+
+<span class="nc" id="L1398">        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 330, 84, 302));</span>
+<span class="nc" id="L1399">        jPanel1.add(jLabelBufferedImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 480));</span>
+
+<span class="nc" id="L1401">        jlabelLeyendaClave.setFont(new java.awt.Font(&quot;Tahoma&quot;, 1, 18)); // NOI18N</span>
+<span class="nc" id="L1402">        jlabelLeyendaClave.setForeground(new java.awt.Color(0, 220, 220));</span>
+<span class="nc" id="L1403">        jlabelLeyendaClave.setText(&quot;Clave&quot;);</span>
+<span class="nc" id="L1404">        jPanel1.add(jlabelLeyendaClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, -1, -1));</span>
+
+<span class="nc" id="L1406">        jlabelLeyendaCaminoIda.setFont(new java.awt.Font(&quot;Tahoma&quot;, 1, 18)); // NOI18N</span>
+<span class="nc" id="L1407">        jlabelLeyendaCaminoIda.setForeground(Color.red);</span>
+<span class="nc" id="L1408">        jlabelLeyendaCaminoIda.setText(&quot;Camino Ida&quot;);</span>
+<span class="nc" id="L1409">        jPanel1.add(jlabelLeyendaCaminoIda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, -1));</span>
+
+<span class="nc" id="L1411">        jlabelLeyendaCaminoVuelta.setFont(new java.awt.Font(&quot;Tahoma&quot;, 1, 18)); // NOI18N</span>
+<span class="nc" id="L1412">        jlabelLeyendaCaminoVuelta.setForeground(Color.magenta);</span>
+<span class="nc" id="L1413">        jlabelLeyendaCaminoVuelta.setText(&quot;Camino Vuelta&quot;);</span>
+<span class="nc" id="L1414">        jPanel1.add(jlabelLeyendaCaminoVuelta, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 420, -1, -1));</span>
+
+<span class="nc" id="L1416">        jTabbedPane1.addTab(&quot;Enigma clásica&quot;, jPanel1);</span>
+
+<span class="nc" id="L1418">        jPanel2.setName(&quot;&quot;); // NOI18N</span>
+<span class="nc" id="L1419">        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L1421">        jLabelMensaje1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1422">        jLabelMensaje1.setText(&quot;Introduce tu mensaje:&quot;);</span>
+<span class="nc" id="L1423">        jPanel2.add(jLabelMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, -1, -1));</span>
+
+<span class="nc" id="L1425">        jTextFieldMensajeAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1426">        jPanel2.add(jTextFieldMensajeAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 389, -1));</span>
+
+<span class="nc" id="L1428">        jLabelCifrado1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1429">        jLabelCifrado1.setText(&quot;Mensaje cifrado:&quot;);</span>
+<span class="nc" id="L1430">        jPanel2.add(jLabelCifrado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 560, -1, -1));</span>
+
+<span class="nc" id="L1432">        jTextFieldCifradoAmp.setEditable(false);</span>
+<span class="nc" id="L1433">        jTextFieldCifradoAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1434">        jTextFieldCifradoAmp.setDragEnabled(true);</span>
+<span class="nc" id="L1435">        jPanel2.add(jTextFieldCifradoAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 590, 389, -1));</span>
+<span class="nc" id="L1436">        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 280, 240, 10));</span>
+
+<span class="nc" id="L1438">        jLabelClavesAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1439">        jLabelClavesAmp.setText(&quot;Claves:&quot;);</span>
+<span class="nc" id="L1440">        jPanel2.add(jLabelClavesAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, -1, -1));</span>
+
+<span class="nc" id="L1442">        jTextFieldClaveIzqAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1443">        jTextFieldClaveIzqAmp.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1444">        jTextFieldClaveIzqAmp.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1445">        jPanel2.add(jTextFieldClaveIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, -1, -1));</span>
+
+<span class="nc" id="L1447">        jTextFieldClaveCenAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1448">        jTextFieldClaveCenAmp.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1449">        jTextFieldClaveCenAmp.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1450">        jPanel2.add(jTextFieldClaveCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 390, -1, -1));</span>
+
+<span class="nc" id="L1452">        jTextFieldClaveDerAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1453">        jTextFieldClaveDerAmp.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1454">        jTextFieldClaveDerAmp.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1455">        jPanel2.add(jTextFieldClaveDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, -1, -1));</span>
+<span class="nc" id="L1456">        jPanel2.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 160, 10));</span>
+
+<span class="nc" id="L1458">        jLabelClavijasAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1459">        jLabelClavijasAmp.setText(&quot;Conexiones de Clavijas:&quot;);</span>
+<span class="nc" id="L1460">        jPanel2.add(jLabelClavijasAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 300, -1, -1));</span>
+
+<span class="nc" id="L1462">        jTextFieldClavijaAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1463">        jTextFieldClavijaAmp1.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1464">        jTextFieldClavijaAmp1.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1465">        jPanel2.add(jTextFieldClavijaAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, -1, -1));</span>
+
+<span class="nc" id="L1467">        jTextFieldClavijaAmp2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1468">        jTextFieldClavijaAmp2.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1469">        jTextFieldClavijaAmp2.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1470">        jPanel2.add(jTextFieldClavijaAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 390, -1, -1));</span>
+
+<span class="nc" id="L1472">        jButtonClavijaAddAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1473">        jButtonClavijaAddAmp.setText(&quot;Añadir&quot;);</span>
+<span class="nc" id="L1474">        jPanel2.add(jButtonClavijaAddAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 360, -1, -1));</span>
+
+<span class="nc" id="L1476">        jButtonClavijaDeleteAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1477">        jButtonClavijaDeleteAmp.setText(&quot;Eliminar&quot;);</span>
+<span class="nc" id="L1478">        jPanel2.add(jButtonClavijaDeleteAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, -1, -1));</span>
+
+<span class="nc" id="L1480">        jListClavijasAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1481">        jScrollPane3.setViewportView(jListClavijasAmp);</span>
+
+<span class="nc" id="L1483">        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 340, 84, 302));</span>
+
+<span class="nc" id="L1485">        jTextFieldRotorIzqAmp.setEditable(false);</span>
+<span class="nc" id="L1486">        jTextFieldRotorIzqAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1487">        jPanel2.add(jTextFieldRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 330, -1));</span>
+
+<span class="nc" id="L1489">        jLabelRotorIzqAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1490">        jLabelRotorIzqAmp.setText(&quot;Rotor Izquierdo:&quot;);</span>
+<span class="nc" id="L1491">        jPanel2.add(jLabelRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));</span>
+
+<span class="nc" id="L1493">        jLabelRotorCenAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1494">        jLabelRotorCenAmp.setText(&quot;Rotor Central:&quot;);</span>
+<span class="nc" id="L1495">        jPanel2.add(jLabelRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));</span>
+
+<span class="nc" id="L1497">        jTextFieldRotorCenAmp.setEditable(false);</span>
+<span class="nc" id="L1498">        jTextFieldRotorCenAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1499">        jPanel2.add(jTextFieldRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 330, -1));</span>
+
+<span class="nc" id="L1501">        jLabelRotorDerAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1502">        jLabelRotorDerAmp.setText(&quot;Rotor Derecho:&quot;);</span>
+<span class="nc" id="L1503">        jPanel2.add(jLabelRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));</span>
+
+<span class="nc" id="L1505">        jTextFieldRotorDerAmp.setEditable(false);</span>
+<span class="nc" id="L1506">        jTextFieldRotorDerAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1507">        jPanel2.add(jTextFieldRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 330, -1));</span>
+
+<span class="nc" id="L1509">        jTextFieldReflectorAmp.setEditable(false);</span>
+<span class="nc" id="L1510">        jTextFieldReflectorAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1511">        jPanel2.add(jTextFieldReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 330, -1));</span>
+
+<span class="nc" id="L1513">        jLabelReflectorAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1514">        jLabelReflectorAmp.setText(&quot;Reflector:&quot;);</span>
+<span class="nc" id="L1515">        jPanel2.add(jLabelReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));</span>
+
+<span class="nc" id="L1517">        jCheckBoxReflectorAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1518">        jCheckBoxReflectorAmp.setSelected(true);</span>
+<span class="nc" id="L1519">        jCheckBoxReflectorAmp.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1520">        jPanel2.add(jCheckBoxReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 270, -1, -1));</span>
+
+<span class="nc" id="L1522">        jCheckBoxRotorIzqAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1523">        jCheckBoxRotorIzqAmp.setSelected(true);</span>
+<span class="nc" id="L1524">        jCheckBoxRotorIzqAmp.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1525">        jPanel2.add(jCheckBoxRotorIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, -1));</span>
+
+<span class="nc" id="L1527">        jCheckBoxRotorCenAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1528">        jCheckBoxRotorCenAmp.setSelected(true);</span>
+<span class="nc" id="L1529">        jCheckBoxRotorCenAmp.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1530">        jPanel2.add(jCheckBoxRotorCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, -1, -1));</span>
+
+<span class="nc" id="L1532">        jCheckBoxRotorDerAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1533">        jCheckBoxRotorDerAmp.setSelected(true);</span>
+<span class="nc" id="L1534">        jCheckBoxRotorDerAmp.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1535">        jPanel2.add(jCheckBoxRotorDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));</span>
+
+<span class="nc" id="L1537">        jButtonValidarRIAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1538">        jButtonValidarRIAmp.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1539">        jButtonValidarRIAmp.setEnabled(false);</span>
+<span class="nc" id="L1540">        jPanel2.add(jButtonValidarRIAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, -1, -1));</span>
+
+<span class="nc" id="L1542">        jButtonValidarRCAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1543">        jButtonValidarRCAmp.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1544">        jButtonValidarRCAmp.setEnabled(false);</span>
+<span class="nc" id="L1545">        jPanel2.add(jButtonValidarRCAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, -1, -1));</span>
+
+<span class="nc" id="L1547">        jButtonValidarRDAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1548">        jButtonValidarRDAmp.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1549">        jButtonValidarRDAmp.setEnabled(false);</span>
+<span class="nc" id="L1550">        jPanel2.add(jButtonValidarRDAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, -1, -1));</span>
+
+<span class="nc" id="L1552">        jButtonCifrarAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1553">        jButtonCifrarAmp.setText(&quot;Cifrar&quot;);</span>
+<span class="nc" id="L1554">        jPanel2.add(jButtonCifrarAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 510, -1, -1));</span>
+
+<span class="nc" id="L1556">        jButtonValidarRAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1557">        jButtonValidarRAmp.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1558">        jButtonValidarRAmp.setEnabled(false);</span>
+<span class="nc" id="L1559">        jPanel2.add(jButtonValidarRAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));</span>
+<span class="nc" id="L1560">        jPanel2.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 190, 10));</span>
+
+<span class="nc" id="L1562">        jTextFieldRotorDerAmpGiro.setEditable(false);</span>
+<span class="nc" id="L1563">        jTextFieldRotorDerAmpGiro.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1564">        jPanel2.add(jTextFieldRotorDerAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 220, 60, -1));</span>
+
+<span class="nc" id="L1566">        jTextFieldRotorIzqAmpGiro.setEditable(false);</span>
+<span class="nc" id="L1567">        jTextFieldRotorIzqAmpGiro.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1568">        jPanel2.add(jTextFieldRotorIzqAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 60, -1));</span>
+
+<span class="nc" id="L1570">        jTextFieldRotorCenAmpGiro.setEditable(false);</span>
+<span class="nc" id="L1571">        jTextFieldRotorCenAmpGiro.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1572">        jPanel2.add(jTextFieldRotorCenAmpGiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 60, -1));</span>
+
+<span class="nc" id="L1574">        jLabelRotorIzqAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1575">        jLabelRotorIzqAmp1.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1576">        jPanel2.add(jLabelRotorIzqAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, -1, -1));</span>
+
+<span class="nc" id="L1578">        jLabelRotorIzqAmp2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1579">        jLabelRotorIzqAmp2.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1580">        jPanel2.add(jLabelRotorIzqAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));</span>
+
+<span class="nc" id="L1582">        jLabelRotorIzqAmp3.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1583">        jLabelRotorIzqAmp3.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1584">        jPanel2.add(jLabelRotorIzqAmp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, -1, -1));</span>
+
+<span class="nc" id="L1586">        jButtonAceptarDerAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1587">        jButtonAceptarDerAmp.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1588">        jButtonAceptarDerAmp.setEnabled(false);</span>
+<span class="nc" id="L1589">        jPanel2.add(jButtonAceptarDerAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 220, -1, -1));</span>
+
+<span class="nc" id="L1591">        jButtonAceptarIzqAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1592">        jButtonAceptarIzqAmp.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1593">        jButtonAceptarIzqAmp.setEnabled(false);</span>
+<span class="nc" id="L1594">        jPanel2.add(jButtonAceptarIzqAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 60, -1, -1));</span>
+
+<span class="nc" id="L1596">        jButtonAceptarCenAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1597">        jButtonAceptarCenAmp.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1598">        jButtonAceptarCenAmp.setEnabled(false);</span>
+<span class="nc" id="L1599">        jPanel2.add(jButtonAceptarCenAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 140, -1, -1));</span>
+<span class="nc" id="L1600">        jPanel2.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 180, 10));</span>
+
+<span class="nc" id="L1602">        jLabelClavijasAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1603">        jLabelClavijasAmp1.setText(&quot;Clavijas:&quot;);</span>
+<span class="nc" id="L1604">        jPanel2.add(jLabelClavijasAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, -1, -1));</span>
+<span class="nc" id="L1605">        jPanel2.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 160, 10));</span>
+
+<span class="nc" id="L1607">        jLabelColorValidarIzq.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1608">        jLabelColorValidarIzq.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1609">        jLabelColorValidarIzq.setOpaque(true);</span>
+<span class="nc" id="L1610">        jLabelColorValidarIzq.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1611">        jLabelColorValidarIzq.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1612">        jPanel2.add(jLabelColorValidarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 65, -1, -1));</span>
+
+<span class="nc" id="L1614">        jLabelColorValidarDer.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1615">        jLabelColorValidarDer.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1616">        jLabelColorValidarDer.setOpaque(true);</span>
+<span class="nc" id="L1617">        jLabelColorValidarDer.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1618">        jLabelColorValidarDer.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1619">        jPanel2.add(jLabelColorValidarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 225, -1, -1));</span>
+
+<span class="nc" id="L1621">        jLabelColorValidarR.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1622">        jLabelColorValidarR.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1623">        jLabelColorValidarR.setOpaque(true);</span>
+<span class="nc" id="L1624">        jLabelColorValidarR.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1625">        jLabelColorValidarR.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1626">        jPanel2.add(jLabelColorValidarR, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 305, -1, -1));</span>
+
+<span class="nc" id="L1628">        jLabelColorValidarCen.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1629">        jLabelColorValidarCen.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1630">        jLabelColorValidarCen.setOpaque(true);</span>
+<span class="nc" id="L1631">        jLabelColorValidarCen.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1632">        jLabelColorValidarCen.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1633">        jPanel2.add(jLabelColorValidarCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 145, -1, -1));</span>
+
+<span class="nc" id="L1635">        jLabelColorAceptarDer.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1636">        jLabelColorAceptarDer.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1637">        jLabelColorAceptarDer.setOpaque(true);</span>
+<span class="nc" id="L1638">        jLabelColorAceptarDer.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1639">        jLabelColorAceptarDer.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1640">        jPanel2.add(jLabelColorAceptarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 225, -1, -1));</span>
+
+<span class="nc" id="L1642">        jLabelColorAceptarIzq.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1643">        jLabelColorAceptarIzq.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1644">        jLabelColorAceptarIzq.setOpaque(true);</span>
+<span class="nc" id="L1645">        jLabelColorAceptarIzq.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1646">        jLabelColorAceptarIzq.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1647">        jPanel2.add(jLabelColorAceptarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 65, -1, -1));</span>
+
+<span class="nc" id="L1649">        jLabelColorAceptarCen.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1650">        jLabelColorAceptarCen.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1651">        jLabelColorAceptarCen.setOpaque(true);</span>
+<span class="nc" id="L1652">        jLabelColorAceptarCen.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1653">        jLabelColorAceptarCen.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1654">        jPanel2.add(jLabelColorAceptarCen, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 145, -1, -1));</span>
+
+<span class="nc" id="L1656">        jTabbedPane1.addTab(&quot;Enigma ampliada&quot;, jPanel2);</span>
+
+<span class="nc" id="L1658">        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L1660">        jLabelRotorIzqAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1661">        jLabelRotorIzqAmpPlus.setText(&quot;Rotor Izquierdo:&quot;);</span>
+<span class="nc" id="L1662">        jPanel5.add(jLabelRotorIzqAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));</span>
+
+<span class="nc" id="L1664">        jCheckBoxRotorIzqAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1665">        jCheckBoxRotorIzqAmpPlus.setSelected(true);</span>
+<span class="nc" id="L1666">        jCheckBoxRotorIzqAmpPlus.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1667">        jPanel5.add(jCheckBoxRotorIzqAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, -1));</span>
+
+<span class="nc" id="L1669">        jTextFieldRotorIzqAmpPlus.setEditable(false);</span>
+<span class="nc" id="L1670">        jTextFieldRotorIzqAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1671">        jPanel5.add(jTextFieldRotorIzqAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 330, -1));</span>
+
+<span class="nc" id="L1673">        jButtonValidarRIAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1674">        jButtonValidarRIAmpPlus.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1675">        jButtonValidarRIAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1676">        jPanel5.add(jButtonValidarRIAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, -1, -1));</span>
+
+<span class="nc" id="L1678">        jLabelColorValidarIzqPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1679">        jLabelColorValidarIzqPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1680">        jLabelColorValidarIzqPlus.setOpaque(true);</span>
+<span class="nc" id="L1681">        jLabelColorValidarIzqPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1682">        jLabelColorValidarIzqPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1683">        jPanel5.add(jLabelColorValidarIzqPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 65, -1, -1));</span>
+
+<span class="nc" id="L1685">        jTextFieldRotorIzqAmpGiroPlus.setEditable(false);</span>
+<span class="nc" id="L1686">        jTextFieldRotorIzqAmpGiroPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1687">        jPanel5.add(jTextFieldRotorIzqAmpGiroPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 60, -1));</span>
+
+<span class="nc" id="L1689">        jLabelRotorIzqAmp5.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1690">        jLabelRotorIzqAmp5.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1691">        jPanel5.add(jLabelRotorIzqAmp5, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, -1, -1));</span>
+
+<span class="nc" id="L1693">        jButtonAceptarIzqAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1694">        jButtonAceptarIzqAmpPlus.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1695">        jButtonAceptarIzqAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1696">        jPanel5.add(jButtonAceptarIzqAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 60, -1, -1));</span>
+
+<span class="nc" id="L1698">        jLabelColorAceptarIzqPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1699">        jLabelColorAceptarIzqPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1700">        jLabelColorAceptarIzqPlus.setOpaque(true);</span>
+<span class="nc" id="L1701">        jLabelColorAceptarIzqPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1702">        jLabelColorAceptarIzqPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1703">        jPanel5.add(jLabelColorAceptarIzqPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 65, -1, -1));</span>
+
+<span class="nc" id="L1705">        jLabelColorAceptarCenPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1706">        jLabelColorAceptarCenPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1707">        jLabelColorAceptarCenPlus.setOpaque(true);</span>
+<span class="nc" id="L1708">        jLabelColorAceptarCenPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1709">        jLabelColorAceptarCenPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1710">        jPanel5.add(jLabelColorAceptarCenPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 145, -1, -1));</span>
+
+<span class="nc" id="L1712">        jButtonAceptarCenAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1713">        jButtonAceptarCenAmpPlus.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1714">        jButtonAceptarCenAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1715">        jPanel5.add(jButtonAceptarCenAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 140, -1, -1));</span>
+
+<span class="nc" id="L1717">        jTextFieldRotorCenAmpGiroPlus.setEditable(false);</span>
+<span class="nc" id="L1718">        jTextFieldRotorCenAmpGiroPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1719">        jPanel5.add(jTextFieldRotorCenAmpGiroPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 60, -1));</span>
+
+<span class="nc" id="L1721">        jLabelRotorIzqAmp6.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1722">        jLabelRotorIzqAmp6.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1723">        jPanel5.add(jLabelRotorIzqAmp6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, -1, -1));</span>
+
+<span class="nc" id="L1725">        jButtonValidarRCAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1726">        jButtonValidarRCAmpPlus.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1727">        jButtonValidarRCAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1728">        jPanel5.add(jButtonValidarRCAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, -1, -1));</span>
+
+<span class="nc" id="L1730">        jLabelColorValidarCenPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1731">        jLabelColorValidarCenPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1732">        jLabelColorValidarCenPlus.setOpaque(true);</span>
+<span class="nc" id="L1733">        jLabelColorValidarCenPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1734">        jLabelColorValidarCenPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1735">        jPanel5.add(jLabelColorValidarCenPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 145, -1, -1));</span>
+
+<span class="nc" id="L1737">        jTextFieldRotorCenAmpPlus.setEditable(false);</span>
+<span class="nc" id="L1738">        jTextFieldRotorCenAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1739">        jPanel5.add(jTextFieldRotorCenAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 330, -1));</span>
+
+<span class="nc" id="L1741">        jCheckBoxRotorCenAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1742">        jCheckBoxRotorCenAmpPlus.setSelected(true);</span>
+<span class="nc" id="L1743">        jCheckBoxRotorCenAmpPlus.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1744">        jPanel5.add(jCheckBoxRotorCenAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, -1, -1));</span>
+
+<span class="nc" id="L1746">        jLabelRotorCenAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1747">        jLabelRotorCenAmp1.setText(&quot;Rotor Central:&quot;);</span>
+<span class="nc" id="L1748">        jPanel5.add(jLabelRotorCenAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));</span>
+
+<span class="nc" id="L1750">        jLabelRotorDerAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1751">        jLabelRotorDerAmp1.setText(&quot;Rotor Derecho:&quot;);</span>
+<span class="nc" id="L1752">        jPanel5.add(jLabelRotorDerAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));</span>
+
+<span class="nc" id="L1754">        jTextFieldRotorDerAmpPlus.setEditable(false);</span>
+<span class="nc" id="L1755">        jTextFieldRotorDerAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1756">        jPanel5.add(jTextFieldRotorDerAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 330, -1));</span>
+
+<span class="nc" id="L1758">        jCheckBoxRotorDerAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1759">        jCheckBoxRotorDerAmpPlus.setSelected(true);</span>
+<span class="nc" id="L1760">        jCheckBoxRotorDerAmpPlus.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1761">        jPanel5.add(jCheckBoxRotorDerAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));</span>
+
+<span class="nc" id="L1763">        jButtonValidarRDAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1764">        jButtonValidarRDAmpPlus.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1765">        jButtonValidarRDAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1766">        jPanel5.add(jButtonValidarRDAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, -1, -1));</span>
+
+<span class="nc" id="L1768">        jLabelColorValidarDerPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1769">        jLabelColorValidarDerPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1770">        jLabelColorValidarDerPlus.setOpaque(true);</span>
+<span class="nc" id="L1771">        jLabelColorValidarDerPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1772">        jLabelColorValidarDerPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1773">        jPanel5.add(jLabelColorValidarDerPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 225, -1, -1));</span>
+
+<span class="nc" id="L1775">        jTextFieldRotorDerAmpGiroPlus.setEditable(false);</span>
+<span class="nc" id="L1776">        jTextFieldRotorDerAmpGiroPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1777">        jPanel5.add(jTextFieldRotorDerAmpGiroPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 220, 60, -1));</span>
+
+<span class="nc" id="L1779">        jLabelRotorIzqAmp7.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1780">        jLabelRotorIzqAmp7.setText(&quot;Punto de giro:&quot;);</span>
+<span class="nc" id="L1781">        jPanel5.add(jLabelRotorIzqAmp7, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, -1, -1));</span>
+
+<span class="nc" id="L1783">        jButtonAceptarDerAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1784">        jButtonAceptarDerAmpPlus.setText(&quot;Aceptar&quot;);</span>
+<span class="nc" id="L1785">        jButtonAceptarDerAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1786">        jPanel5.add(jButtonAceptarDerAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 220, -1, -1));</span>
+
+<span class="nc" id="L1788">        jLabelColorAceptarDerPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1789">        jLabelColorAceptarDerPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1790">        jLabelColorAceptarDerPlus.setOpaque(true);</span>
+<span class="nc" id="L1791">        jLabelColorAceptarDerPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1792">        jLabelColorAceptarDerPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1793">        jPanel5.add(jLabelColorAceptarDerPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 225, -1, -1));</span>
+
+<span class="nc" id="L1795">        jLabelColorValidarRPlus.setMaximumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1796">        jLabelColorValidarRPlus.setMinimumSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1797">        jLabelColorValidarRPlus.setOpaque(true);</span>
+<span class="nc" id="L1798">        jLabelColorValidarRPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1799">        jLabelColorValidarRPlus.setRequestFocusEnabled(false);</span>
+<span class="nc" id="L1800">        jPanel5.add(jLabelColorValidarRPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 305, -1, -1));</span>
+
+<span class="nc" id="L1802">        jButtonValidarRAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1803">        jButtonValidarRAmpPlus.setText(&quot;Validar&quot;);</span>
+<span class="nc" id="L1804">        jButtonValidarRAmpPlus.setEnabled(false);</span>
+<span class="nc" id="L1805">        jPanel5.add(jButtonValidarRAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));</span>
+
+<span class="nc" id="L1807">        jTextFieldReflectorAmpPlus.setEditable(false);</span>
+<span class="nc" id="L1808">        jTextFieldReflectorAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1809">        jPanel5.add(jTextFieldReflectorAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 330, -1));</span>
+
+<span class="nc" id="L1811">        jCheckBoxReflectorAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1812">        jCheckBoxReflectorAmpPlus.setSelected(true);</span>
+<span class="nc" id="L1813">        jCheckBoxReflectorAmpPlus.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1814">        jPanel5.add(jCheckBoxReflectorAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 270, -1, -1));</span>
+
+<span class="nc" id="L1816">        jLabelReflectorAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1817">        jLabelReflectorAmp1.setText(&quot;Reflector:&quot;);</span>
+<span class="nc" id="L1818">        jPanel5.add(jLabelReflectorAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));</span>
+
+<span class="nc" id="L1820">        jLabelClavijasAmp2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1821">        jLabelClavijasAmp2.setText(&quot;Conexiones de Clavijas:&quot;);</span>
+<span class="nc" id="L1822">        jPanel5.add(jLabelClavijasAmp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 300, -1, -1));</span>
+
+<span class="nc" id="L1824">        jButtonClavijaAddAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1825">        jButtonClavijaAddAmpPlus.setText(&quot;Añadir&quot;);</span>
+<span class="nc" id="L1826">        jPanel5.add(jButtonClavijaAddAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(546, 360, -1, -1));</span>
+
+<span class="nc" id="L1828">        jButtonClavijaDeleteAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1829">        jButtonClavijaDeleteAmpPlus.setText(&quot;Eliminar&quot;);</span>
+<span class="nc" id="L1830">        jPanel5.add(jButtonClavijaDeleteAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, -1, -1));</span>
+
+<span class="nc" id="L1832">        jListClavijasAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1833">        jScrollPane4.setViewportView(jListClavijasAmpPlus);</span>
+
+<span class="nc" id="L1835">        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 340, 84, 302));</span>
+<span class="nc" id="L1836">        jPanel5.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 160, 10));</span>
+<span class="nc" id="L1837">        jPanel5.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 190, 10));</span>
+<span class="nc" id="L1838">        jPanel5.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 180, 10));</span>
+<span class="nc" id="L1839">        jPanel5.add(jSeparator12, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 160, 10));</span>
+
+<span class="nc" id="L1841">        jLabelClavijasAmp3.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1842">        jLabelClavijasAmp3.setText(&quot;Clavijas:&quot;);</span>
+<span class="nc" id="L1843">        jPanel5.add(jLabelClavijasAmp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, -1, -1));</span>
+
+<span class="nc" id="L1845">        jTextFieldClavijaAmpPlus1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1846">        jTextFieldClavijaAmpPlus1.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1847">        jTextFieldClavijaAmpPlus1.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1848">        jPanel5.add(jTextFieldClavijaAmpPlus1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, -1, -1));</span>
+
+<span class="nc" id="L1850">        jTextFieldClavijaAmpPlus2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1851">        jTextFieldClavijaAmpPlus2.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1852">        jTextFieldClavijaAmpPlus2.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1853">        jPanel5.add(jTextFieldClavijaAmpPlus2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 390, -1, -1));</span>
+
+<span class="nc" id="L1855">        jTextFieldClaveDerAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1856">        jTextFieldClaveDerAmpPlus.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1857">        jTextFieldClaveDerAmpPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1858">        jPanel5.add(jTextFieldClaveDerAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, -1, -1));</span>
+
+<span class="nc" id="L1860">        jTextFieldClaveCenAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1861">        jTextFieldClaveCenAmpPlus.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1862">        jTextFieldClaveCenAmpPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1863">        jPanel5.add(jTextFieldClaveCenAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 390, -1, -1));</span>
+
+<span class="nc" id="L1865">        jTextFieldClaveIzqAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1866">        jTextFieldClaveIzqAmpPlus.setText(&quot;A&quot;);</span>
+<span class="nc" id="L1867">        jTextFieldClaveIzqAmpPlus.setPreferredSize(new java.awt.Dimension(20, 20));</span>
+<span class="nc" id="L1868">        jPanel5.add(jTextFieldClaveIzqAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, -1, -1));</span>
+
+<span class="nc" id="L1870">        jLabelClavesAmp1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1871">        jLabelClavesAmp1.setText(&quot;Claves:&quot;);</span>
+<span class="nc" id="L1872">        jPanel5.add(jLabelClavesAmp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, -1, -1));</span>
+
+<span class="nc" id="L1874">        jLabelMensaje7.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1875">        jLabelMensaje7.setText(&quot;Introduce tu mensaje:&quot;);</span>
+<span class="nc" id="L1876">        jPanel5.add(jLabelMensaje7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, -1, -1));</span>
+
+<span class="nc" id="L1878">        jTextFieldMensajeAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1879">        jPanel5.add(jTextFieldMensajeAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 389, -1));</span>
+
+<span class="nc" id="L1881">        jLabelCifrado2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1882">        jLabelCifrado2.setText(&quot;Mensaje cifrado:&quot;);</span>
+<span class="nc" id="L1883">        jPanel5.add(jLabelCifrado2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 560, -1, -1));</span>
+
+<span class="nc" id="L1885">        jTextFieldCifradoAmpPlus.setEditable(false);</span>
+<span class="nc" id="L1886">        jTextFieldCifradoAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1887">        jTextFieldCifradoAmpPlus.setDragEnabled(true);</span>
+<span class="nc" id="L1888">        jPanel5.add(jTextFieldCifradoAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 590, 389, -1));</span>
+
+<span class="nc" id="L1890">        jButtonCifrarAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1891">        jButtonCifrarAmpPlus.setText(&quot;Cifrar&quot;);</span>
+<span class="nc" id="L1892">        jPanel5.add(jButtonCifrarAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 510, -1, -1));</span>
+
+<span class="nc" id="L1894">        buttonGroupModoAmpPlus.add(jRadioButtonModo0);</span>
+<span class="nc" id="L1895">        jRadioButtonModo0.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1896">        jRadioButtonModo0.setSelected(true);</span>
+<span class="nc" id="L1897">        jRadioButtonModo0.setText(&quot;Cifrado&quot;);</span>
+<span class="nc" id="L1898">        jPanel5.add(jRadioButtonModo0, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 480, -1, -1));</span>
+
+<span class="nc" id="L1900">        buttonGroupModoAmpPlus.add(jRadioButtonModo1);</span>
+<span class="nc" id="L1901">        jRadioButtonModo1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1902">        jRadioButtonModo1.setText(&quot;Descifrado&quot;);</span>
+<span class="nc" id="L1903">        jPanel5.add(jRadioButtonModo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 540, -1, -1));</span>
+
+<span class="nc" id="L1905">        jTabbedPane1.addTab(&quot;Enigma ampliada ++&quot;, jPanel5);</span>
+
+<span class="nc" id="L1907">        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L1909">        jButtonGenerarRotor.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1910">        jButtonGenerarRotor.setText(&quot;Generar&quot;);</span>
+<span class="nc" id="L1911">        jPanel7.add(jButtonGenerarRotor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, -1, -1));</span>
+
+<span class="nc" id="L1913">        jCheckBoxSymbols.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1914">        jCheckBoxSymbols.setText(&quot;Símbolos&quot;);</span>
+<span class="nc" id="L1915">        jCheckBoxSymbols.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);</span>
+<span class="nc" id="L1916">        jPanel7.add(jCheckBoxSymbols, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));</span>
+<span class="nc" id="L1917">        jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 680, 10));</span>
+
+<span class="nc" id="L1919">        jTextFieldLongitudPass.setEditable(false);</span>
+<span class="nc" id="L1920">        jTextFieldLongitudPass.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1921">        jPanel7.add(jTextFieldLongitudPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 70, -1));</span>
+
+<span class="nc" id="L1923">        jLabelMensaje2.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1924">        jLabelMensaje2.setText(&quot;Longitud:&quot;);</span>
+<span class="nc" id="L1925">        jPanel7.add(jLabelMensaje2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, -1));</span>
+
+<span class="nc" id="L1927">        jTextFieldRotorReflector.setEditable(false);</span>
+<span class="nc" id="L1928">        jTextFieldRotorReflector.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1929">        jPanel7.add(jTextFieldRotorReflector, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, 700, -1));</span>
+
+<span class="nc" id="L1931">        jTextFieldPass.setEditable(false);</span>
+<span class="nc" id="L1932">        jTextFieldPass.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1933">        jPanel7.add(jTextFieldPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 700, -1));</span>
+
+<span class="nc" id="L1935">        jLabelMensaje3.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1936">        jLabelMensaje3.setText(&quot;Generador de contraseñas:&quot;);</span>
+<span class="nc" id="L1937">        jPanel7.add(jLabelMensaje3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));</span>
+
+<span class="nc" id="L1939">        jLabelMensaje4.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1940">        jLabelMensaje4.setText(&quot;Contraseña:&quot;);</span>
+<span class="nc" id="L1941">        jPanel7.add(jLabelMensaje4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));</span>
+
+<span class="nc" id="L1943">        jButtonGenerarPass.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1944">        jButtonGenerarPass.setText(&quot;Generar&quot;);</span>
+<span class="nc" id="L1945">        jPanel7.add(jButtonGenerarPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, -1, -1));</span>
+
+<span class="nc" id="L1947">        jLabelMensaje5.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1948">        jLabelMensaje5.setText(&quot;Rotor:&quot;);</span>
+<span class="nc" id="L1949">        jPanel7.add(jLabelMensaje5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 490, -1, -1));</span>
+
+<span class="nc" id="L1951">        jLabelMensaje6.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1952">        jLabelMensaje6.setText(&quot;Generador de rotores y reflectores:&quot;);</span>
+<span class="nc" id="L1953">        jPanel7.add(jLabelMensaje6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, -1, -1));</span>
+
+<span class="nc" id="L1955">        jCheckBoxLongitudPass.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="nc" id="L1956">        jCheckBoxLongitudPass.setSelected(true);</span>
+<span class="nc" id="L1957">        jCheckBoxLongitudPass.setText(&quot;Por defecto&quot;);</span>
+<span class="nc" id="L1958">        jPanel7.add(jCheckBoxLongitudPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, -1));</span>
+
+<span class="nc" id="L1960">        buttonGroupGenerador.add(jRadioButtonRRAmpPlus);</span>
+<span class="nc" id="L1961">        jRadioButtonRRAmpPlus.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1962">        jRadioButtonRRAmpPlus.setText(&quot;Rotor/Reflector Ampliado++&quot;);</span>
+<span class="nc" id="L1963">        jPanel7.add(jRadioButtonRRAmpPlus, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 420, -1, -1));</span>
+
+<span class="nc" id="L1965">        buttonGroupGenerador.add(jRadioButtonRotorAmp);</span>
+<span class="nc" id="L1966">        jRadioButtonRotorAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1967">        jRadioButtonRotorAmp.setSelected(true);</span>
+<span class="nc" id="L1968">        jRadioButtonRotorAmp.setText(&quot;Rotor Ampliado&quot;);</span>
+<span class="nc" id="L1969">        jPanel7.add(jRadioButtonRotorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));</span>
+
+<span class="nc" id="L1971">        buttonGroupGenerador.add(jRadioButtonReflectorAmp);</span>
+<span class="nc" id="L1972">        jRadioButtonReflectorAmp.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1973">        jRadioButtonReflectorAmp.setText(&quot;Reflector Ampliado&quot;);</span>
+<span class="nc" id="L1974">        jPanel7.add(jRadioButtonReflectorAmp, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 420, -1, -1));</span>
+
+<span class="nc" id="L1976">        jButtonGenerarPassCopy.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1977">        jButtonGenerarPassCopy.setText(&quot;Copiar&quot;);</span>
+<span class="nc" id="L1978">        jPanel7.add(jButtonGenerarPassCopy, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 210, -1, -1));</span>
+
+<span class="nc" id="L1980">        jButtonGenerarRotorCopy.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N</span>
+<span class="nc" id="L1981">        jButtonGenerarRotorCopy.setText(&quot;Copiar&quot;);</span>
+<span class="nc" id="L1982">        jPanel7.add(jButtonGenerarRotorCopy, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 480, -1, -1));</span>
+
+<span class="nc" id="L1984">        jTabbedPane1.addTab(&quot;Generardor de contraseñas&quot;, jPanel7);</span>
+
+<span class="nc" id="L1986">        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());</span>
+<span class="nc" id="L1987">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L1988">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L1989">            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)</span>
+<span class="nc" id="L1990">            .add(org.jdesktop.layout.GroupLayout.TRAILING, jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)</span>
+        );
+<span class="nc" id="L1992">        layout.setVerticalGroup(</span>
+<span class="nc" id="L1993">            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)</span>
+<span class="nc" id="L1994">            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+        );
+
+<span class="nc" id="L1997">        jTabbedPane1.getAccessibleContext().setAccessibleName(&quot;Simulador Enigma ++&quot;);</span>
+<span class="nc" id="L1998">        jTabbedPane1.getAccessibleContext().setAccessibleDescription(&quot;Simulador de la Máquina Enigma original y de la ampliación&quot;);</span>
+
+<span class="nc" id="L2000">        getAccessibleContext().setAccessibleName(&quot;jFrame&quot;);</span>
+
+<span class="nc" id="L2002">        pack();</span>
+<span class="nc" id="L2003">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L2015" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L2016" title="All 2 branches missed.">                if (&quot;Windows&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L2017">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L2018">                    break;</span>
+                }
+            }
+<span class="nc" id="L2021">        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L2022">            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L2023">        }</span>
+        //&lt;/editor-fold&gt;
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the form */
+        //java.awt.EventQueue.invokeLater
+        /*javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new menu().setVisible(true);
+            }
+        });*/
+<span class="nc" id="L2035">        new Menu().setVisible(true);</span>
+<span class="nc" id="L2036">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupGenerador;
+    private javax.swing.ButtonGroup buttonGroupModoAmpPlus;
+    private javax.swing.JButton jButtonAceptarCenAmp;
+    private javax.swing.JButton jButtonAceptarCenAmpPlus;
+    private javax.swing.JButton jButtonAceptarDerAmp;
+    private javax.swing.JButton jButtonAceptarDerAmpPlus;
+    private javax.swing.JButton jButtonAceptarIzqAmp;
+    private javax.swing.JButton jButtonAceptarIzqAmpPlus;
+    private javax.swing.JButton jButtonCifrarAmp;
+    private javax.swing.JButton jButtonCifrarAmpPlus;
+    private javax.swing.JButton jButtonClavijaAdd;
+    private javax.swing.JButton jButtonClavijaAddAmp;
+    private javax.swing.JButton jButtonClavijaAddAmpPlus;
+    private javax.swing.JButton jButtonClavijaDelete;
+    private javax.swing.JButton jButtonClavijaDeleteAmp;
+    private javax.swing.JButton jButtonClavijaDeleteAmpPlus;
+    private javax.swing.JButton jButtonGenerarPass;
+    private javax.swing.JButton jButtonGenerarPassCopy;
+    private javax.swing.JButton jButtonGenerarRotor;
+    private javax.swing.JButton jButtonGenerarRotorCopy;
+    private javax.swing.JButton jButtonValidarRAmp;
+    private javax.swing.JButton jButtonValidarRAmpPlus;
+    private javax.swing.JButton jButtonValidarRCAmp;
+    private javax.swing.JButton jButtonValidarRCAmpPlus;
+    private javax.swing.JButton jButtonValidarRDAmp;
+    private javax.swing.JButton jButtonValidarRDAmpPlus;
+    private javax.swing.JButton jButtonValidarRIAmp;
+    private javax.swing.JButton jButtonValidarRIAmpPlus;
+    private javax.swing.JCheckBox jCheckBoxLongitudPass;
+    private javax.swing.JCheckBox jCheckBoxReflectorAmp;
+    private javax.swing.JCheckBox jCheckBoxReflectorAmpPlus;
+    private javax.swing.JCheckBox jCheckBoxRotorCenAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorCenAmpPlus;
+    private javax.swing.JCheckBox jCheckBoxRotorDerAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorDerAmpPlus;
+    private javax.swing.JCheckBox jCheckBoxRotorIzqAmp;
+    private javax.swing.JCheckBox jCheckBoxRotorIzqAmpPlus;
+    private javax.swing.JCheckBox jCheckBoxSymbols;
+    private javax.swing.JComboBox&lt;String&gt; jComboBoxRotorCen;
+    private javax.swing.JComboBox&lt;String&gt; jComboBoxRotorDer;
+    private javax.swing.JComboBox&lt;String&gt; jComboBoxRotorIzq;
+    private javax.swing.JLabel jLabelBufferedImage;
+    private javax.swing.JLabel jLabelCifrado;
+    private javax.swing.JLabel jLabelCifrado1;
+    private javax.swing.JLabel jLabelCifrado2;
+    private javax.swing.JLabel jLabelClaves;
+    private javax.swing.JLabel jLabelClavesAmp;
+    private javax.swing.JLabel jLabelClavesAmp1;
+    private javax.swing.JLabel jLabelClavijas;
+    private javax.swing.JLabel jLabelClavijasAmp;
+    private javax.swing.JLabel jLabelClavijasAmp1;
+    private javax.swing.JLabel jLabelClavijasAmp2;
+    private javax.swing.JLabel jLabelClavijasAmp3;
+    private javax.swing.JLabel jLabelColorAceptarCen;
+    private javax.swing.JLabel jLabelColorAceptarCenPlus;
+    private javax.swing.JLabel jLabelColorAceptarDer;
+    private javax.swing.JLabel jLabelColorAceptarDerPlus;
+    private javax.swing.JLabel jLabelColorAceptarIzq;
+    private javax.swing.JLabel jLabelColorAceptarIzqPlus;
+    private javax.swing.JLabel jLabelColorValidarCen;
+    private javax.swing.JLabel jLabelColorValidarCenPlus;
+    private javax.swing.JLabel jLabelColorValidarDer;
+    private javax.swing.JLabel jLabelColorValidarDerPlus;
+    private javax.swing.JLabel jLabelColorValidarIzq;
+    private javax.swing.JLabel jLabelColorValidarIzqPlus;
+    private javax.swing.JLabel jLabelColorValidarR;
+    private javax.swing.JLabel jLabelColorValidarRPlus;
+    private javax.swing.JLabel jLabelMensaje;
+    private javax.swing.JLabel jLabelMensaje1;
+    private javax.swing.JLabel jLabelMensaje2;
+    private javax.swing.JLabel jLabelMensaje3;
+    private javax.swing.JLabel jLabelMensaje4;
+    private javax.swing.JLabel jLabelMensaje5;
+    private javax.swing.JLabel jLabelMensaje6;
+    private javax.swing.JLabel jLabelMensaje7;
+    private javax.swing.JLabel jLabelReflectorAmp;
+    private javax.swing.JLabel jLabelReflectorAmp1;
+    private javax.swing.JLabel jLabelRotorCen;
+    private javax.swing.JLabel jLabelRotorCenAmp;
+    private javax.swing.JLabel jLabelRotorCenAmp1;
+    private javax.swing.JLabel jLabelRotorDer;
+    private javax.swing.JLabel jLabelRotorDerAmp;
+    private javax.swing.JLabel jLabelRotorDerAmp1;
+    private javax.swing.JLabel jLabelRotorIzq;
+    private javax.swing.JLabel jLabelRotorIzqAmp;
+    private javax.swing.JLabel jLabelRotorIzqAmp1;
+    private javax.swing.JLabel jLabelRotorIzqAmp2;
+    private javax.swing.JLabel jLabelRotorIzqAmp3;
+    private javax.swing.JLabel jLabelRotorIzqAmp5;
+    private javax.swing.JLabel jLabelRotorIzqAmp6;
+    private javax.swing.JLabel jLabelRotorIzqAmp7;
+    private javax.swing.JLabel jLabelRotorIzqAmpPlus;
+    private javax.swing.JList&lt;String&gt; jListClavijas;
+    private javax.swing.JList&lt;String&gt; jListClavijasAmp;
+    private javax.swing.JList&lt;String&gt; jListClavijasAmpPlus;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JRadioButton jRadioButtonModo0;
+    private javax.swing.JRadioButton jRadioButtonModo1;
+    private javax.swing.JRadioButton jRadioButtonRRAmpPlus;
+    private javax.swing.JRadioButton jRadioButtonReflectorAmp;
+    private javax.swing.JRadioButton jRadioButtonRotorAmp;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
+    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator12;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextFieldCifrado;
+    private javax.swing.JTextField jTextFieldCifradoAmp;
+    private javax.swing.JTextField jTextFieldCifradoAmpPlus;
+    private javax.swing.JTextField jTextFieldClaveCen;
+    private javax.swing.JTextField jTextFieldClaveCenAmp;
+    private javax.swing.JTextField jTextFieldClaveCenAmpPlus;
+    private javax.swing.JTextField jTextFieldClaveDer;
+    private javax.swing.JTextField jTextFieldClaveDerAmp;
+    private javax.swing.JTextField jTextFieldClaveDerAmpPlus;
+    private javax.swing.JTextField jTextFieldClaveIzq;
+    private javax.swing.JTextField jTextFieldClaveIzqAmp;
+    private javax.swing.JTextField jTextFieldClaveIzqAmpPlus;
+    private javax.swing.JTextField jTextFieldClavija1;
+    private javax.swing.JTextField jTextFieldClavija2;
+    private javax.swing.JTextField jTextFieldClavijaAmp1;
+    private javax.swing.JTextField jTextFieldClavijaAmp2;
+    private javax.swing.JTextField jTextFieldClavijaAmpPlus1;
+    private javax.swing.JTextField jTextFieldClavijaAmpPlus2;
+    public javax.swing.JTextField jTextFieldLongitudPass;
+    public javax.swing.JTextField jTextFieldMensaje;
+    private javax.swing.JTextField jTextFieldMensajeAmp;
+    private javax.swing.JTextField jTextFieldMensajeAmpPlus;
+    private javax.swing.JTextField jTextFieldPass;
+    private javax.swing.JTextField jTextFieldReflectorAmp;
+    private javax.swing.JTextField jTextFieldReflectorAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorCenAmp;
+    private javax.swing.JTextField jTextFieldRotorCenAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorCenAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorCenAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorDerAmp;
+    private javax.swing.JTextField jTextFieldRotorDerAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorDerAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorDerAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorIzqAmp;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpGiro;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpGiroPlus;
+    private javax.swing.JTextField jTextFieldRotorIzqAmpPlus;
+    private javax.swing.JTextField jTextFieldRotorReflector;
+    private javax.swing.JLabel jlabelLeyendaCaminoIda;
+    private javax.swing.JLabel jlabelLeyendaCaminoVuelta;
+    private javax.swing.JLabel jlabelLeyendaClave;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

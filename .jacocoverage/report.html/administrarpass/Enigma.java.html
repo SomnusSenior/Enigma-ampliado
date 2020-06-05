@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Enigma.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;AdministrarPass&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">administrarpass</a> &gt; <span class="el_source">Enigma.java</span></div><h1>Enigma.java</h1><pre class="source lang-java linenums">package administrarpass;
+
+import static administrarpass.EjecutarEnigma.getModo;
+
+public class Enigma {
+
+<span class="fc" id="L7">    private Rotor entrada = new Rotor(&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;, '-'); // rotor entrada</span>
+<span class="fc" id="L8">    private Rotor entradaAmpliado = new Rotor(&quot; !\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;, '-'); // rotor entrada AMPLIADO</span>
+<span class="fc" id="L9">    private Rotor entradaAmpliadoPlus = new Rotor(&quot;!\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;, '-'); // rotor entrada AMPLIADO Plus</span>
+    private Rotor rotorDerecha; // rotor derecho
+    private Rotor rotorCentral; // rotor medio
+    private Rotor rotorIzquierda; // rotor izquierdo
+<span class="fc" id="L13">    private Rotor reflector = new Rotor(&quot;YRUHQSLDPXNGOKMIEBFZCWVJAT&quot;, '-'); // reflector B</span>
+<span class="fc" id="L14">    private Rotor reflectorAmpliado = new Rotor(&quot;vsUyTlYoiKZWtjVNkRIHDBh9c8zqf76S)xQ3rpM5J$\&quot;2+g&amp;*emCwaGXA(14%bu'PFO!0n dL#E&quot;, '-'); //reflector AMPLIADO</span>
+<span class="fc" id="L15">    private Rotor reflectorAmpliadoPlus = new Rotor(&quot;bnD(gcF3SzpT6Q%#lRv70\&quot;+V8J5eOoLxGN2)r$PiwAy1hfm'jX*t!4sCkYMHBq&amp;KudWUE9ZaI&quot;, '-'); // reflector AMPLIADO Plus</span>
+    private Clavijero plugboard; // tablero de clavijas
+<span class="fc" id="L17">    public static int indiceP = 0;</span>
+<span class="fc" id="L18">    public static char[] pintar = new char[16];</span>
+
+    /**
+     * Creación la maquina enigma
+     *
+     * @param rDe rotor derecho
+     * @param rCen rotor medio
+     * @param rIz rotor izquierdo
+     */
+<span class="fc" id="L27">    public Enigma(Rotor rIz, Rotor rCen, Rotor rDe) {</span>
+<span class="fc" id="L28">        this.rotorDerecha = rDe;</span>
+<span class="fc" id="L29">        this.rotorCentral = rCen;</span>
+<span class="fc" id="L30">        this.rotorIzquierda = rIz;</span>
+<span class="fc" id="L31">        this.plugboard = new Clavijero();</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Creación la maquina enigma plus
+     *
+     * @param rDe rotor derecho
+     * @param rCen rotor medio
+     * @param rIz rotor izquierdo
+     * @param plus indica si los rotores son plus
+     */
+<span class="fc" id="L42">    public Enigma(Rotor rIz, Rotor rCen, Rotor rDe, boolean plus) {</span>
+<span class="fc" id="L43">        this.rotorDerecha = rDe;</span>
+<span class="fc" id="L44">        this.rotorCentral = rCen;</span>
+<span class="fc" id="L45">        this.rotorIzquierda = rIz;</span>
+<span class="fc" id="L46">        this.plugboard = new Clavijero(plus);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Gira los rotores a la posición de sus claves
+     *
+     * @param claveDer Clave / posición inicial del rotor derecho
+     * @param claveCen Clave / posición inicial del rotor medio
+     * @param claveIzq Clave / posición inicial del rotor izquierdo
+     */
+    public void setRotoresIni(char claveIzq, char claveCen, char claveDer) {
+<span class="fc" id="L57">        int posDer = claveDer - 'A';</span>
+<span class="fc" id="L58">        int posCen = claveCen - 'A';</span>
+<span class="fc" id="L59">        int posIzq = claveIzq - 'A';</span>
+<span class="fc" id="L60">        this.rotorDerecha = this.rotorDerecha.giro(posDer);</span>
+<span class="fc" id="L61">        this.rotorCentral = this.rotorCentral.giro(posCen);</span>
+<span class="fc" id="L62">        this.rotorIzquierda = this.rotorIzquierda.giro(posIzq);</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Gira los rotores a la posición de sus claves
+     *
+     * @param claveDer Clave / posición inicial del rotor derecho
+     * @param claveCen Clave / posición inicial del rotor medio
+     * @param claveIzq Clave / posición inicial del rotor izquierdo
+     * @param plus indica si los rotores son plua
+     */
+    public void setRotoresIniAmpliado(char claveIzq, char claveCen, char claveDer, boolean plus) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        int posDer = plus ? posCheckPlus(claveDer) : posCheck(claveDer);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        int posCen = plus ? posCheckPlus(claveCen) : posCheck(claveCen);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        int posIzq = plus ? posCheckPlus(claveIzq) : posCheck(claveIzq);</span>
+<span class="fc" id="L77">        this.rotorDerecha = this.rotorDerecha.giroAmpliado(posDer, plus);</span>
+<span class="fc" id="L78">        this.rotorCentral = this.rotorCentral.giroAmpliado(posCen, plus);</span>
+<span class="fc" id="L79">        this.rotorIzquierda = this.rotorIzquierda.giroAmpliado(posIzq, plus);</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Comprueba las posiciones de la clave pasada; funcionalidad de los rotores
+     * ampliados.
+     *
+     * @param clave
+     * @return posición de la clave
+     */
+    private static int posCheck(int clave) {
+<span class="fc" id="L90">        int check = clave - '!';</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        int letras = check &lt; 58 ? check - 11 : check - 17; // mayusculas : minusculas</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        int numeros = check &lt; 25 ? check - 4 : letras; // numeros : </span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        return check &lt; 11 ? check : numeros; // simbolos : </span>
+    }
+
+    /**
+     * Comprueba las posiciones de la clave pasada; funcionalidad de los rotores
+     * ampliados plus.
+     *
+     * @param clave
+     * @return posición de la clave
+     */
+    private static int posCheckPlus(int clave) {
+<span class="fc" id="L104">        int check = clave - ' ';</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        int letras = check &lt; 59 ? check - 11 : check - 17; // mayusculas : minusculas</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        int numeros = check &lt; 26 ? check - 4 : letras; // numeros : </span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        return check &lt; 12 ? check : numeros; // simbolos : </span>
+    }
+
+    /**
+     * Actualiza la posicion de los rotores haciendo que giren 1 vez
+     */
+    private void actualizarRotores() {
+<span class="fc" id="L114">        char claveActualDer = this.rotorDerecha.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor derecho</span>
+<span class="fc" id="L115">        char claveActualCen = this.rotorCentral.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor central</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (claveActualDer == this.rotorDerecha.obtenerPuntoGiro()) { // si la clave actual del rotor derecho es el punto de giro del rotor derecho</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="fc" id="L118">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
+            }
+<span class="fc" id="L120">            this.rotorCentral = this.rotorCentral.giro(1); // gira rotor central</span>
+        } else {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="fc" id="L123">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
+<span class="fc" id="L124">                this.rotorCentral = this.rotorCentral.giro(1); // gira rotor central</span>
+            }
+        }
+<span class="fc" id="L127">        this.rotorDerecha = this.rotorDerecha.giro(1); // gira rotor derecho</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Actualiza la posicion de los rotores ampliados haciendo que giren 1 vez
+     *
+     * @param plus indica si es un rotor ampliado plus
+     */
+    private void actualizarRotoresAmpliado(boolean plus) {
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        char claveActualDer = plus ? this.rotorDerecha.obtenerContEscrituraAmpliadoPlus().charAt(0) : this.rotorDerecha.obtenerContEscrituraAmpliado().charAt(0); // obtiene la clave actual del rotor derecho</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        char claveActualCen = plus ? this.rotorCentral.obtenerContEscrituraAmpliadoPlus().charAt(0) : this.rotorCentral.obtenerContEscrituraAmpliado().charAt(0); // obtiene la clave actual del rotor central</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (claveActualDer == this.rotorDerecha.obtenerPuntoGiro()) { // si la clave actual del rotor derecho es el punto de giro del rotor derecho</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="nc" id="L140">                this.rotorIzquierda = this.rotorIzquierda.giroAmpliado(1, plus); // gira rotor izquierdo</span>
+            }
+<span class="nc" id="L142">            this.rotorCentral = this.rotorCentral.giroAmpliado(1, plus); // gira rotor central</span>
+        } else {
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="nc" id="L145">                this.rotorIzquierda = this.rotorIzquierda.giroAmpliado(1, plus); // gira rotor izquierdo</span>
+<span class="nc" id="L146">                this.rotorCentral = this.rotorCentral.giroAmpliado(1, plus); // gira rotor central</span>
+            }
+        }
+<span class="fc" id="L149">        this.rotorDerecha = this.rotorDerecha.giroAmpliado(1, plus); // gira rotor derecho</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Cifrado para la interfaz interactiva, revisar utilidad para usar esta
+     * función o la de cifrado.
+     *
+     * @param c Caracter del mensaje para cifrar
+     * @return Caracter cifrado del mensaje
+     */
+    public char cifrado(char c) {
+        char aux;
+        int i;
+<span class="fc" id="L162">        indiceP = 0;</span>
+<span class="fc" id="L163">        pintar[indiceP] = c;</span>
+<span class="fc" id="L164">        indiceP++;</span>
+<span class="fc" id="L165">        actualizarRotores();</span>
+<span class="fc" id="L166">        i = this.entrada.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado</span>
+<span class="fc" id="L167">        i = this.rotorDerecha.cifrarIda(i);</span>
+<span class="fc" id="L168">        i = this.rotorCentral.cifrarIda(i);</span>
+<span class="fc" id="L169">        i = this.rotorIzquierda.cifrarIda(i);</span>
+<span class="fc" id="L170">        i = this.reflector.cifrarIda(i);            //Reflector</span>
+<span class="fc" id="L171">        i = this.rotorIzquierda.cifrarVuelta(i);</span>
+<span class="fc" id="L172">        i = this.rotorCentral.cifrarVuelta(i);</span>
+<span class="fc" id="L173">        i = this.rotorDerecha.cifrarVuelta(i);</span>
+<span class="fc" id="L174">        aux = this.entrada.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido</span>
+<span class="fc" id="L175">        pintar[indiceP] = aux;</span>
+<span class="fc" id="L176">        indiceP++;</span>
+<span class="fc" id="L177">        Menu.setcI((char) this.rotorIzquierda.obtenerContEscritura().charAt(0));</span>
+<span class="fc" id="L178">        Menu.setcC((char) this.rotorCentral.obtenerContEscritura().charAt(0));</span>
+<span class="fc" id="L179">        Menu.setcD((char) this.rotorDerecha.obtenerContEscritura().charAt(0));</span>
+<span class="fc" id="L180">        return aux;</span>
+    }
+
+    /**
+     * Cifra el caracter pasado, ampliado y ampliado plus
+     *
+     * @param c Caracter del mensaje para cifrar
+     * @param plus indica si es plus
+     * @return Caracter cifrado del mensaje
+     */
+    public char cifradoAmpliadoPlus(char c, boolean plus) {
+<span class="fc" id="L191">        actualizarRotoresAmpliado(plus);</span>
+        int i;
+        int aux;
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        i = plus ? this.entradaAmpliadoPlus.obtenerContenido().indexOf(c) : this.entradaAmpliado.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado</span>
+<span class="fc" id="L195">        i = this.rotorDerecha.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc" id="L196">        i = this.rotorCentral.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc" id="L197">        i = this.rotorIzquierda.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        aux = getModo() == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        i = plus ? aux : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -&gt; Ampliado Plus</span>
+<span class="fc" id="L200">        i = this.rotorIzquierda.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc" id="L201">        i = this.rotorCentral.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc" id="L202">        i = this.rotorDerecha.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        return plus ? this.entradaAmpliadoPlus.obtenerContenido().charAt(i) : this.entradaAmpliado.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido</span>
+    }
+
+    /**
+     * Pone la conexión de las clavijas en el alfabeto
+     *
+     * @param a clavija a
+     * @param b clavija b
+     */
+    public void ponerClavija(char a, char b) {
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
+<span class="nc" id="L214">            moverClavijas(a, b);</span>
+        }
+<span class="nc" id="L216">    }</span>
+
+    /**
+     * Pone la conexión de las clavijas en el alfabeto ampliado
+     *
+     * @param a clavija a
+     * @param b clavija b
+     * @param plus indica si es plus
+     */
+    public void ponerClavijaAmpliado(char a, char b, boolean plus) {
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
+<span class="nc" id="L227">            moverClavijasAmpliado(a, b, plus);</span>
+        }
+<span class="nc" id="L229">    }</span>
+
+    /**
+     * Mueve las clavijas en el alfabeto
+     *
+     * @param a clavija a
+     * @param b clavija b
+     */
+    public void moverClavijas(char a, char b) {
+<span class="nc" id="L238">        StringBuilder aux = new StringBuilder();</span>
+<span class="nc" id="L239">        String contenido = this.entrada.obtenerContenido();</span>
+        // ordena las clavijas        
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
+        char c;
+        char mew;
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
+<span class="nc" id="L246">            c = contenido.charAt(i);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : mew); // reordena el alfabeto de escritura</span>
+        }
+<span class="nc" id="L250">        this.entrada = new Rotor(aux.toString(), this.entrada.obtenerPuntoGiro());</span>
+<span class="nc" id="L251">    }</span>
+
+    /**
+     * Mueve las clavijas en el alfabeto
+     *
+     * @param a clavija a
+     * @param b clavija b
+     * @param plus indica si es plus
+     */
+    public void moverClavijasAmpliado(char a, char b, boolean plus) {
+<span class="nc" id="L261">        StringBuilder aux = new StringBuilder();</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        String contenido = plus ? this.entradaAmpliadoPlus.obtenerContenido() : this.entradaAmpliado.obtenerContenido();</span>
+        // ordena las clavijas
+<span class="nc bnc" id="L264" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
+        char c;
+        char mew;
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
+<span class="nc" id="L269">            c = contenido.charAt(i);</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : (mew)); // reordena el alfabeto de escritura</span>
+        }
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        if (plus) {</span>
+<span class="nc" id="L274">            this.entradaAmpliadoPlus = new Rotor(aux.toString(), this.entradaAmpliadoPlus.obtenerPuntoGiro());</span>
+        } else {
+<span class="nc" id="L276">            this.entradaAmpliado = new Rotor(aux.toString(), this.entradaAmpliado.obtenerPuntoGiro());</span>
+        }
+<span class="nc" id="L278">    }</span>
+
+    /**
+     * Obtiene las conexiones de las clavijas.
+     *
+     * @return conexiones del clavijero
+     */
+    public Clavijero getPlugboard() {
+<span class="nc" id="L286">        return plugboard;</span>
+    }
+
+    /**
+     * Configura las conexiones de las clavijas
+     *
+     * @param plugboard
+     */
+    public void setPlugboard(Clavijero plugboard) {
+<span class="nc" id="L295">        this.plugboard = plugboard;</span>
+<span class="nc" id="L296">    }</span>
+
+    /**
+     * Configura el reflector ampliado
+     *
+     * @param reflectorAmpliado
+     */
+    public void setReflectorAmpliado(Rotor reflectorAmpliado) {
+<span class="nc" id="L304">        this.reflectorAmpliado = reflectorAmpliado;</span>
+<span class="nc" id="L305">    }</span>
+
+    /**
+     * Configura el reflector ampliado plus
+     *
+     * @param reflectorAmpliadoPlus
+     */
+    public void setReflectorAmpliadoPlus(Rotor reflectorAmpliadoPlus) {
+<span class="nc" id="L313">        this.reflectorAmpliadoPlus = reflectorAmpliadoPlus;</span>
+<span class="nc" id="L314">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

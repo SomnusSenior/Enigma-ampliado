@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Clavijero.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;AdministrarPass&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">administrarpass</a> &gt; <span class="el_source">Clavijero.java</span></div><h1>Clavijero.java</h1><pre class="source lang-java linenums">package administrarpass;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Clavijero {
+
+<span class="fc" id="L8">    private ArrayList&lt;Character&gt; clavijas = new ArrayList&lt;&gt;(); // Todas las clavijas</span>
+<span class="fc" id="L9">    private ArrayList&lt;Character&gt; clavijasLibres = new ArrayList&lt;&gt;(); // Clavijas libres</span>
+<span class="fc" id="L10">    private ArrayList&lt;Clavijas&gt; conexiones = new ArrayList&lt;&gt;(); // Conexiones realizadas</span>
+
+    /**
+     * Crea el panel de clavijas
+     */
+<span class="fc" id="L15">    public Clavijero() {</span>
+        String panel;
+<span class="fc" id="L17">        panel = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;;</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (int i = 0; i &lt; panel.length(); i++) { // crea las clavijas del panel</span>
+<span class="fc" id="L19">            char a = panel.charAt(i);</span>
+<span class="fc" id="L20">            this.clavijas.add(a);</span>
+<span class="fc" id="L21">            this.clavijasLibres.add(a);</span>
+        }
+<span class="fc" id="L23">    }</span>
+
+    /**
+     * Crea el panel ampliado de clavijas
+     *
+     * @param plus Indica si el abecedario es plus
+     */
+<span class="fc" id="L30">    public Clavijero(boolean plus) {</span>
+        String panel;
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        panel = plus ? &quot;!\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot; : &quot; !\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;;</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for (int i = 0; i &lt; panel.length(); i++) { // crea las clavijas del panel</span>
+<span class="fc" id="L34">            char a = panel.charAt(i);</span>
+<span class="fc" id="L35">            this.clavijas.add(a);</span>
+<span class="fc" id="L36">            this.clavijasLibres.add(a);</span>
+        }
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Establece una conexion en el panel de clavijas
+     *
+     * @param a clavija a
+     * @param b clavija b
+     * @return devuelve true si se puedo establecer la conexión
+     */
+    public boolean establecerConexion(char a, char b) {
+<span class="nc bnc" id="L48" title="All 4 branches missed.">        if (this.clavijas.contains(a) &amp;&amp; this.clavijas.contains(b)) { // comprueba si existen las clavijas</span>
+<span class="nc bnc" id="L49" title="All 4 branches missed.">            if (this.clavijasLibres.contains(a) &amp;&amp; this.clavijasLibres.contains(b)) { // comprueba si alguna de las clavijas está ocupada</span>
+<span class="nc" id="L50">                this.conexiones.add(new Clavijas(a, b)); // crea la conexión de las clavijas</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                for (int i = 0; i &lt; this.clavijasLibres.size(); i++) { // busca las clavijas y las elimina de las clavijas libres</span>
+<span class="nc" id="L52">                    char aux = this.clavijasLibres.get(i);</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">                    if (a == aux || b == aux) {</span>
+<span class="nc" id="L54">                        this.clavijasLibres.remove(i);</span>
+                    }
+                }
+            } else {
+                // La clavija tiene otra conexión
+<span class="nc" id="L59">                return false;</span>
+            }
+        } else {
+            // No existe la clavija
+<span class="nc" id="L63">            return false;</span>
+        }
+<span class="nc" id="L65">        return true;</span>
+    }
+
+    /**
+     * Devuelve indice de la conexion entre 2 clavijas
+     *
+     * @param a clavija a
+     * @param b clavija b
+     * @return índice de la conexion si la encuentra, -1 si no la encuentra
+     */
+    private int encontrarConexion(char a, char b) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        for (int i = 0; i &lt; this.conexiones.size(); i++) {</span>
+<span class="nc" id="L77">            Clavijas aux = this.conexiones.get(i); // busca si hay una conexión entre las clavijas</span>
+<span class="nc bnc" id="L78" title="All 8 branches missed.">            if ((aux.getA() == a &amp;&amp; aux.getB() == b) || (aux.getA() == b &amp;&amp; aux.getB() == a)) { // comprueba las entradas (indiferente del orden)</span>
+<span class="nc" id="L79">                return i;</span>
+            }
+        }
+<span class="nc" id="L82">        return -1;</span>
+    }
+
+    /**
+     * Elimina la conexion del panel de clavijas
+     *
+     * @param a clavija a
+     * @param b clavija b
+     * @return true si la conexion fue eliminada, false si no se encuentra la
+     * conexion
+     */
+    public boolean eliminarConexion(char a, char b) {
+<span class="nc" id="L94">        int i = encontrarConexion(a, b); // comprueba si existe conexión</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (i != -1) { // elimina la conexión</span>
+<span class="nc" id="L96">            this.clavijasLibres.add(a);</span>
+<span class="nc" id="L97">            this.clavijasLibres.add(b);</span>
+<span class="nc" id="L98">            this.conexiones.remove(i);</span>
+        } else {
+            // No existe la conexion a eliminar
+<span class="nc" id="L101">            return false;</span>
+        }
+<span class="nc" id="L103">        return true;</span>
+    }
+
+    /**
+     * Obtiene la lista de Clavijas
+     *
+     * @return lista de clavijas
+     */
+    public List&lt;Clavijas&gt; getConexiones() {
+<span class="nc" id="L112">        return conexiones;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

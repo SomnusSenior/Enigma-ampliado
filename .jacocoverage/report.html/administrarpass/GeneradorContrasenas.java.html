@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GeneradorContrasenas.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;AdministrarPass&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">administrarpass</a> &gt; <span class="el_source">GeneradorContrasenas.java</span></div><h1>GeneradorContrasenas.java</h1><pre class="source lang-java linenums">package administrarpass;
+
+import static java.lang.Math.random;
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ *
+ * @author 49904022
+ */
+public class GeneradorContrasenas {
+
+<span class="fc" id="L13">    private static int n = 20;   // Longitud de contraseña</span>
+<span class="fc" id="L14">    private static int rotor = 73; // Longitud NUEVOS rotores Plus</span>
+<span class="fc" id="L15">    private static int rotorPlus = 74; // Longitud NUEVOS rotores Plus</span>
+<span class="fc" id="L16">    private static int symbolic = 0;</span>
+<span class="fc" id="L17">    private static Random random = new Random();</span>
+
+    /**
+     * Constructor privado
+     */
+<span class="nc" id="L22">    private GeneradorContrasenas() {</span>
+<span class="nc" id="L23">        throw new IllegalStateException(&quot;Utility class&quot;);</span>
+    }
+
+    /**
+     * Genera una contraseña de forma aleatoria de longitud N y con o sin
+     * símbolos según &quot;symbolic&quot;
+     *
+     * @return Contraseña aleatoria
+     */
+    public static String aleatorio() {
+<span class="fc" id="L33">        StringBuilder pass = new StringBuilder();</span>
+        int alea;
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {   // Crea pass</span>
+<span class="fc" id="L36">            alea = alea(symbolic);  // Define siguiente caracter de la contraseña</span>
+<span class="pc bpc" id="L37" title="1 of 5 branches missed.">            switch (alea) {</span>
+                case 0:
+<span class="fc" id="L39">                    pass.append(Character.toString(randomNumber()));   // Define números</span>
+<span class="fc" id="L40">                    break;</span>
+                case 1:
+<span class="fc" id="L42">                    pass.append(Character.toString(randomCharMayus()));   // Define MAYÚSCULAS</span>
+<span class="fc" id="L43">                    break;</span>
+                case 2:
+<span class="fc" id="L45">                    pass.append(Character.toString(randomCharMinus()));   // Define minúsculas</span>
+<span class="fc" id="L46">                    break;</span>
+                case 3:
+<span class="fc" id="L48">                    pass.append(Character.toString(randomSymbol()));   // Define símbolos</span>
+<span class="fc" id="L49">                    break;</span>
+                default:
+                    break;
+            }
+        }
+<span class="fc" id="L54">        return pass.toString();</span>
+    }
+
+    /**
+     * Genera un rotor ampliado de forma aleatoria
+     *
+     * @param plus indica si el rotor es plus
+     * @return rotor ampliado
+     */
+    public static String rotoresAleatoriosAmp(boolean plus) {
+<span class="fc" id="L64">        StringBuilder r = new StringBuilder();</span>
+<span class="fc" id="L65">        String s = &quot;.&quot;;</span>
+        int alea;
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        int ro = plus ? rotor : rotorPlus; // 73 : 74</span>
+        boolean repetido;
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (int i = 0; i &lt; ro; i++) {  // Crea Rotor ampliado o Rotor/Reflector ampliado Plus</span>
+            do {
+<span class="fc" id="L71">                alea = alea(4);          // Define siguiente caracter de la contraseña</span>
+<span class="pc bpc" id="L72" title="1 of 5 branches missed.">                switch (alea) {</span>
+                    case 0:
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                        s = plus ? Character.toString(randomSymbol()) : Character.toString(randomSymbol2());   // Define símbolos</span>
+<span class="fc" id="L75">                        break;</span>
+                    case 1:
+<span class="fc" id="L77">                        s = Character.toString(randomCharMayus());   // Define MAYÚSCULAS</span>
+<span class="fc" id="L78">                        break;</span>
+                    case 2:
+<span class="fc" id="L80">                        s = Character.toString(randomCharMinus());   // Define minúsculas</span>
+<span class="fc" id="L81">                        break;</span>
+                    case 3:
+<span class="fc" id="L83">                        s = Character.toString(randomNumber());   // Define números</span>
+<span class="fc" id="L84">                        break;</span>
+                    default:
+                        break;
+                }
+<span class="fc bfc" id="L88" title="All 2 branches covered.">                if (!r.toString().contains(s)) {   // Comprueba si ya existe el caracter</span>
+<span class="fc" id="L89">                    r.append(s);</span>
+<span class="fc" id="L90">                    repetido = false;</span>
+                } else {
+<span class="fc" id="L92">                    repetido = true;</span>
+                }
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            } while (repetido);</span>
+        }
+<span class="fc" id="L96">        return r.toString();</span>
+    }
+
+    /**
+     * Genera un reflector ampliado de forma aleatoria
+     *
+     * @return reflector ampliado
+     */
+    public static String rotorReflectorAmp() {
+        char c1;
+        char c2;
+<span class="fc" id="L107">        boolean repetido = false;</span>
+<span class="fc" id="L108">        ArrayList&lt;Character&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L109">        ArrayList&lt;Character&gt; alfabetoArray = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L110">        String alfabeto = &quot; !\&quot;#$%&amp;'()*+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (int i = 0; i &lt; alfabeto.length(); i++) {   // Crea arraylist de 74 '.'</span>
+<span class="fc" id="L112">            alfabetoArray.add(alfabeto.charAt(i));</span>
+<span class="fc" id="L113">            r.add('.');</span>
+        }
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (int i = 0; i &lt; alfabetoArray.size() / 2; i++) {    // Crea reflector con permutaciones a pares</span>
+            do {
+<span class="fc" id="L117">                int iA = alea(alfabetoArray.size());</span>
+<span class="fc" id="L118">                int iB = alea(alfabetoArray.size());</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                if (iA != iB) {</span>
+<span class="fc" id="L120">                    repetido = false;</span>
+<span class="fc" id="L121">                    c1 = alfabetoArray.get(iA);</span>
+<span class="fc" id="L122">                    c2 = alfabetoArray.get(iB);</span>
+<span class="pc bpc" id="L123" title="2 of 8 branches missed.">                    if (!r.contains(c1) &amp;&amp; !r.contains(c2) &amp;&amp; r.get(iA) == '.' &amp;&amp; r.get(iB) == '.') {   // Comprueba caracter no esté ya seleccionado</span>
+<span class="fc" id="L124">                        r.set(iB, c1);</span>
+<span class="fc" id="L125">                        r.set(iA, c2);</span>
+<span class="fc" id="L126">                        alfabetoArray.set(iA, '.');</span>
+<span class="fc" id="L127">                        alfabetoArray.set(iB, '.');</span>
+                    } else {
+<span class="fc" id="L129">                        repetido = true;</span>
+                    }
+                } else {
+<span class="fc" id="L132">                    repetido = true;</span>
+                }
+<span class="pc bpc" id="L134" title="1 of 4 branches missed.">            } while (repetido &amp;&amp; !alfabetoArray.isEmpty());</span>
+        }
+<span class="fc" id="L136">        return transformToString(r);</span>
+    }
+
+    /**
+     * Transforma una lista de arrays de caracteres en un string
+     *
+     * @param lista
+     * @return string de caracteres
+     */
+    private static String transformToString(ArrayList&lt;Character&gt; lista) {
+<span class="fc" id="L146">        StringBuilder cadena = new StringBuilder();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for (char c : lista) {  // Transforma el reflector en una cadena</span>
+<span class="fc" id="L148">            cadena.append(c);</span>
+<span class="fc" id="L149">        }</span>
+<span class="fc" id="L150">        return cadena.toString();</span>
+    }
+
+    /**
+     * Genera una opción de forma aleatoria
+     *
+     * @param n
+     * @return opción
+     */
+    private static int alea(int n) {
+<span class="fc" id="L160">        return random.nextInt(n);</span>
+    }
+
+    /**
+     * Genera un número de forma aleatoria
+     *
+     * @return número
+     */
+    private static char randomNumber() {
+<span class="fc" id="L169">        return (char) (random.nextInt(10) + 48);</span>
+    }
+
+    /**
+     * Genera un caracter en mayúscula de forma aleatoria
+     *
+     * @return caracter en mayúscula
+     */
+    private static char randomCharMayus() {
+<span class="fc" id="L178">        return (char) (random.nextInt(26) + 65);</span>
+    }
+
+    /**
+     * Genera un caracter en minúscula de forma aleatoria
+     *
+     * @return caracter en minúscula
+     */
+    private static char randomCharMinus() {
+<span class="fc" id="L187">        return (char) (random.nextInt(26) + 97);</span>
+    }
+
+    /**
+     * Genera un símbolo de forma aleatoria incluyendo el &quot;espacio&quot; (bar space)
+     *
+     * @return símbolo
+     */
+    private static char randomSymbol() {
+<span class="fc" id="L196">        return (char) (random.nextInt(11) + 33);</span>
+    }
+
+    /**
+     * Genera un símbolo de forma aleatoria
+     *
+     * @return símbolo
+     */
+    private static char randomSymbol2() {
+<span class="fc" id="L205">        return (char) (random.nextInt(12) + 32);</span>
+    }
+
+    /**
+     * Configura la longitud de la cadena a generar
+     *
+     * @param n
+     */
+    public static void setn(int n) {
+<span class="fc" id="L214">        GeneradorContrasenas.n = n;</span>
+<span class="fc" id="L215">    }</span>
+
+    /**
+     * Configura el uso de símbolos para la cadena a generar
+     *
+     * @param symbolic
+     */
+    public static void setSymbolic(int symbolic) {
+<span class="fc" id="L223">        GeneradorContrasenas.symbolic = symbolic;</span>
+<span class="fc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
