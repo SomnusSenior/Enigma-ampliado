@@ -2,4 +2,5 @@ language: java
 jdk: openjdk8
 
 script:
+  - cd test/administrarpass
   - ant test
