@@ -7,10 +7,6 @@ package administrarpass;
 
 import java.util.ArrayList;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,7 +21,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testTraducir() {
-        System.out.println("traducir");
+        // traducir 
         Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
         Rotor rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
         Rotor rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
@@ -77,7 +73,6 @@ public class EjecutarEnigmaTest {
     private String generador(Random random, int max) {
         StringBuilder s = new StringBuilder();
         int num = random.nextInt(max);
-        //System.out.println("    num: " + num);
         for (int j = 0; j < num; j++) {
             s.append(Character.toString(((char) (random.nextInt(26) + 65))));
         }
@@ -89,7 +84,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testTraducirAmp() {
-        System.out.println("traducir amp no plus");
+        // traducir amp no plus
         boolean plus = false;
         Rotor rIzqAmp = new Rotor("4\"HIr(c36!5fs+kB28l#$mjO%tGAo)*1Md9Dy7'EhWJgavVS0exRN ZuF&PnqYipCUzLwTbKQX", 'X'); //NUEVO tipo Izq X
         Rotor rCenAmp = new Rotor("YZh!+76W&Ig%fiPsnUuSQC21v49q3B'5j)(TA8kGdmX$ O#0KbRJF*HNtEwc\"zVxaoerMplDyL", '\''); //NUEVO tipo Cen '
@@ -130,7 +125,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testTraducirAmpPlus() {
-        System.out.println("traducir amp plus");
+        // traducir amp plus
         boolean plus = true;
         Rotor rIzqAmpPlus = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo Izq Plus h
         Rotor rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo Cen Plus I 
@@ -249,7 +244,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testProcesar() {
-        System.out.println("procesar");
+        /// procesar
         Rotor rI = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'); //tipo I Q
         Rotor rII = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'); //tipo II E
         Rotor rIII = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'); //tipo III V
@@ -266,7 +261,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testProcesarAmpliadoNoPlus() {
-        System.out.println("procesarAmpliadoPlus");
+        // procesarAmpliadoPlus
         Rotor rIzqAmp = new Rotor("4\"HIr(c36!5fs+kB28l#$mjO%tGAo)*1Md9Dy7'EhWJgavVS0exRN ZuF&PnqYipCUzLwTbKQX", 'X'); //NUEVO tipo Izq X
         Rotor rCenAmp = new Rotor("YZh!+76W&Ig%fiPsnUuSQC21v49q3B'5j)(TA8kGdmX$ O#0KbRJF*HNtEwc\"zVxaoerMplDyL", '\''); //NUEVO tipo Cen '
         Rotor rDerAmp = new Rotor("X14&w92 5!\"khP#Ij6*BdvLQGUE%p$ql7Fa3KuDn(Z8MbmTo'iHSWA0YCRytJ+OfzVsgN)cxre", 'J'); //NUEVO tipo Der J
@@ -284,7 +279,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testProcesarAmpliadoPlusCifrado() {
-        System.out.println("procesarAmpliadoPlus");
+        // procesarAmpliadoPlus
         Rotor rIzqAmpPlus = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo Izq Plus h
         Rotor rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo Cen Plus I 
         Rotor rDerAmpPlus = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo Der Plus i
@@ -303,7 +298,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testProcesarAmpliadoPlusDescifrado() {
-        System.out.println("procesarAmpliadoPlus");
+        // procesarAmpliadoPlus
         Rotor rIzqAmpPlus = new Rotor("#1q2OXy%x\"*(7GK+QPc$C4M5s!fEHrTiw8udRnFj&Y9)3aep0U6DBvAkJ'lIShgotmzZWVNLb", 'h'); //NUEVO tipo Izq Plus h
         Rotor rCenAmpPlus = new Rotor("R9(24Dpd%yKV0F!l#Jmz&gA)H87UQ3ErBSPv1TOc65'*n$LCwGsYa+WktMuf\"IeqhjXboiZNx", 'I'); //NUEVO tipo Cen Plus I 
         Rotor rDerAmpPlus = new Rotor("0xoOdh2G91DyXn+3kT8BP$(4\"V*#r6')R5%lbpt!ajigvCUYIsZN7zJWemwfcAFHuSEqKL&QM", 'i'); //NUEVO tipo Der Plus i
@@ -322,7 +317,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testPasarMayus() {
-        System.out.println("pasarMayus");
+        // pasarMayus
         char c = ' ';
         char expResult = ' ';
         char result = EjecutarEnigma.pasarMayus(c);
@@ -334,7 +329,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testSetModo() {
-        System.out.println("setModo");
+        // setModo
         int expResult = 0;
         EjecutarEnigma.setModo(expResult);
         int result = EjecutarEnigma.getModo();
@@ -346,7 +341,7 @@ public class EjecutarEnigmaTest {
      */
     @Test
     public void testGetModo() {
-        System.out.println("getModo");
+        // getModo
         int expResult = 0;
         EjecutarEnigma.setModo(expResult);
         int result = EjecutarEnigma.getModo();

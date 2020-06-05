@@ -6,9 +6,7 @@
 package administrarpass;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,8 +16,8 @@ import static org.junit.Assert.*;
  */
 public class ClavijasTest {
     
-    private static char a = 'A';
-    private static char b = 'B';
+    private static final char a = 'A';
+    private static final char b = 'B';
     Clavijas cla;
     
     @Before
@@ -37,7 +35,7 @@ public class ClavijasTest {
      */
     @Test
     public void testGetA() {
-        System.out.println("getA");
+        // getA
         char expResult = 'A';
         char result = cla.getA();
         assertEquals(expResult, result);
@@ -48,7 +46,7 @@ public class ClavijasTest {
      */
     @Test
     public void testGetB() {
-        System.out.println("getB");
+        // getB
         char expResult = 'B';
         char result = cla.getB();
         assertEquals(expResult, result);

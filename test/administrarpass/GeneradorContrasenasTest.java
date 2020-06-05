@@ -5,10 +5,6 @@
  */
 package administrarpass;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,29 +14,12 @@ import static org.junit.Assert.*;
  */
 public class GeneradorContrasenasTest {
 
-//    public GeneradorContrasenasTest() {
-//    }
-//    @BeforeClass
-//    public static void setUpClass() {
-//    }
-//    
-//    @AfterClass
-//    public static void tearDownClass() {
-//    }
-//    
-//    @Before
-//    public void setUp() {
-//    }
-//    
-//    @After
-//    public void tearDown() {
-//    }
     /**
      * Test of rotoresAleatorios method, of class GeneradorContrasenas.
      */
     @Test
     public void testRotoresAleatoriosPlus() {
-        System.out.println("rotoresAleatorios Plus");
+        // rotoresAleatorios Plus 
         boolean plus = true;
         int longExpect = 73;
         String rotor = GeneradorContrasenas.rotoresAleatoriosAmp(plus);
@@ -52,7 +31,7 @@ public class GeneradorContrasenasTest {
      */
     @Test
     public void testRotoresAleatoriosNoPlus() {
-        System.out.println("rotoresAleatorios no Plus");
+        // rotoresAleatorios no Plus
         boolean plus = false;
         int longExpect = 74;
         String rotor = GeneradorContrasenas.rotoresAleatoriosAmp(plus);
@@ -64,7 +43,7 @@ public class GeneradorContrasenasTest {
      */
     @Test
     public void testRotoresReflector() {
-        System.out.println("rotoresReflector");
+        // rotoresReflector
         String result = GeneradorContrasenas.rotorReflectorAmp();
         boolean boolResult = false;
         boolean expect = true;
@@ -86,14 +65,13 @@ public class GeneradorContrasenasTest {
         }
         assertEquals(expect, boolResult);
     }
-    //////////////////////////////////////////////
 
     /**
      * Test of alea method, of class GeneradorContrasenas.
      */
     @Test
     public void testAleatorioNoSymbol() {
-        System.out.println("aleatorio sin símbolos");
+        // aleatorio sin símbolos
         int n = 30;
         int sym = 3;
         boolean equal = false;
@@ -101,7 +79,6 @@ public class GeneradorContrasenasTest {
         GeneradorContrasenas.setSymbolic(sym);
         int longResult = n;
         String result = GeneradorContrasenas.aleatorio();
-        //System.out.println("result: " + result);
         assertEquals(longResult, result.length());
         for (int i = 0; i < result.length(); i++) {
             equal = ((result.charAt(i) >= 48 && result.charAt(i) <= 57)
@@ -116,7 +93,7 @@ public class GeneradorContrasenasTest {
      */
     @Test
     public void testAleatorioSymbol() {
-        System.out.println("aleatorio con símbolos");
+        // aleatorio con símbolos
         int n = 30;
         int sym = 4;
         boolean equal = false;
@@ -124,7 +101,6 @@ public class GeneradorContrasenasTest {
         GeneradorContrasenas.setSymbolic(sym);
         int longResult = n;
         String result = GeneradorContrasenas.aleatorio();
-        //System.out.println("result: " + result);
         assertEquals(longResult, result.length());
         for (int i = 0; i < result.length(); i++) {
             equal = ((result.charAt(i) >= 33 && result.charAt(i) <= 43)
@@ -134,5 +110,4 @@ public class GeneradorContrasenasTest {
         }
         assertEquals(true, equal);
     }
-
 }
