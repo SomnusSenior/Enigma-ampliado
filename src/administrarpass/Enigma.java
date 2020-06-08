@@ -174,9 +174,9 @@ public class Enigma {
         aux = this.entrada.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido
         pintar[indiceP] = aux;
         indiceP++;
-        Menu.setcI((char) this.rotorIzquierda.obtenerContEscritura().charAt(0));
-        Menu.setcC((char) this.rotorCentral.obtenerContEscritura().charAt(0));
-        Menu.setcD((char) this.rotorDerecha.obtenerContEscritura().charAt(0));
+        Menu.setcI(this.rotorIzquierda.obtenerContEscritura().charAt(0));
+        Menu.setcC(this.rotorCentral.obtenerContEscritura().charAt(0));
+        Menu.setcD(this.rotorDerecha.obtenerContEscritura().charAt(0));
         return aux;
     }
 
