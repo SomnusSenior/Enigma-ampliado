@@ -265,7 +265,8 @@ is divided into following sections:
             <element name="customize" optional="true"/>
             <sequential>
                 <property location="${build.dir}/empty" name="empty.dir"/>
-                <mkdir dir="${empty.dir}"/>
+                <!--<echo message="Prueba"/>-->
+				<mkdir dir="${empty.dir}"/>
                 <mkdir dir="@{apgeneratedsrcdir}"/>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <src>
@@ -919,6 +920,7 @@ is divided into following sections:
     </target>
     <target depends="init,deps-jar" name="-pre-pre-compile">
         <mkdir dir="${build.classes.dir}"/>
+		<!--<mkdir dir="dist/lib"/>-->
     </target>
     <target name="-pre-compile">
         <!-- Empty placeholder for easier customization. -->
