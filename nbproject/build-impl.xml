@@ -891,6 +891,12 @@ is divided into following sections:
     <target name="-deps-jar-init" unless="built-jar.properties">
         <property location="${build.dir}/built-jar.properties" name="built-jar.properties"/>
         <delete file="${built-jar.properties}" quiet="true"/>
+		<path id="project.class.path">
+			<pathelement location="${dist.dir}/lib/"/>
+		</path>
+		<javac srcdir="${build.classes.dir}" destdir="${dist.dir}">
+			 <classpath refid="project.class.path"/>
+		</javac>
     </target>
     <target if="already.built.jar.${basedir}" name="-warn-already-built-jar">
         <echo level="warn" message="Cycle detected: AdministrarPass was already built"/>
