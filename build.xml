@@ -70,10 +70,4 @@
     nbproject/build-impl.xml file. 
 
     -->
-	<path id="project.class.path">
-		<pathelement location="dist/lib/"/>
-	</path>
-	<javac srcdir="build/classes/administrarpass" destdir="dist/">
-		 <classpath refid="project.class.path"/>
-	</javac>
 </project>
