@@ -190,17 +190,25 @@ public class Enigma {
     public char cifradoAmpliadoPlus(char c, boolean plus) {
         actualizarRotoresAmpliado(plus);
         int i;
-        int aux;
         i = plus ? this.entradaAmpliadoPlus.obtenerContenido().indexOf(c) : this.entradaAmpliado.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado
         i = this.rotorDerecha.cifrarIdaAmpliado(i, plus);
         i = this.rotorCentral.cifrarIdaAmpliado(i, plus);
         i = this.rotorIzquierda.cifrarIdaAmpliado(i, plus);
-        aux = getModo() == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus);
-        i = plus ? aux : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -> Ampliado Plus
+        i = plus ? aux(i, plus) : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -> Ampliado Plus
         i = this.rotorIzquierda.cifrarVueltaAmpliado(i, plus);
         i = this.rotorCentral.cifrarVueltaAmpliado(i, plus);
         i = this.rotorDerecha.cifrarVueltaAmpliado(i, plus);
         return plus ? this.entradaAmpliadoPlus.obtenerContenido().charAt(i) : this.entradaAmpliado.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido
+    }
+
+    /**
+     * Función auxiliar para el cifrado
+     * @param i índice caracter
+     * @param plus indica si es plus
+     * @return índice character cifrado
+     */
+    private int aux(int i, boolean plus) {
+        return getModo() == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus);
     }
 
     /**

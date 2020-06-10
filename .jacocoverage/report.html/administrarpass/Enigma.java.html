@@ -114,8 +114,8 @@ public class Enigma {
 <span class="fc" id="L114">        char claveActualDer = this.rotorDerecha.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor derecho</span>
 <span class="fc" id="L115">        char claveActualCen = this.rotorCentral.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor central</span>
 <span class="fc bfc" id="L116" title="All 2 branches covered.">        if (claveActualDer == this.rotorDerecha.obtenerPuntoGiro()) { // si la clave actual del rotor derecho es el punto de giro del rotor derecho</span>
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
-<span class="nc" id="L118">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="fc" id="L118">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
             }
 <span class="fc" id="L120">            this.rotorCentral = this.rotorCentral.giro(1); // gira rotor central</span>
         } else {
