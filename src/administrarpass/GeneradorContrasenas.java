@@ -1,6 +1,5 @@
 package administrarpass;
 
-import static java.lang.Math.random;
 import java.util.ArrayList;
 import java.util.Random;
 
