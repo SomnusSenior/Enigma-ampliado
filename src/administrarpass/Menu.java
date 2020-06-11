@@ -2174,8 +2174,8 @@ public class Menu extends JFrame {
     private javax.swing.JTextField jTextFieldClavijaAmp2;
     private javax.swing.JTextField jTextFieldClavijaAmpPlus1;
     private javax.swing.JTextField jTextFieldClavijaAmpPlus2;
-    public javax.swing.JTextField jTextFieldLongitudPass;
-    public javax.swing.JTextField jTextFieldMensaje;
+    private javax.swing.JTextField jTextFieldLongitudPass;
+    private javax.swing.JTextField jTextFieldMensaje;
     private javax.swing.JTextField jTextFieldMensajeAmp;
     private javax.swing.JTextField jTextFieldMensajeAmpPlus;
     private javax.swing.JTextField jTextFieldPass;

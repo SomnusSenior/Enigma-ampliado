@@ -114,8 +114,8 @@ public class Enigma {
 <span class="fc" id="L114">        char claveActualDer = this.rotorDerecha.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor derecho</span>
 <span class="fc" id="L115">        char claveActualCen = this.rotorCentral.obtenerContEscritura().charAt(0); // obtiene la clave actual del rotor central</span>
 <span class="fc bfc" id="L116" title="All 2 branches covered.">        if (claveActualDer == this.rotorDerecha.obtenerPuntoGiro()) { // si la clave actual del rotor derecho es el punto de giro del rotor derecho</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
-<span class="fc" id="L118">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (claveActualCen == this.rotorCentral.obtenerPuntoGiro()) { // si la clave actual del rotor central es el punto de giro del rotor central</span>
+<span class="nc" id="L118">                this.rotorIzquierda = this.rotorIzquierda.giro(1); // gira rotor izquierdo</span>
             }
 <span class="fc" id="L120">            this.rotorCentral = this.rotorCentral.giro(1); // gira rotor central</span>
         } else {
@@ -190,17 +190,25 @@ public class Enigma {
     public char cifradoAmpliadoPlus(char c, boolean plus) {
 <span class="fc" id="L191">        actualizarRotoresAmpliado(plus);</span>
         int i;
-        int aux;
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        i = plus ? this.entradaAmpliadoPlus.obtenerContenido().indexOf(c) : this.entradaAmpliado.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado</span>
-<span class="fc" id="L195">        i = this.rotorDerecha.cifrarIdaAmpliado(i, plus);</span>
-<span class="fc" id="L196">        i = this.rotorCentral.cifrarIdaAmpliado(i, plus);</span>
-<span class="fc" id="L197">        i = this.rotorIzquierda.cifrarIdaAmpliado(i, plus);</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">        aux = getModo() == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus);</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        i = plus ? aux : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -&gt; Ampliado Plus</span>
-<span class="fc" id="L200">        i = this.rotorIzquierda.cifrarVueltaAmpliado(i, plus);</span>
-<span class="fc" id="L201">        i = this.rotorCentral.cifrarVueltaAmpliado(i, plus);</span>
-<span class="fc" id="L202">        i = this.rotorDerecha.cifrarVueltaAmpliado(i, plus);</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        return plus ? this.entradaAmpliadoPlus.obtenerContenido().charAt(i) : this.entradaAmpliado.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        i = plus ? this.entradaAmpliadoPlus.obtenerContenido().indexOf(c) : this.entradaAmpliado.obtenerContenido().indexOf(c); // obtiene el indice del caracter pasado</span>
+<span class="fc" id="L194">        i = this.rotorDerecha.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc" id="L195">        i = this.rotorCentral.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc" id="L196">        i = this.rotorIzquierda.cifrarIdaAmpliado(i, plus);</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        i = plus ? aux(i, plus) : this.reflectorAmpliado.cifrarIdaAmpliado(i, plus); // modo = 0 | modo = 1 -&gt; Ampliado Plus</span>
+<span class="fc" id="L198">        i = this.rotorIzquierda.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc" id="L199">        i = this.rotorCentral.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc" id="L200">        i = this.rotorDerecha.cifrarVueltaAmpliado(i, plus);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        return plus ? this.entradaAmpliadoPlus.obtenerContenido().charAt(i) : this.entradaAmpliado.obtenerContenido().charAt(i); // obtiene el caracter del indice obtenido</span>
+    }
+
+    /**
+     * Función auxiliar para el cifrado
+     * @param i índice caracter
+     * @param plus indica si es plus
+     * @return índice character cifrado
+     */
+    private int aux(int i, boolean plus) {
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        return getModo() == 0 ? this.reflectorAmpliadoPlus.cifrarIdaAmpliado(i, plus) : this.reflectorAmpliadoPlus.cifrarVueltaAmpliado(i, plus);</span>
     }
 
     /**
@@ -210,10 +218,10 @@ public class Enigma {
      * @param b clavija b
      */
     public void ponerClavija(char a, char b) {
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
-<span class="nc" id="L214">            moverClavijas(a, b);</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
+<span class="nc" id="L222">            moverClavijas(a, b);</span>
         }
-<span class="nc" id="L216">    }</span>
+<span class="nc" id="L224">    }</span>
 
     /**
      * Pone la conexión de las clavijas en el alfabeto ampliado
@@ -223,10 +231,10 @@ public class Enigma {
      * @param plus indica si es plus
      */
     public void ponerClavijaAmpliado(char a, char b, boolean plus) {
-<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
-<span class="nc" id="L227">            moverClavijasAmpliado(a, b, plus);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        if (this.plugboard.establecerConexion(a, b)) {</span>
+<span class="nc" id="L235">            moverClavijasAmpliado(a, b, plus);</span>
         }
-<span class="nc" id="L229">    }</span>
+<span class="nc" id="L237">    }</span>
 
     /**
      * Mueve las clavijas en el alfabeto
@@ -235,20 +243,20 @@ public class Enigma {
      * @param b clavija b
      */
     public void moverClavijas(char a, char b) {
-<span class="nc" id="L238">        StringBuilder aux = new StringBuilder();</span>
-<span class="nc" id="L239">        String contenido = this.entrada.obtenerContenido();</span>
+<span class="nc" id="L246">        StringBuilder aux = new StringBuilder();</span>
+<span class="nc" id="L247">        String contenido = this.entrada.obtenerContenido();</span>
         // ordena las clavijas        
-<span class="nc bnc" id="L241" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
-<span class="nc bnc" id="L242" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
         char c;
         char mew;
-<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
-<span class="nc" id="L246">            c = contenido.charAt(i);</span>
-<span class="nc bnc" id="L247" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
-<span class="nc bnc" id="L248" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : mew); // reordena el alfabeto de escritura</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
+<span class="nc" id="L254">            c = contenido.charAt(i);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : mew); // reordena el alfabeto de escritura</span>
         }
-<span class="nc" id="L250">        this.entrada = new Rotor(aux.toString(), this.entrada.obtenerPuntoGiro());</span>
-<span class="nc" id="L251">    }</span>
+<span class="nc" id="L258">        this.entrada = new Rotor(aux.toString(), this.entrada.obtenerPuntoGiro());</span>
+<span class="nc" id="L259">    }</span>
 
     /**
      * Mueve las clavijas en el alfabeto
@@ -258,24 +266,24 @@ public class Enigma {
      * @param plus indica si es plus
      */
     public void moverClavijasAmpliado(char a, char b, boolean plus) {
-<span class="nc" id="L261">        StringBuilder aux = new StringBuilder();</span>
-<span class="nc bnc" id="L262" title="All 2 branches missed.">        String contenido = plus ? this.entradaAmpliadoPlus.obtenerContenido() : this.entradaAmpliado.obtenerContenido();</span>
+<span class="nc" id="L269">        StringBuilder aux = new StringBuilder();</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        String contenido = plus ? this.entradaAmpliadoPlus.obtenerContenido() : this.entradaAmpliado.obtenerContenido();</span>
         // ordena las clavijas
-<span class="nc bnc" id="L264" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
-<span class="nc bnc" id="L265" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        char susIzq = a &lt; b ? a : b;</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        char susDer = a &lt; b ? b : a;</span>
         char c;
         char mew;
-<span class="nc bnc" id="L268" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
-<span class="nc" id="L269">            c = contenido.charAt(i);</span>
-<span class="nc bnc" id="L270" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
-<span class="nc bnc" id="L271" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : (mew)); // reordena el alfabeto de escritura</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        for (int i = 0; i &lt; contenido.length(); i++) {</span>
+<span class="nc" id="L277">            c = contenido.charAt(i);</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">            mew = c == susDer ? susIzq : c;</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">            aux.append(c == susIzq ? susDer : (mew)); // reordena el alfabeto de escritura</span>
         }
-<span class="nc bnc" id="L273" title="All 2 branches missed.">        if (plus) {</span>
-<span class="nc" id="L274">            this.entradaAmpliadoPlus = new Rotor(aux.toString(), this.entradaAmpliadoPlus.obtenerPuntoGiro());</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        if (plus) {</span>
+<span class="nc" id="L282">            this.entradaAmpliadoPlus = new Rotor(aux.toString(), this.entradaAmpliadoPlus.obtenerPuntoGiro());</span>
         } else {
-<span class="nc" id="L276">            this.entradaAmpliado = new Rotor(aux.toString(), this.entradaAmpliado.obtenerPuntoGiro());</span>
+<span class="nc" id="L284">            this.entradaAmpliado = new Rotor(aux.toString(), this.entradaAmpliado.obtenerPuntoGiro());</span>
         }
-<span class="nc" id="L278">    }</span>
+<span class="nc" id="L286">    }</span>
 
     /**
      * Obtiene las conexiones de las clavijas.
@@ -283,7 +291,7 @@ public class Enigma {
      * @return conexiones del clavijero
      */
     public Clavijero getPlugboard() {
-<span class="nc" id="L286">        return plugboard;</span>
+<span class="nc" id="L294">        return plugboard;</span>
     }
 
     /**
@@ -292,8 +300,8 @@ public class Enigma {
      * @param plugboard
      */
     public void setPlugboard(Clavijero plugboard) {
-<span class="nc" id="L295">        this.plugboard = plugboard;</span>
-<span class="nc" id="L296">    }</span>
+<span class="nc" id="L303">        this.plugboard = plugboard;</span>
+<span class="nc" id="L304">    }</span>
 
     /**
      * Configura el reflector ampliado
@@ -301,8 +309,8 @@ public class Enigma {
      * @param reflectorAmpliado
      */
     public void setReflectorAmpliado(Rotor reflectorAmpliado) {
-<span class="nc" id="L304">        this.reflectorAmpliado = reflectorAmpliado;</span>
-<span class="nc" id="L305">    }</span>
+<span class="nc" id="L312">        this.reflectorAmpliado = reflectorAmpliado;</span>
+<span class="nc" id="L313">    }</span>
 
     /**
      * Configura el reflector ampliado plus
@@ -310,8 +318,8 @@ public class Enigma {
      * @param reflectorAmpliadoPlus
      */
     public void setReflectorAmpliadoPlus(Rotor reflectorAmpliadoPlus) {
-<span class="nc" id="L313">        this.reflectorAmpliadoPlus = reflectorAmpliadoPlus;</span>
-<span class="nc" id="L314">    }</span>
+<span class="nc" id="L321">        this.reflectorAmpliadoPlus = reflectorAmpliadoPlus;</span>
+<span class="nc" id="L322">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
